@@ -5,20 +5,7 @@
 #include "Adafruit_BusIO_Register.h"
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
-
-struct Linear_function
-{
-  //y = ax + b
-  double a;
-  double b; 
-};
-
-struct Point
-{
-  Point(uint16_t _y = 0, uint16_t _x = 0):y(_y), x(_x){};
-  uint16_t y;
-  uint16_t x;
-};
+#include "Linear_function.h"
 
 const byte m_pin_r_button = 3;
 const byte m_pin_l_button = 2;
@@ -35,29 +22,17 @@ DS18B20 *m_ds_sensor = new DS18B20(m_pin_thermometer);
 
 Adafruit_SSD1306 display(m_screen_width, m_screen_height, &Wire);
 
+const int blink_time_calibration = 150;
 const long m_long_press_time = 1000;
+
 long m_buttons_start_press;
 bool m_r_button_pressed = false;
 bool m_l_button_pressed = false;
 bool m_calibration = false;
 Linear_function probe_characteristic;
 
-Linear_function calculate(Point first, Point second)
-{
-  Linear_function f;
-  f.a = (second.y - first.y)/(double)(second.x - first.x);
-  f.b = first.y - (f.a * first.x);
-  return f;
-}
-
-double find_y(int x, Linear_function f)
-{
-  return(f.a * x + f.b);
-}
-
 void ds_thermometer_init()
 {
-	Serial.print("Serch thermometer");
 	m_one_wire->reset_search();
 	while (m_one_wire->search(m_ds_address))
 	{
@@ -66,31 +41,14 @@ void ds_thermometer_init()
 
 		if (OneWire::crc8(m_ds_address, 7) != m_ds_address[7])
 		{
-			Serial.println(F("1-Wire bus connection error!"));
 			break;
 		}
-
-		for (byte i = 0; i < 8; i++)
-		{
-			Serial.print(F("0x"));
-			Serial.print(m_ds_address[i], HEX);
-
-			if (i < 7)
-				Serial.print(F(", "));
-		}
-		Serial.println();
 	}
 }
 
 void screen_init()
 {
-	if(!display.begin(SSD1306_SWITCHCAPVCC, m_screen_adress)) { 
-    	Serial.println(F("SSD1306 allocation failed"));
-  	}
-  	else
-  	{
-    	Serial.println(F("SSD1306 allocation ok"));
- 	} 
+	display.begin(SSD1306_SWITCHCAPVCC, m_screen_adress);
   	display.clearDisplay();
   	display.setTextSize(2);      
   	display.setTextColor(SSD1306_WHITE); 
@@ -142,7 +100,7 @@ void display_measurements()
 {
 	float temperature = m_ds_sensor->getTempC();
 	int analog_mes = analogRead(m_pin_probe);
-	float ph = find_y(analog_mes, probe_characteristic);
+	float ph = probe_characteristic.find_y(analog_mes);
 
 	Serial.print("measure");
 	Serial.print(temperature);
@@ -175,7 +133,7 @@ void display_calibration(int sample)
 	display.print((char)247);
 	display.println("C");
 
-	if (loop_time - time > 150) 
+	if (loop_time - time > blink_time_calibration) 
 	{
 		time = millis();
 		toggle = !toggle;
@@ -196,21 +154,7 @@ void save_calibration(const Point samples[2])
 	EEPROM.put<uint16_t>(8, samples[1].x);
 	EEPROM.put<uint16_t>(12, samples[1].y);
 
-	Serial.print("EEPROM_save_0_1");
-	uint16_t read_value;
-	EEPROM.get<uint16_t>(0,read_value);
-	Serial.print(read_value);
-	Serial.print(",");
-	EEPROM.get<uint16_t>(4,read_value);
-	Serial.println(read_value);
-	Serial.print("EEPROM_save_2_3");
-	EEPROM.get<uint16_t>(8,read_value);
-	Serial.print(read_value);
-	Serial.print(",");
-	EEPROM.get<uint16_t>(12,read_value);
-	Serial.println(read_value);
-
-	probe_characteristic = calculate(samples[0], samples[1]);  
+	probe_characteristic.set_points(samples[0], samples[1]);  
 }
 
 void calibration()
@@ -222,6 +166,7 @@ void calibration()
 
 	if(m_r_button_pressed || m_l_button_pressed)
 	{
+		delay(100);
 		while (!digitalRead(m_pin_r_button) && !digitalRead(m_pin_r_button) && (m_r_button_pressed || m_l_button_pressed))
 		{
 			long loop_time = millis();
@@ -231,21 +176,13 @@ void calibration()
 				{
 					
 					samples[0].x = sample;
-					samples[0].y = analogRead(m_pin_probe);	
-					Serial.print("sample_0");
-					Serial.print(samples[0].x);
-					Serial.print(",");
-					Serial.println(samples[0].y);			
+					samples[0].y = analogRead(m_pin_probe);				
 					calibrated_sample++;
 				}
 				else
 				{
 					samples[1].x = sample;
 					samples[1].y = analogRead(m_pin_probe);
-					Serial.print("sample_1");
-					Serial.print(samples[1].x);
-					Serial.print(",");
-					Serial.println(samples[1].y);
 					save = true;					
 				}
 				display_save_data();
@@ -291,22 +228,14 @@ void setup()
 
 	uint16_t read_value_x;
 	uint16_t read_value_y;
-	Serial.print("EEPROM_load_0_1");
 	EEPROM.get<uint16_t>(0,read_value_x);
-	Serial.print(read_value_x);
-	Serial.print(",");
 	EEPROM.get<uint16_t>(4,read_value_y);
-	Serial.println(read_value_y);
 	Point first_sample(read_value_x, read_value_y);
-	Serial.print("EEPROM_load_2_3");
 	EEPROM.get<uint16_t>(8,read_value_x);
-	Serial.print(read_value_x);
-	Serial.print(",");
 	EEPROM.get<uint16_t>(12,read_value_y);
-	Serial.println(read_value_y);
 	Point second_sample(read_value_x, read_value_y);
 
-  	probe_characteristic = calculate(first_sample, second_sample);  
+  	probe_characteristic.set_points(first_sample, second_sample);  
 
 	pinMode(m_pin_r_button, INPUT_PULLUP);
 	pinMode(m_pin_l_button, INPUT_PULLUP);

@@ -6,12 +6,12 @@
         {
             "name": "Win32",
             "includePath": [
-                "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/include",
-                "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/src",
+                "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/include",
+                "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/src",
                 "C:/Users/Omen/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
-                "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/.pio/libdeps/nanoatmega328/Adafruit SSD1306",
-                "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/.pio/libdeps/nanoatmega328/Adafruit GFX Library",
-                "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/.pio/libdeps/nanoatmega328/Adafruit BusIO",
+                "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit SSD1306",
+                "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit GFX Library",
+                "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit BusIO",
                 "C:/Users/Omen/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                 "C:/Users/Omen/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                 "C:/Users/Omen/.platformio/lib/DS18B20_ID6432/src",
@@ -51,12 +51,12 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/include",
-                    "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/src",
+                    "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/include",
+                    "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/src",
                     "C:/Users/Omen/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
-                    "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/.pio/libdeps/nanoatmega328/Adafruit SSD1306",
-                    "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/.pio/libdeps/nanoatmega328/Adafruit GFX Library",
-                    "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/.pio/libdeps/nanoatmega328/Adafruit BusIO",
+                    "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit SSD1306",
+                    "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit GFX Library",
+                    "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit BusIO",
                     "C:/Users/Omen/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                     "C:/Users/Omen/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                     "C:/Users/Omen/.platformio/lib/DS18B20_ID6432/src",
@@ -95,7 +95,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=50001",
+                "PLATFORMIO=50003",
                 "ARDUINO_AVR_NANO",
                 "F_CPU=16000000L",
                 "ARDUINO_ARCH_AVR",
@@ -103,7 +103,7 @@
                 "__AVR_ATmega328P__",
                 ""
             ],
-            "intelliSenseMode": "clang-x64",
+            "intelliSenseMode": "gcc-x64",
             "cStandard": "c11",
             "cppStandard": "c++11",
             "compilerPath": "C:/Users/Omen/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe",

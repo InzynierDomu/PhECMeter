@@ -12,7 +12,8 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/.pio/build/nanoatmega328/firmware.elf",
+            "executable": "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/build/nanoatmega328/firmware.elf",
+            "projectEnvName": "nanoatmega328",
             "toolchainBinDir": "C:/Users/Omen/.platformio/packages/toolchain-atmelavr/bin",
             "preLaunchTask": {
                 "type": "PlatformIO",
@@ -24,7 +25,8 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/.pio/build/nanoatmega328/firmware.elf",
+            "executable": "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/build/nanoatmega328/firmware.elf",
+            "projectEnvName": "nanoatmega328",
             "toolchainBinDir": "C:/Users/Omen/.platformio/packages/toolchain-atmelavr/bin",
             "internalConsoleOptions": "openOnSessionStart"
         }
