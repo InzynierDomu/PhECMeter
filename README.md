@@ -1,9 +1,9 @@
 # PhMeter
-* [Schemat](#Schemat)
-* [Środowisku i projekt](#Środowisko-i-projekt)
+* [Scheme](#Scheme)
+* [IDE](#IDE)
 
-Wideo z całym projektem do obejrzenia tutaj
-## Schemat
+The video with the entire project can be watched on this [video](https://youtu.be/vjk0nq04lCo)
+## Scheme
 ![alt text](http://www.inzynierdomu.pl/wp-content/uploads/2020/12/schemat.png)
-## Środowisko i projekt
-Projekt przygotowany jest pod środowisko Platform IO. Wideo jak zainstalowac takie środowisko można znaleźć [tutaj](https://youtu.be/Em9NuebT2Kc)
+## IDE
+The project is prepared for the Platform IO environment. A video on how to install such an environment can be watched on this [video](https://youtu.be/Em9NuebT2Kc)
