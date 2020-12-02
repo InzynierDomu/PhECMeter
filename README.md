@@ -1,6 +1,6 @@
 # PhMeter
 * [Schemat](#Schemat)
-* [Środowisku i projekt](Środowisko-i-projekt)
+* [Środowisku i projekt](#Środowisko-i-projekt)
 
 Wideo z całym projektem do obejrzenia tutaj
 ## Schemat
