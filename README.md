@@ -4,7 +4,7 @@
 
 The video with the entire project can be watched on this [video](https://youtu.be/vjk0nq04lCo)
 ## Scheme
-![alt text](http://www.inzynierdomu.pl/wp-content/uploads/2020/12/schemat.png)
+![alt text](http://www.inzynierdomu.pl/wp-content/uploads/2021/01/ph_metr_schemat.png)
 ### Part list:
 * pH metr need probe and board for probe like [this](https://botland.com.pl/pl/seria-gravity/15094-gravity-czujnik-miernik-ph-analogowy-v2-dfrobot-sen0161-v2.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)
 * A1 Arduino Nano
