@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <EEPROM.h>
-#include <OneWire.h>
-#include <DS18B20.h>
+#include "OneWire.h"
+#include "DS18B20.h"
 #include "Adafruit_BusIO_Register.h"
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
@@ -11,6 +11,7 @@ const byte m_pin_r_button = 3;
 const byte m_pin_l_button = 2;
 const byte m_pin_thermometer = 4;
 const byte m_pin_probe = A1;
+const byte m_supply_pin_probe = 5;
 
 const byte m_screen_adress = 0x3C;    
 const int m_screen_width = 128;
@@ -237,6 +238,8 @@ void setup()
 
   	probe_characteristic.set_points(first_sample, second_sample);  
 
+	pinMode(m_supply_pin_probe, OUTPUT);
+	digitalWrite(m_supply_pin_probe, HIGH);
 	pinMode(m_pin_r_button, INPUT_PULLUP);
 	pinMode(m_pin_l_button, INPUT_PULLUP);
 	attachInterrupt(digitalPinToInterrupt(m_pin_r_button), button_r_pressed, FALLING);
