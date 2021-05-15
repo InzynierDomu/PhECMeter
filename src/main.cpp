@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <EEPROM.h>
+#include "Config.h"
 #include "OneWire.h"
 #include "DS18B20.h"
 #include "Adafruit_BusIO_Register.h"
@@ -7,24 +8,21 @@
 #include "Adafruit_SSD1306.h"
 #include "Linear_function.h"
 
-const byte m_pin_r_button = 3;
-const byte m_pin_l_button = 2;
-const byte m_pin_thermometer = 4;
-const byte m_pin_probe = A1;
-const byte m_supply_pin_probe = 5;
-
-const byte m_screen_adress = 0x3C;    
-const int m_screen_width = 128;
-const int m_screen_height = 32; 
+enum class Device_state
+{
+  startup,
+  display_measure_ph,
+  display_measure_ec,
+  calibration_ph,
+  calibration_ec
+};
 
 byte m_ds_address[8];
-OneWire *m_one_wire = new OneWire(m_pin_thermometer);
-DS18B20 *m_ds_sensor = new DS18B20(m_pin_thermometer);
+OneWire *m_one_wire = new OneWire(Config::m_pin_thermometer);
+DS18B20 *m_ds_sensor = new DS18B20(Config::m_pin_thermometer);
+Adafruit_SSD1306 display(Config::m_screen_width, Config::m_screen_height, &Wire);
 
-Adafruit_SSD1306 display(m_screen_width, m_screen_height, &Wire);
-
-const int blink_time_calibration = 150;
-const long m_long_press_time = 1000;
+Device_state m_device_state = Device_state::startup;
 
 long m_buttons_start_press;
 bool m_r_button_pressed = false;
@@ -49,7 +47,7 @@ void ds_thermometer_init()
 
 void screen_init()
 {
-	display.begin(SSD1306_SWITCHCAPVCC, m_screen_adress);
+	display.begin(SSD1306_SWITCHCAPVCC, Config::m_screen_adress);
   	display.clearDisplay();
   	display.setTextSize(2);      
   	display.setTextColor(SSD1306_WHITE); 
@@ -97,19 +95,19 @@ void display_save_data()
   	display.display();
 }
 
-void display_measurements()
+void display_measurements_ph()
 {
 	float temperature = m_ds_sensor->getTempC();
-	int analog_mes = analogRead(m_pin_probe);
+	int analog_mes = analogRead(Config::m_pin_probe);
 	float ph = probe_characteristic.find_y(analog_mes);
-
+//----------------------------------
 	Serial.print("measure");
 	Serial.print(temperature);
 	Serial.print(";");
 	Serial.print(analog_mes);
 	Serial.print(";");
 	Serial.println(ph);
-
+//----------------------------------
 	display.clearDisplay();
   	display.setCursor(0, 0);   
   	display.print(temperature); 
@@ -118,6 +116,22 @@ void display_measurements()
 	display.print(ph);
 	display.print("pH");
   	display.display();
+//----------------------------------
+
+  if(m_r_button_pressed || m_l_button_pressed)
+  {		
+	do
+	{
+   	  long loop_time = millis();
+	  if(loop_time - m_buttons_start_press > Config::m_long_press_time)
+		{
+		  m_device_state = Device_state::calibration_ph;
+		}
+	}
+	while(!digitalRead(Config::m_pin_r_button) && !digitalRead(Config::m_pin_r_button));
+		m_r_button_pressed = false;
+		m_l_button_pressed = false;
+  }
 }
 
 void display_calibration(int sample)
@@ -134,7 +148,7 @@ void display_calibration(int sample)
 	display.print((char)247);
 	display.println("C");
 
-	if (loop_time - time > blink_time_calibration) 
+	if (loop_time - time > Config::blink_time_calibration) 
 	{
 		time = millis();
 		toggle = !toggle;
@@ -158,7 +172,7 @@ void save_calibration(const Point samples[2])
 	probe_characteristic.set_points(samples[0], samples[1]);  
 }
 
-void calibration()
+void calibration_ph()
 {
 	bool save = false;
 	static int sample = 4;
@@ -168,22 +182,21 @@ void calibration()
 	if(m_r_button_pressed || m_l_button_pressed)
 	{
 		delay(100);
-		while (!digitalRead(m_pin_r_button) && !digitalRead(m_pin_r_button) && (m_r_button_pressed || m_l_button_pressed))
+		while (!digitalRead(Config::m_pin_r_button) && !digitalRead(Config::m_pin_r_button) && (m_r_button_pressed || m_l_button_pressed))
 		{
 			long loop_time = millis();
-			if(loop_time - m_buttons_start_press > m_long_press_time && !save)
+			if(loop_time - m_buttons_start_press > Config::m_long_press_time && !save)
 			{
 				if(calibrated_sample == 1)
-				{
-					
+				{					
 					samples[0].x = sample;
-					samples[0].y = analogRead(m_pin_probe);				
+					samples[0].y = analogRead(Config::m_pin_probe);				
 					calibrated_sample++;
 				}
 				else
 				{
 					samples[1].x = sample;
-					samples[1].y = analogRead(m_pin_probe);
+					samples[1].y = analogRead(Config::m_pin_probe);
 					save = true;					
 				}
 				display_save_data();
@@ -222,53 +235,47 @@ void calibration()
 
 void setup() 
 {
-	Serial.begin(9600);
-  	ds_thermometer_init();
-	screen_init();
-	display_start();
+  Serial.begin(9600);
+  ds_thermometer_init();
+  screen_init();
+  display_start();
 
-	uint16_t read_value_x;
-	uint16_t read_value_y;
-	EEPROM.get<uint16_t>(0,read_value_x);
-	EEPROM.get<uint16_t>(4,read_value_y);
-	Point first_sample(read_value_x, read_value_y);
-	EEPROM.get<uint16_t>(8,read_value_x);
-	EEPROM.get<uint16_t>(12,read_value_y);
-	Point second_sample(read_value_x, read_value_y);
+  uint16_t read_value_x;
+  uint16_t read_value_y;
+  EEPROM.get<uint16_t>(0,read_value_x);
+  EEPROM.get<uint16_t>(4,read_value_y);
+  Point first_sample(read_value_x, read_value_y);
+  EEPROM.get<uint16_t>(8,read_value_x);
+  EEPROM.get<uint16_t>(12,read_value_y);
+  Point second_sample(read_value_x, read_value_y);
 
-  	probe_characteristic.set_points(first_sample, second_sample);  
+  probe_characteristic.set_points(first_sample, second_sample);
 
-	pinMode(m_supply_pin_probe, OUTPUT);
-	digitalWrite(m_supply_pin_probe, HIGH);
-	pinMode(m_pin_r_button, INPUT_PULLUP);
-	pinMode(m_pin_l_button, INPUT_PULLUP);
-	attachInterrupt(digitalPinToInterrupt(m_pin_r_button), button_r_pressed, FALLING);
-	attachInterrupt(digitalPinToInterrupt(m_pin_l_button), button_l_pressed, FALLING);
+  pinMode(Config::m_supply_pin_probe, OUTPUT);
+  digitalWrite(Config::m_supply_pin_probe, HIGH);
+  pinMode(Config::m_pin_r_button, INPUT_PULLUP);
+  pinMode(Config::m_pin_l_button, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(Config::m_pin_r_button), button_r_pressed, FALLING);
+  attachInterrupt(digitalPinToInterrupt(Config::m_pin_l_button), button_l_pressed, FALLING);
+
+  m_device_state = Device_state::display_measure_ph; //startup finished
 }
 
 void loop() 
 {
-	if (m_calibration)
+	switch (m_device_state)
 	{
-		calibration();
-	}
-	else if(m_r_button_pressed || m_l_button_pressed)
-	{		
-		do
-		{
-			long loop_time = millis();
-			if(loop_time - m_buttons_start_press > m_long_press_time)
-			{
-				m_calibration = true;
-				display_calib_mode();
-			}
-		}
-		while(!digitalRead(m_pin_r_button) && !digitalRead(m_pin_r_button) && !m_calibration);
-		m_r_button_pressed = false;
-		m_l_button_pressed = false;
-	}
-	else
-	{
-		display_measurements();
+	case Device_state::display_measure_ph :
+		display_measurements_ph();
+		break;
+	case Device_state::display_measure_ec :
+		break;
+	case Device_state::calibration_ph :
+		calibration_ph();
+		break;
+	case Device_state::calibration_ec :
+		break;
+	default:
+		break;
 	}
 }
