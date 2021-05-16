@@ -17,6 +17,15 @@ enum class Device_state
   calibration_ec
 };
 
+enum class Buttons_action
+{
+  nothig,
+  two_buttons_2s,
+  right_button_2s,
+  short_right_button,
+  short_left_button
+};
+
 byte m_ds_address[8];
 OneWire *m_one_wire = new OneWire(Config::m_pin_thermometer);
 DS18B20 *m_ds_sensor = new DS18B20(Config::m_pin_thermometer);
@@ -27,7 +36,6 @@ Device_state m_device_state = Device_state::startup;
 long m_buttons_start_press;
 bool m_r_button_pressed = false;
 bool m_l_button_pressed = false;
-bool m_calibration = false;
 Linear_function probe_characteristic;
 
 void ds_thermometer_init()
@@ -56,13 +64,11 @@ void screen_init()
 
 void button_r_pressed()
 {
-	m_buttons_start_press = millis();
 	m_r_button_pressed = true;
 }
 
 void button_l_pressed()
 {
-	m_buttons_start_press = millis();
 	m_l_button_pressed = true;
 }
 
@@ -95,13 +101,13 @@ void display_save_data()
   	display.display();
 }
 
-void display_measurements_ph()
+void display_measurements_ph(Buttons_action action)
 {
 	float temperature = m_ds_sensor->getTempC();
 	int analog_mes = analogRead(Config::m_pin_probe);
 	float ph = probe_characteristic.find_y(analog_mes);
 //----------------------------------
-	Serial.print("measure");
+	Serial.print("measure ph");
 	Serial.print(temperature);
 	Serial.print(";");
 	Serial.print(analog_mes);
@@ -118,20 +124,27 @@ void display_measurements_ph()
   	display.display();
 //----------------------------------
 
-  if(m_r_button_pressed || m_l_button_pressed)
-  {		
-	do
+	switch (action)
 	{
-   	  long loop_time = millis();
-	  if(loop_time - m_buttons_start_press > Config::m_long_press_time)
-		{
-		  m_device_state = Device_state::calibration_ph;
-		}
+	case Buttons_action::two_buttons_2s:
+		m_device_state = Device_state::calibration_ph;
+		break;
+	case Buttons_action::right_button_2s:
+		m_device_state = Device_state::display_measure_ec;
+	default:
+		m_device_state = Device_state::display_measure_ph;
+		break;
 	}
-	while(!digitalRead(Config::m_pin_r_button) && !digitalRead(Config::m_pin_r_button));
-		m_r_button_pressed = false;
-		m_l_button_pressed = false;
-  }
+}
+
+void display_measurements_ec(Buttons_action action)
+{
+	display.clearDisplay();
+  	display.setCursor(0, 0);   
+  	display.print((char)247);
+	display.println("C");
+	display.print("S");
+  	display.display();
 }
 
 void display_calibration(int sample)
@@ -172,64 +185,42 @@ void save_calibration(const Point samples[2])
 	probe_characteristic.set_points(samples[0], samples[1]);  
 }
 
-void calibration_ph()
+void calibration_ph(Buttons_action action)
 {
 	bool save = false;
 	static int sample = 4;
 	static int calibrated_sample = 1;
 	static Point samples[2]={};
 
-	if(m_r_button_pressed || m_l_button_pressed)
+	switch (action)
 	{
-		delay(100);
-		while (!digitalRead(Config::m_pin_r_button) && !digitalRead(Config::m_pin_r_button) && (m_r_button_pressed || m_l_button_pressed))
-		{
-			long loop_time = millis();
-			if(loop_time - m_buttons_start_press > Config::m_long_press_time && !save)
-			{
-				if(calibrated_sample == 1)
-				{					
-					samples[0].x = sample;
-					samples[0].y = analogRead(Config::m_pin_probe);				
-					calibrated_sample++;
-				}
-				else
-				{
-					samples[1].x = sample;
-					samples[1].y = analogRead(Config::m_pin_probe);
-					save = true;					
-				}
-				display_save_data();
-				
-				m_r_button_pressed = false;	
-				m_l_button_pressed = false;		
-			}
+	case Buttons_action::two_buttons_2s:
+//----------------------------------------
+		if(calibrated_sample == 1)
+		{					
+			samples[0].x = sample;
+			samples[0].y = analogRead(Config::m_pin_probe);				
+			calibrated_sample++;
 		}
-		
-		if(m_r_button_pressed)
-		{
-			sample++;
-		}
-
 		else
 		{
-			sample--;	
+			samples[1].x = sample;
+			samples[1].y = analogRead(Config::m_pin_probe);
+			calibrated_sample = 1;
+			save_calibration(samples);					
+		 	m_device_state = Device_state::display_measure_ph; 	
 		}
-
-		m_r_button_pressed = false;	
-		m_l_button_pressed = false;
-	}
-
-	if(save)
-	{
-		calibrated_sample = 1;
-		save = false;
-		m_calibration = false;
-		save_calibration(samples);
-	}	
-	else
-	{
+//----------------------------------------
+		break;
+	case Buttons_action::short_left_button:
+		sample--;
+		break;
+	case Buttons_action::short_right_button:
+		sample++;
+		break;
+	default:
 		display_calibration(sample);
+		break;
 	}
 }
 
@@ -261,21 +252,72 @@ void setup()
   m_device_state = Device_state::display_measure_ph; //startup finished
 }
 
+Buttons_action check_buttons()
+{
+  	if(m_r_button_pressed || m_l_button_pressed)
+  	{			  
+		m_buttons_start_press = millis();  
+
+		//przycisniecie dwoch przyciskow >2s
+		do
+		{
+		long loop_time = millis();
+		if(loop_time - m_buttons_start_press > Config::m_long_press_time)
+			{		  
+			m_l_button_pressed = false;
+			m_r_button_pressed = false;
+			return Buttons_action::two_buttons_2s;
+			}
+		}while(!digitalRead(Config::m_pin_r_button) && !digitalRead(Config::m_pin_l_button));
+
+		//przycisniecie prawego przycisku >2s
+		do
+		{
+		long loop_time = millis();
+		if(loop_time - m_buttons_start_press > Config::m_long_press_time)
+			{
+			m_device_state = Device_state::display_measure_ec;
+			m_l_button_pressed = false;
+			m_r_button_pressed = false;
+			return Buttons_action::right_button_2s;
+			}
+		}while (!digitalRead(Config::m_pin_r_button) && digitalRead(Config::m_pin_l_button));
+  	}
+
+  	if(digitalRead(Config::m_pin_r_button) && digitalRead(Config::m_pin_l_button))
+  	{
+		if(m_l_button_pressed)
+		{
+			m_l_button_pressed = false;
+			return Buttons_action::short_left_button;
+		}
+		else if(m_r_button_pressed)
+		{
+			m_r_button_pressed = false;
+			return Buttons_action::short_right_button;
+		}
+    	
+  	}
+	return Buttons_action::nothig;
+}
+
 void loop() 
 {
+	Buttons_action action = check_buttons();
 	switch (m_device_state)
 	{
 	case Device_state::display_measure_ph :
-		display_measurements_ph();
+		display_measurements_ph(action);
 		break;
 	case Device_state::display_measure_ec :
+		display_measurements_ec(action);
 		break;
 	case Device_state::calibration_ph :
-		calibration_ph();
+		calibration_ph(action);
 		break;
 	case Device_state::calibration_ec :
 		break;
 	default:
 		break;
-	}
+	}	
 }
