@@ -1,3 +1,6 @@
+#ifndef CONFIG
+#define CONFIG
+
 namespace Config
 {
   const byte m_pin_r_button = 3;
@@ -13,3 +16,5 @@ namespace Config
   const int blink_time_calibration = 150;
   const long m_long_press_time = 2000;
 }
+
+#endif //CONFIG

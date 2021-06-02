@@ -11,6 +11,7 @@
                 "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/include",
                 "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/src",
                 "C:/Users/Omen/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/ArduinoSTL/src",
                 "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit SSD1306",
                 "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit GFX Library",
                 "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit BusIO",
@@ -56,6 +57,7 @@
                     "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/include",
                     "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/src",
                     "C:/Users/Omen/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                    "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/ArduinoSTL/src",
                     "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit SSD1306",
                     "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit GFX Library",
                     "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/libdeps/nanoatmega328/Adafruit BusIO",
@@ -107,7 +109,7 @@
             ],
             "cStandard": "c11",
             "cppStandard": "c++11",
-            "compilerPath": "C:/Users/Omen/.platformio/packages/toolchain-atmelavr@1.50400.190710/bin/avr-gcc.exe",
+            "compilerPath": "C:/Users/Omen/.platformio/packages/toolchain-atmelavr@1.70300.191015/bin/avr-gcc.exe",
             "compilerArgs": [
                 "-mmcu=atmega328p",
                 ""

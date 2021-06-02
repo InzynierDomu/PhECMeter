@@ -14,6 +14,7 @@ public:
   Linear_function();
   Linear_function(Point first, Point second);
   void set_points(Point first, Point second);
+  void set_points(Point* points);
   double find_y(int x);
 
 private:
