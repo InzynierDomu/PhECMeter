@@ -29,6 +29,16 @@
             "projectEnvName": "nanoatmega328",
             "toolchainBinDir": "C:/Users/Omen/.platformio/packages/toolchain-atmelavr@1.70300.191015/bin",
             "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (without uploading)",
+            "executable": "c:/Users/Omen/Documents/PlatformIO/Projects/PhMeter/PhMeter/.pio/build/nanoatmega328/firmware.elf",
+            "projectEnvName": "nanoatmega328",
+            "toolchainBinDir": "C:/Users/Omen/.platformio/packages/toolchain-atmelavr@1.70300.191015/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "loadMode": "manual"
         }
     ]
 }
