@@ -1,274 +1,284 @@
-#include <Arduino.h>
-#include <EEPROM.h>
-#include "OneWire.h"
+#include "Calibration_data_memory.h"
+#include "Config.h"
 #include "DS18B20.h"
-#include "Adafruit_BusIO_Register.h"
-#include "Adafruit_GFX.h"
-#include "Adafruit_SSD1306.h"
+#include "Data_presentation.h"
 #include "Linear_function.h"
+#include "OneWire.h"
 
-const byte m_pin_r_button = 3;
-const byte m_pin_l_button = 2;
-const byte m_pin_thermometer = 4;
-const byte m_pin_probe = A1;
-const byte m_supply_pin_probe = 5;
+#include <Arduino.h>
+#include <ArduinoSTL.h>
+#include <EEPROM.h>
 
-const byte m_screen_adress = 0x3C;    
-const int m_screen_width = 128;
-const int m_screen_height = 32; 
+enum class Device_state
+{
+  startup,
+  display_measure_ph,
+  display_measure_ec,
+  calibration_ph,
+  calibration_ec
+};
+
+enum class Buttons_action
+{
+  nothig,
+  two_buttons_2s,
+  right_button_2s,
+  short_right_button,
+  short_left_button
+};
 
 byte m_ds_address[8];
-OneWire *m_one_wire = new OneWire(m_pin_thermometer);
-DS18B20 *m_ds_sensor = new DS18B20(m_pin_thermometer);
+OneWire m_one_wire = OneWire(Config::m_pin_thermometer);
+DS18B20 m_ds_sensor = DS18B20(Config::m_pin_thermometer);
+Data_presentation m_data_presentation;
+Calibration_data_memory m_memory;
 
-Adafruit_SSD1306 display(m_screen_width, m_screen_height, &Wire);
+Device_state m_device_state = Device_state::startup;
 
-const int blink_time_calibration = 150;
-const long m_long_press_time = 1000;
-
-long m_buttons_start_press;
 bool m_r_button_pressed = false;
 bool m_l_button_pressed = false;
-bool m_calibration = false;
 Linear_function probe_characteristic;
 
 void ds_thermometer_init()
 {
-	m_one_wire->reset_search();
-	while (m_one_wire->search(m_ds_address))
-	{
-		if (m_ds_address[0] != 0x28)
-			continue;
+  m_one_wire.reset_search();
+  while (m_one_wire.search(m_ds_address))
+  {
+    if (m_ds_address[0] != 0x28)
+      continue;
 
-		if (OneWire::crc8(m_ds_address, 7) != m_ds_address[7])
-		{
-			break;
-		}
-	}
+    if (OneWire::crc8(m_ds_address, 7) != m_ds_address[7])
+    {
+      break;
+    }
+  }
 }
 
-void screen_init()
-{
-	display.begin(SSD1306_SWITCHCAPVCC, m_screen_adress);
-  	display.clearDisplay();
-  	display.setTextSize(2);      
-  	display.setTextColor(SSD1306_WHITE); 
-  	display.display();
-}
-
+/**
+ * @brief right button press interrupt
+ */
 void button_r_pressed()
 {
-	m_buttons_start_press = millis();
-	m_r_button_pressed = true;
+  m_r_button_pressed = true;
 }
 
+/**
+ * @brief left button press interrupt
+ */
 void button_l_pressed()
 {
-	m_buttons_start_press = millis();
-	m_l_button_pressed = true;
+  m_l_button_pressed = true;
 }
 
-void display_start()
+void measurements_ph(const Buttons_action action)
 {
-	display.clearDisplay();
-  	display.setCursor(0, 0);   
-  	display.println("pH meter");
-	display.setTextSize(1);
-	display.println("inzynier Domu");
-  	display.display();
-	display.setTextSize(2);
+  float temperature = m_ds_sensor.getTempC();
+  int analog_mes = analogRead(Config::m_ph_pin_probe);
+  float ph = probe_characteristic.find_y(analog_mes);
+
+  m_data_presentation.presentation_measurements_ph(temperature, ph);
+
+  switch (action)
+  {
+    case Buttons_action::two_buttons_2s:
+      m_data_presentation.display_calib_mode();
+      m_device_state = Device_state::calibration_ph;
+      break;
+    case Buttons_action::right_button_2s:
+      digitalWrite(Config::m_ph_supply_pin_probe, LOW);
+      digitalWrite(Config::m_ec_supply_pin_probe, HIGH);
+      m_device_state = Device_state::display_measure_ec;
+      break;
+    default:
+      m_device_state = Device_state::display_measure_ph;
+      break;
+  }
 }
 
-void display_calib_mode()
+void measurements_ec(const Buttons_action action)
 {
-	display.clearDisplay();
-  	display.setCursor(0, 0);   
-  	display.println("CALIB");
-	display.println("MODE");
-  	display.display();
+  float temperature = m_ds_sensor.getTempC();
+  // TODO: change measure to ec pin and characteristic from ec
+  int analog_mes = analogRead(Config::m_ph_pin_probe);
+  float ec = probe_characteristic.find_y(analog_mes);
+
+  m_data_presentation.presentation_measurements_ec(temperature, ec);
+
+  switch (action)
+  {
+    case Buttons_action::two_buttons_2s:
+      m_data_presentation.display_calib_mode();
+      m_device_state = Device_state::calibration_ec;
+      break;
+    case Buttons_action::right_button_2s:
+      digitalWrite(Config::m_ec_supply_pin_probe, LOW);
+      digitalWrite(Config::m_ph_supply_pin_probe, HIGH);
+      m_device_state = Device_state::display_measure_ph;
+      break;
+    default:
+      m_device_state = Device_state::display_measure_ec;
+      break;
+  }
 }
 
-void display_save_data()
+bool save_sample(Point* samples, int sample)
 {
-	display.clearDisplay();
-  	display.setCursor(0, 0);   
-  	display.println("POINT");
-	display.println("SAVED");
-  	display.display();
+  static int sample_counter = 0;
+  samples[sample_counter].x = sample;
+  // TODO: change ph/ec
+  samples[sample_counter].y = analogRead(Config::m_ph_pin_probe);
+  if (++sample_counter == 2)
+  {
+    sample_counter = 0;
+    return true;
+  }
+  return false;
 }
 
-void display_measurements()
+void calibration_ph(const Buttons_action action)
 {
-	float temperature = m_ds_sensor->getTempC();
-	int analog_mes = analogRead(m_pin_probe);
-	float ph = probe_characteristic.find_y(analog_mes);
+  static int sample = 4;
 
-	Serial.print("measure");
-	Serial.print(temperature);
-	Serial.print(";");
-	Serial.print(analog_mes);
-	Serial.print(";");
-	Serial.println(ph);
+  static Point samples[2] = {};
 
-	display.clearDisplay();
-  	display.setCursor(0, 0);   
-  	display.print(temperature); 
-  	display.print((char)247);
-	display.println("C");
-	display.print(ph);
-	display.print("pH");
-  	display.display();
+  float temperature = m_ds_sensor.getTempC();
+
+  switch (action)
+  {
+    case Buttons_action::two_buttons_2s:
+      m_data_presentation.display_save_data();
+      if (save_sample(samples, sample))
+      {
+        m_memory.save_ph_calibration(std::make_pair(samples[0], samples[1]));
+        probe_characteristic.set_points(samples[0], samples[1]);
+        m_device_state = Device_state::display_measure_ph;
+      }
+      break;
+    case Buttons_action::short_left_button:
+      sample--;
+      break;
+    case Buttons_action::short_right_button:
+      sample++;
+      break;
+    default:
+      m_data_presentation.display_calibration_ph(sample, temperature);
+      break;
+  }
 }
 
-void display_calibration(int sample)
+void calibration_ec(Buttons_action action)
 {
-	long loop_time = millis();
-	static long time;
-	static bool toggle;
+  static double sample = 4.0;
 
-	float temperature = m_ds_sensor->getTempC();
+  static Point samples[2] = {};
 
-	display.clearDisplay();
-  	display.setCursor(0, 0);   
-  	display.print(temperature); 
-	display.print((char)247);
-	display.println("C");
+  float temperature = m_ds_sensor.getTempC();
 
-	if (loop_time - time > blink_time_calibration) 
-	{
-		time = millis();
-		toggle = !toggle;
-	}
-	
-	if(toggle)
-	{
-		display.print(sample);
-		display.print(".0 pH");	
-	}
-  	display.display();
+  switch (action)
+  {
+    case Buttons_action::two_buttons_2s:
+      break;
+    default:
+      break;
+  }
 }
 
-void save_calibration(const Point samples[2])
+/**
+ * @brief buttons action reaction
+ * @return Buttons_action type of action was done
+ */
+Buttons_action check_buttons()
 {
-	EEPROM.put<uint16_t>(0, samples[0].x);
-	EEPROM.put<uint16_t>(4, samples[0].y);
-	EEPROM.put<uint16_t>(8, samples[1].x);
-	EEPROM.put<uint16_t>(12, samples[1].y);
+  long m_buttons_start_press;
+  if (m_r_button_pressed || m_l_button_pressed)
+  {
+    m_buttons_start_press = millis();
 
-	probe_characteristic.set_points(samples[0], samples[1]);  
+    // przycisniecie dwoch przyciskow >2s
+    do
+    {
+      long loop_time = millis();
+      if (loop_time - m_buttons_start_press > Config::m_long_press_time)
+      {
+        m_l_button_pressed = false;
+        m_r_button_pressed = false;
+        return Buttons_action::two_buttons_2s;
+      }
+    } while (!digitalRead(Config::m_pin_r_button) && !digitalRead(Config::m_pin_l_button));
+
+    // przycisniecie prawego przycisku >2s
+    do
+    {
+      long loop_time = millis();
+      if (loop_time - m_buttons_start_press > Config::m_long_press_time)
+      {
+        m_l_button_pressed = false;
+        m_r_button_pressed = false;
+        return Buttons_action::right_button_2s;
+      }
+    } while (!digitalRead(Config::m_pin_r_button) && digitalRead(Config::m_pin_l_button));
+  }
+
+  if (digitalRead(Config::m_pin_r_button) && digitalRead(Config::m_pin_l_button))
+  {
+    if (m_l_button_pressed)
+    {
+      m_l_button_pressed = false;
+      return Buttons_action::short_left_button;
+    }
+    else if (m_r_button_pressed)
+    {
+      m_r_button_pressed = false;
+      return Buttons_action::short_right_button;
+    }
+  }
+  return Buttons_action::nothig;
 }
 
-void calibration()
+/**
+ * @brief setup on startup
+ */
+void setup()
 {
-	bool save = false;
-	static int sample = 4;
-	static int calibrated_sample = 1;
-	static Point samples[2]={};
+  m_data_presentation.display_start();
+  ds_thermometer_init();
 
-	if(m_r_button_pressed || m_l_button_pressed)
-	{
-		delay(100);
-		while (!digitalRead(m_pin_r_button) && !digitalRead(m_pin_r_button) && (m_r_button_pressed || m_l_button_pressed))
-		{
-			long loop_time = millis();
-			if(loop_time - m_buttons_start_press > m_long_press_time && !save)
-			{
-				if(calibrated_sample == 1)
-				{
-					
-					samples[0].x = sample;
-					samples[0].y = analogRead(m_pin_probe);				
-					calibrated_sample++;
-				}
-				else
-				{
-					samples[1].x = sample;
-					samples[1].y = analogRead(m_pin_probe);
-					save = true;					
-				}
-				display_save_data();
-				
-				m_r_button_pressed = false;	
-				m_l_button_pressed = false;		
-			}
-		}
-		
-		if(m_r_button_pressed)
-		{
-			sample++;
-		}
+  auto points = m_memory.load_ph_calibration();
+  probe_characteristic.set_points(points);
 
-		else
-		{
-			sample--;	
-		}
+  pinMode(Config::m_ph_supply_pin_probe, OUTPUT);
+  digitalWrite(Config::m_ph_supply_pin_probe, HIGH);
+  pinMode(Config::m_ec_supply_pin_probe, OUTPUT);
+  digitalWrite(Config::m_ec_supply_pin_probe, LOW);
+  pinMode(Config::m_pin_r_button, INPUT_PULLUP);
+  pinMode(Config::m_pin_l_button, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(Config::m_pin_r_button), button_r_pressed, FALLING);
+  attachInterrupt(digitalPinToInterrupt(Config::m_pin_l_button), button_l_pressed, FALLING);
 
-		m_r_button_pressed = false;	
-		m_l_button_pressed = false;
-	}
-
-	if(save)
-	{
-		calibrated_sample = 1;
-		save = false;
-		m_calibration = false;
-		save_calibration(samples);
-	}	
-	else
-	{
-		display_calibration(sample);
-	}
+  m_device_state = Device_state::display_measure_ph;
 }
 
-void setup() 
+/**
+ * @brief main loop with state machine
+ */
+void loop()
 {
-	Serial.begin(9600);
-  	ds_thermometer_init();
-	screen_init();
-	display_start();
-
-	uint16_t read_value_x;
-	uint16_t read_value_y;
-	EEPROM.get<uint16_t>(0,read_value_x);
-	EEPROM.get<uint16_t>(4,read_value_y);
-	Point first_sample(read_value_x, read_value_y);
-	EEPROM.get<uint16_t>(8,read_value_x);
-	EEPROM.get<uint16_t>(12,read_value_y);
-	Point second_sample(read_value_x, read_value_y);
-
-  	probe_characteristic.set_points(first_sample, second_sample);  
-
-	pinMode(m_supply_pin_probe, OUTPUT);
-	digitalWrite(m_supply_pin_probe, HIGH);
-	pinMode(m_pin_r_button, INPUT_PULLUP);
-	pinMode(m_pin_l_button, INPUT_PULLUP);
-	attachInterrupt(digitalPinToInterrupt(m_pin_r_button), button_r_pressed, FALLING);
-	attachInterrupt(digitalPinToInterrupt(m_pin_l_button), button_l_pressed, FALLING);
-}
-
-void loop() 
-{
-	if (m_calibration)
-	{
-		calibration();
-	}
-	else if(m_r_button_pressed || m_l_button_pressed)
-	{		
-		do
-		{
-			long loop_time = millis();
-			if(loop_time - m_buttons_start_press > m_long_press_time)
-			{
-				m_calibration = true;
-				display_calib_mode();
-			}
-		}
-		while(!digitalRead(m_pin_r_button) && !digitalRead(m_pin_r_button) && !m_calibration);
-		m_r_button_pressed = false;
-		m_l_button_pressed = false;
-	}
-	else
-	{
-		display_measurements();
-	}
+  auto action = check_buttons();
+  switch (m_device_state)
+  {
+    case Device_state::display_measure_ph:
+      measurements_ph(action);
+      break;
+    case Device_state::display_measure_ec:
+      measurements_ec(action);
+      break;
+    case Device_state::calibration_ph:
+      calibration_ph(action);
+      break;
+    case Device_state::calibration_ec:
+      calibration_ec(action);
+      break;
+    default:
+      break;
+  }
 }

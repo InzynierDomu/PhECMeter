@@ -1,25 +1,27 @@
-#ifndef LINEAR_FUNCTION
-#define LINEAR_FUNCTION
+#pragma once
+
+#include <ArduinoSTL.h>
 
 struct Point
 {
-  Point(int _y = 0, int _x = 0):y(_y), x(_x){};
-  int y;
-  int x;
+  Point(double _y = 0, double _x = 0)
+  : y(_y)
+  , x(_x){};
+  double y;
+  double x;
 };
 
 class Linear_function
 {
-public:
+  public:
   Linear_function();
   Linear_function(Point first, Point second);
   void set_points(Point first, Point second);
+  void set_points(std::pair<Point, Point> points);
   double find_y(int x);
 
-private:
-  //y = ax + b
+  private:
+  // y = ax + b
   double a;
   double b;
 };
-
-#endif //LINEAR_FUNCTION
