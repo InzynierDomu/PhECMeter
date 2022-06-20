@@ -2,9 +2,9 @@
 
 Linear_function::Linear_function() {}
 
-Linear_function::Linear_function(Point first, Point second)
+Linear_function::Linear_function(Point points[2])
 {
-  set_points(first, second);
+  set_points(points);
 }
 
 double Linear_function::find_y(int x)
@@ -12,14 +12,8 @@ double Linear_function::find_y(int x)
   return (a * x + b);
 }
 
-void Linear_function::set_points(Point first, Point second)
+void Linear_function::set_points(Point points[2])
 {
-  a = (second.y - first.y) / (double)(second.x - first.x);
-  b = first.y - (a * first.x);
-}
-
-void Linear_function::set_points(std::pair<Point, Point> points)
-{
-  a = (points.second.y - points.first.y) / (double)(points.second.x - points.first.x);
-  b = points.first.y - (a * points.first.x);
+  a = (points[1].y - points[0].y) / (double)(points[1].x - points[0].x);
+  b = points[0].y - (a * points[0].x);
 }
