@@ -28,8 +28,8 @@ enum class Buttons_action
 };
 
 byte m_ds_address[8];
-OneWire* m_one_wire = new OneWire(Config::m_pin_thermometer);
-DS18B20* m_ds_sensor = new DS18B20(Config::m_pin_thermometer);
+OneWire m_one_wire = OneWire(Config::m_pin_thermometer);
+DS18B20 m_ds_sensor = DS18B20(Config::m_pin_thermometer);
 Data_presentation m_data_presentation;
 Calibration_data_memory m_memory;
 
@@ -41,8 +41,8 @@ Linear_function probe_characteristic;
 
 void ds_thermometer_init()
 {
-  m_one_wire->reset_search();
-  while (m_one_wire->search(m_ds_address))
+  m_one_wire.reset_search();
+  while (m_one_wire.search(m_ds_address))
   {
     if (m_ds_address[0] != 0x28)
       continue;
@@ -72,8 +72,8 @@ void button_l_pressed()
 
 void measurements_ph(const Buttons_action action)
 {
-  float temperature = m_ds_sensor->getTempC();
-  int analog_mes = analogRead(Config::m_pin_probe);
+  float temperature = m_ds_sensor.getTempC();
+  int analog_mes = analogRead(Config::m_ph_pin_probe);
   float ph = probe_characteristic.find_y(analog_mes);
 
   m_data_presentation.presentation_measurements_ph(temperature, ph);
@@ -85,6 +85,8 @@ void measurements_ph(const Buttons_action action)
       m_device_state = Device_state::calibration_ph;
       break;
     case Buttons_action::right_button_2s:
+      digitalWrite(Config::m_ph_supply_pin_probe, LOW);
+      digitalWrite(Config::m_ec_supply_pin_probe, HIGH);
       m_device_state = Device_state::display_measure_ec;
       break;
     default:
@@ -95,9 +97,9 @@ void measurements_ph(const Buttons_action action)
 
 void measurements_ec(const Buttons_action action)
 {
-  float temperature = m_ds_sensor->getTempC();
-  //TODO: change measure to ec pin and characteristic from ec
-  int analog_mes = analogRead(Config::m_pin_probe);
+  float temperature = m_ds_sensor.getTempC();
+  // TODO: change measure to ec pin and characteristic from ec
+  int analog_mes = analogRead(Config::m_ph_pin_probe);
   float ec = probe_characteristic.find_y(analog_mes);
 
   m_data_presentation.presentation_measurements_ec(temperature, ec);
@@ -109,6 +111,8 @@ void measurements_ec(const Buttons_action action)
       m_device_state = Device_state::calibration_ec;
       break;
     case Buttons_action::right_button_2s:
+      digitalWrite(Config::m_ec_supply_pin_probe, LOW);
+      digitalWrite(Config::m_ph_supply_pin_probe, HIGH);
       m_device_state = Device_state::display_measure_ph;
       break;
     default:
@@ -121,7 +125,8 @@ bool save_sample(Point* samples, int sample)
 {
   static int sample_counter = 0;
   samples[sample_counter].x = sample;
-  samples[sample_counter].y = analogRead(Config::m_pin_probe);
+  // TODO: change ph/ec
+  samples[sample_counter].y = analogRead(Config::m_ph_pin_probe);
   if (++sample_counter == 2)
   {
     sample_counter = 0;
@@ -136,7 +141,7 @@ void calibration_ph(const Buttons_action action)
 
   static Point samples[2] = {};
 
-  float temperature = m_ds_sensor->getTempC();
+  float temperature = m_ds_sensor.getTempC();
 
   switch (action)
   {
@@ -166,6 +171,8 @@ void calibration_ec(Buttons_action action)
   static double sample = 4.0;
 
   static Point samples[2] = {};
+
+  float temperature = m_ds_sensor.getTempC();
 
   switch (action)
   {
@@ -239,8 +246,10 @@ void setup()
   auto points = m_memory.load_ph_calibration();
   probe_characteristic.set_points(points);
 
-  pinMode(Config::m_supply_pin_probe, OUTPUT);
-  digitalWrite(Config::m_supply_pin_probe, HIGH);
+  pinMode(Config::m_ph_supply_pin_probe, OUTPUT);
+  digitalWrite(Config::m_ph_supply_pin_probe, HIGH);
+  pinMode(Config::m_ec_supply_pin_probe, OUTPUT);
+  digitalWrite(Config::m_ec_supply_pin_probe, LOW);
   pinMode(Config::m_pin_r_button, INPUT_PULLUP);
   pinMode(Config::m_pin_l_button, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(Config::m_pin_r_button), button_r_pressed, FALLING);
