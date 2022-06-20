@@ -9,7 +9,6 @@
 #include <ArduinoSTL.h>
 #include <EEPROM.h>
 
-
 enum class Device_state
 {
   startup,
@@ -31,7 +30,7 @@ enum class Buttons_action
 byte m_ds_address[8];
 OneWire* m_one_wire = new OneWire(Config::m_pin_thermometer);
 DS18B20* m_ds_sensor = new DS18B20(Config::m_pin_thermometer);
-Data_presentation* m_data_presentation;
+Data_presentation m_data_presentation;
 Calibration_data_memory m_memory;
 
 Device_state m_device_state = Device_state::startup;
@@ -55,53 +54,63 @@ void ds_thermometer_init()
   }
 }
 
+/**
+ * @brief right button press interrupt
+ */
 void button_r_pressed()
 {
   m_r_button_pressed = true;
 }
 
+/**
+ * @brief left button press interrupt
+ */
 void button_l_pressed()
 {
   m_l_button_pressed = true;
 }
 
-void measurements_ph(Buttons_action action)
+void measurements_ph(const Buttons_action action)
 {
   float temperature = m_ds_sensor->getTempC();
   int analog_mes = analogRead(Config::m_pin_probe);
   float ph = probe_characteristic.find_y(analog_mes);
 
-  m_data_presentation->presentation_measurements_ph(temperature, ph);
+  m_data_presentation.presentation_measurements_ph(temperature, ph);
 
   switch (action)
   {
     case Buttons_action::two_buttons_2s:
-      m_data_presentation->display_calib_mode();
+      m_data_presentation.display_calib_mode();
       m_device_state = Device_state::calibration_ph;
       break;
     case Buttons_action::right_button_2s:
       m_device_state = Device_state::display_measure_ec;
+      break;
     default:
       m_device_state = Device_state::display_measure_ph;
       break;
   }
 }
 
-void measurements_ec(Buttons_action action)
+void measurements_ec(const Buttons_action action)
 {
   float temperature = m_ds_sensor->getTempC();
-  float ec;
+  //TODO: change measure to ec pin and characteristic from ec
+  int analog_mes = analogRead(Config::m_pin_probe);
+  float ec = probe_characteristic.find_y(analog_mes);
 
-  m_data_presentation->presentation_measurements_ec(temperature, ec);
+  m_data_presentation.presentation_measurements_ec(temperature, ec);
 
   switch (action)
   {
     case Buttons_action::two_buttons_2s:
-      m_data_presentation->display_calib_mode();
+      m_data_presentation.display_calib_mode();
       m_device_state = Device_state::calibration_ec;
       break;
     case Buttons_action::right_button_2s:
       m_device_state = Device_state::display_measure_ph;
+      break;
     default:
       m_device_state = Device_state::display_measure_ec;
       break;
@@ -121,7 +130,7 @@ bool save_sample(Point* samples, int sample)
   return false;
 }
 
-void calibration_ph(Buttons_action action)
+void calibration_ph(const Buttons_action action)
 {
   static int sample = 4;
 
@@ -132,7 +141,7 @@ void calibration_ph(Buttons_action action)
   switch (action)
   {
     case Buttons_action::two_buttons_2s:
-      m_data_presentation->display_save_data();
+      m_data_presentation.display_save_data();
       if (save_sample(samples, sample))
       {
         m_memory.save_ph_calibration(std::make_pair(samples[0], samples[1]));
@@ -147,7 +156,7 @@ void calibration_ph(Buttons_action action)
       sample++;
       break;
     default:
-      m_data_presentation->display_calibration_ph(sample, temperature);
+      m_data_presentation.display_calibration_ph(sample, temperature);
       break;
   }
 }
@@ -167,25 +176,10 @@ void calibration_ec(Buttons_action action)
   }
 }
 
-void setup()
-{
-  m_data_presentation = new Data_presentation();
-  ds_thermometer_init();
-  m_data_presentation->display_start();
-
-  auto points = m_memory.load_ph_calibration();
-  probe_characteristic.set_points(points);
-
-  pinMode(Config::m_supply_pin_probe, OUTPUT);
-  digitalWrite(Config::m_supply_pin_probe, HIGH);
-  pinMode(Config::m_pin_r_button, INPUT_PULLUP);
-  pinMode(Config::m_pin_l_button, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(Config::m_pin_r_button), button_r_pressed, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Config::m_pin_l_button), button_l_pressed, FALLING);
-
-  m_device_state = Device_state::display_measure_ph; // startup finished
-}
-
+/**
+ * @brief buttons action reaction
+ * @return Buttons_action type of action was done
+ */
 Buttons_action check_buttons()
 {
   long m_buttons_start_press;
@@ -211,7 +205,6 @@ Buttons_action check_buttons()
       long loop_time = millis();
       if (loop_time - m_buttons_start_press > Config::m_long_press_time)
       {
-        m_device_state = Device_state::display_measure_ec;
         m_l_button_pressed = false;
         m_r_button_pressed = false;
         return Buttons_action::right_button_2s;
@@ -235,9 +228,33 @@ Buttons_action check_buttons()
   return Buttons_action::nothig;
 }
 
+/**
+ * @brief setup on startup
+ */
+void setup()
+{
+  m_data_presentation.display_start();
+  ds_thermometer_init();
+
+  auto points = m_memory.load_ph_calibration();
+  probe_characteristic.set_points(points);
+
+  pinMode(Config::m_supply_pin_probe, OUTPUT);
+  digitalWrite(Config::m_supply_pin_probe, HIGH);
+  pinMode(Config::m_pin_r_button, INPUT_PULLUP);
+  pinMode(Config::m_pin_l_button, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(Config::m_pin_r_button), button_r_pressed, FALLING);
+  attachInterrupt(digitalPinToInterrupt(Config::m_pin_l_button), button_l_pressed, FALLING);
+
+  m_device_state = Device_state::display_measure_ph;
+}
+
+/**
+ * @brief main loop with state machine
+ */
 void loop()
 {
-  Buttons_action action = check_buttons();
+  auto action = check_buttons();
   switch (m_device_state)
   {
     case Device_state::display_measure_ph:

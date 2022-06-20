@@ -7,8 +7,6 @@
 Data_presentation::Data_presentation()
 : m_display(Config::m_screen_width, Config::m_screen_height, &Wire)
 {
-  Serial.begin(9600);
-
   m_display.begin(SSD1306_SWITCHCAPVCC, Config::m_screen_adress);
   m_display.clearDisplay();
   m_display.setTextSize(2);
@@ -18,6 +16,8 @@ Data_presentation::Data_presentation()
 
 void Data_presentation::display_start()
 {
+  Serial.begin(9600);
+
   m_display.clearDisplay();
   m_display.setCursor(0, 0);
   m_display.setTextSize(1);
@@ -80,7 +80,7 @@ void Data_presentation::presentation_measurements_ec(const float temperature, co
   m_display.display();
 }
 
-void Data_presentation::display_calibration_ph(const int sample, const float temperature)
+void Data_presentation::display_calibration_ph(const uint8_t sample, const float temperature)
 {
   long loop_time = millis();
   static long time;
@@ -104,17 +104,17 @@ void Data_presentation::display_calibration_ph(const int sample, const float tem
   }
   else
   {
-    m_display.print("  ");
+    m_display.print(" ");
   }
 
   m_display.print(".0 pH");
   m_display.display();
 
   // 1.0 pH
-  // .0 pH
+  //  .0 pH
   // 1.0 pH
   // 0.0 pH
-  //-1.0 pH
+  //  .0 pH
 }
 
 void Data_presentation::display_calibration_ec(const double sample, const int position, const float temperature)
