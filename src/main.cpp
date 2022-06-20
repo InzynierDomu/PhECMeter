@@ -6,7 +6,6 @@
 #include "OneWire.h"
 
 #include <Arduino.h>
-#include <ArduinoSTL.h>
 #include <EEPROM.h>
 
 enum class Device_state
@@ -149,8 +148,8 @@ void calibration_ph(const Buttons_action action)
       m_data_presentation.display_save_data();
       if (save_sample(samples, sample))
       {
-        m_memory.save_ph_calibration(std::make_pair(samples[0], samples[1]));
-        probe_characteristic.set_points(samples[0], samples[1]);
+        m_memory.save_ph_calibration(samples);
+        probe_characteristic.set_points(samples);
         m_device_state = Device_state::display_measure_ph;
       }
       break;
@@ -243,7 +242,8 @@ void setup()
   m_data_presentation.display_start();
   ds_thermometer_init();
 
-  auto points = m_memory.load_ph_calibration();
+  Point points[2];
+  m_memory.load_ph_calibration(points);
   probe_characteristic.set_points(points);
 
   pinMode(Config::m_ph_supply_pin_probe, OUTPUT);

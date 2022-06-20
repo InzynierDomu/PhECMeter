@@ -1,7 +1,5 @@
 #pragma once
 
-#include <ArduinoSTL.h>
-
 struct Point
 {
   Point(double _y = 0, double _x = 0)
@@ -15,9 +13,8 @@ class Linear_function
 {
   public:
   Linear_function();
-  Linear_function(Point first, Point second);
-  void set_points(Point first, Point second);
-  void set_points(std::pair<Point, Point> points);
+  Linear_function(Point points[2]);
+  void set_points(Point points[2]);
   double find_y(int x);
 
   private:
