@@ -1,4 +1,12 @@
-# PhMeter
+# PhECMeter
+
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/InzynierDomu/PhECMeter/CI?logo=github&style=flat-square)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/InzynierDomu/PhECMeter?style=flat-square)
+<a href="https://inzynierdomu.github.io/PhECMeter/">![GitHub docs deployments](https://img.shields.io/github/deployments/InzynierDomu/PhECMeter/github-pages?label=docs&logo=BookStack&logoColor=white&style=flat-square)</a>
+<a href="https://discord.gg/KmW6mHdg">![Discord](https://img.shields.io/discord/815929748882587688?logo=discord&logoColor=green&style=flat-square)</a>
+![GitHub](https://img.shields.io/github/license/InzynierDomu/PhECMeter?style=flat-square)
+<a href="https://tipo.live/p/inzynierdomu">![support](https://img.shields.io/badge/support-tipo.live-yellow?style=flat-square)</a>
+
 * [Scheme](#Scheme)
 * [IDE](#IDE)
 
@@ -6,7 +14,8 @@ The video with the entire project can be watched on this [video](https://youtu.b
 ## Scheme
 ![alt text](http://www.inzynierdomu.pl/wp-content/uploads/2021/01/ph_metr_schemat.png)
 ### Part list:
-* pH metr need probe and board for probe like [this](https://botland.com.pl/pl/seria-gravity/15094-gravity-czujnik-miernik-ph-analogowy-v2-dfrobot-sen0161-v2.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)
+* pH probe and board like [this](https://botland.com.pl/pl/seria-gravity/15094-gravity-czujnik-miernik-ph-analogowy-v2-dfrobot-sen0161-v2.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)
+* EC probe and board like [this](https://botland.com.pl/gravity-czujniki-pogodowe/15096-gravity-analogowy-czujnik-zasolenia-wody-i-gleby-dfrobot-dfr0300-h-5904422348359.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)
 * A1 Arduino Nano
 * U1 ds18b20 temperature sensor
 * J1 is socket for pH board.
