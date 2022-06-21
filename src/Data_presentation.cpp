@@ -1,19 +1,31 @@
+/**
+ * @file Data_presentation.cpp
+ * @author by Szymon Markiewicz (https://github.com/InzynierDomu/)
+ * @brief send data via serial and present on screen
+ * @date 2022-06
+ */
 #include "Data_presentation.h"
 
 #include "Config.h"
 
 #include <math.h>
 
+/**
+ * @brief Construct a new Data_presentation::Data_presentation object
+ */
 Data_presentation::Data_presentation()
 : m_display(Config::m_screen_width, Config::m_screen_height, &Wire)
 {
-  m_display.begin(SSD1306_SWITCHCAPVCC, Config::m_screen_adress);
+  m_display.begin(SSD1306_SWITCHCAPVCC, Config::m_screen_address);
   m_display.clearDisplay();
   m_display.setTextSize(2);
   m_display.setTextColor(SSD1306_WHITE);
   m_display.display();
 }
 
+/**
+ * @brief startup screen
+ */
 void Data_presentation::display_start()
 {
   Serial.begin(9600);
@@ -28,6 +40,9 @@ void Data_presentation::display_start()
   delay(500);
 }
 
+/**
+ * @brief calibration mode info screen
+ */
 void Data_presentation::display_calib_mode()
 {
   m_display.clearDisplay();
@@ -38,6 +53,9 @@ void Data_presentation::display_calib_mode()
   delay(500);
 }
 
+/**
+ * @brief save point info screen
+ */
 void Data_presentation::display_save_data()
 {
   m_display.clearDisplay();
@@ -48,6 +66,11 @@ void Data_presentation::display_save_data()
   delay(500);
 }
 
+/**
+ * @brief send ph and temperature and print on screen
+ * @param temperature: temperature value to send and print
+ * @param ph: ph value to send and print
+ */
 void Data_presentation::presentation_measurements_ph(const float temperature, const float ph)
 {
   Serial.print(temperature);
@@ -64,6 +87,11 @@ void Data_presentation::presentation_measurements_ph(const float temperature, co
   m_display.display();
 }
 
+/**
+ * @brief send ec and temperature and print on screen
+ * @param temperature: temperature value to send and print
+ * @param ph: ec value to send and print
+ */
 void Data_presentation::presentation_measurements_ec(const float temperature, const float ec)
 {
   Serial.print(temperature);
@@ -80,6 +108,11 @@ void Data_presentation::presentation_measurements_ec(const float temperature, co
   m_display.display();
 }
 
+/**
+ * @brief ph calibration screen
+ * @param sample: ph value current calibrating
+ * @param temperature: current temperature
+ */
 void Data_presentation::display_calibration_ph(const uint8_t sample, const float temperature)
 {
   long loop_time = millis();
@@ -117,6 +150,12 @@ void Data_presentation::display_calibration_ph(const uint8_t sample, const float
   //  .0 pH
 }
 
+/**
+ * @brief ec calibration screen
+ * @param sample: ec value current calibrating
+ * @param position: toggling digit position
+ * @param temperature: current temperature
+ */
 void Data_presentation::display_calibration_ec(const double sample, const int position, const float temperature)
 {
   long loop_time = millis();

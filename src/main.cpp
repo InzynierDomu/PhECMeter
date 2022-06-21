@@ -8,6 +8,7 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 
+///< possible device state
 enum class Device_state
 {
   startup,
@@ -17,6 +18,7 @@ enum class Device_state
   calibration_ec
 };
 
+///< possible recognizing buttons action
 enum class Buttons_action
 {
   nothig,
@@ -26,18 +28,21 @@ enum class Buttons_action
   short_left_button
 };
 
-byte m_ds_address[8];
-OneWire m_one_wire = OneWire(Config::m_pin_thermometer);
-DS18B20 m_ds_sensor = DS18B20(Config::m_pin_thermometer);
-Data_presentation m_data_presentation;
-Calibration_data_memory m_memory;
+byte m_ds_address[8]; ///< ds18b20 thermometer one wire address
+OneWire m_one_wire = OneWire(Config::m_pin_thermometer); ///< one wire bus
+DS18B20 m_ds_sensor = DS18B20(Config::m_pin_thermometer); ///< ds18b20 thermometer
+Data_presentation m_data_presentation; ///< screen and serial handling
+Calibration_data_memory m_memory; ///< memory handling
 
-Device_state m_device_state = Device_state::startup;
+Device_state m_device_state = Device_state::startup; ///< actual device state
 
-bool m_r_button_pressed = false;
-bool m_l_button_pressed = false;
-Linear_function probe_characteristic;
+bool m_r_button_pressed = false; ///< right button pressed flag
+bool m_l_button_pressed = false; ///< left button pressed flag
+Linear_function ph_probe_characteristic; ///< pf probe linear characteristic
 
+/**
+ * @brief find thermometer on one wire
+ */
 void ds_thermometer_init()
 {
   m_one_wire.reset_search();
@@ -69,11 +74,15 @@ void button_l_pressed()
   m_l_button_pressed = true;
 }
 
+/**
+ * @brief ph measure
+ * @param action: buttons action
+ */
 void measurements_ph(const Buttons_action action)
 {
   float temperature = m_ds_sensor.getTempC();
   int analog_mes = analogRead(Config::m_ph_pin_probe);
-  float ph = probe_characteristic.find_y(analog_mes);
+  float ph = ph_probe_characteristic.find_y(analog_mes);
 
   m_data_presentation.presentation_measurements_ph(temperature, ph);
 
@@ -94,12 +103,16 @@ void measurements_ph(const Buttons_action action)
   }
 }
 
+/**
+ * @brief ec measure
+ * @param action: buttons action
+ */
 void measurements_ec(const Buttons_action action)
 {
   float temperature = m_ds_sensor.getTempC();
   // TODO: change measure to ec pin and characteristic from ec
   int analog_mes = analogRead(Config::m_ph_pin_probe);
-  float ec = probe_characteristic.find_y(analog_mes);
+  float ec = ph_probe_characteristic.find_y(analog_mes);
 
   m_data_presentation.presentation_measurements_ec(temperature, ec);
 
@@ -120,6 +133,12 @@ void measurements_ec(const Buttons_action action)
   }
 }
 
+/**
+ * @brief saving next point in characteristic
+ * @param samples points to characteristic
+ * @param sample new reference value
+ * @return is calibration finished
+ */
 bool save_sample(Point* samples, int sample)
 {
   static int sample_counter = 0;
@@ -134,6 +153,10 @@ bool save_sample(Point* samples, int sample)
   return false;
 }
 
+/**
+ * @brief calibration ph procedure
+ * @param action buttons action
+ */
 void calibration_ph(const Buttons_action action)
 {
   static int sample = 4;
@@ -149,7 +172,7 @@ void calibration_ph(const Buttons_action action)
       if (save_sample(samples, sample))
       {
         m_memory.save_ph_calibration(samples);
-        probe_characteristic.set_points(samples);
+        ph_probe_characteristic.set_points(samples);
         m_device_state = Device_state::display_measure_ph;
       }
       break;
@@ -165,7 +188,11 @@ void calibration_ph(const Buttons_action action)
   }
 }
 
-void calibration_ec(Buttons_action action)
+/**
+ * @brief calibration ec procedure
+ * @param action buttons action
+ */
+void calibration_ec(const Buttons_action action)
 {
   static double sample = 4.0;
 
@@ -193,7 +220,7 @@ Buttons_action check_buttons()
   {
     m_buttons_start_press = millis();
 
-    // przycisniecie dwoch przyciskow >2s
+    // two buttons pressed >2s
     do
     {
       long loop_time = millis();
@@ -205,7 +232,7 @@ Buttons_action check_buttons()
       }
     } while (!digitalRead(Config::m_pin_r_button) && !digitalRead(Config::m_pin_l_button));
 
-    // przycisniecie prawego przycisku >2s
+    // right button pressed >2s
     do
     {
       long loop_time = millis();
@@ -244,7 +271,7 @@ void setup()
 
   Point points[2];
   m_memory.load_ph_calibration(points);
-  probe_characteristic.set_points(points);
+  ph_probe_characteristic.set_points(points);
 
   pinMode(Config::m_ph_supply_pin_probe, OUTPUT);
   digitalWrite(Config::m_ph_supply_pin_probe, HIGH);

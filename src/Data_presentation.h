@@ -1,3 +1,9 @@
+/**
+ * @file Data_presentation.h
+ * @author by Szymon Markiewicz (https://github.com/InzynierDomu/)
+ * @brief send data via serial and present on screen
+ * @date 2022-06
+ */
 #pragma once
 
 #include "Adafruit_BusIO_Register.h"
@@ -17,5 +23,5 @@ class Data_presentation
   void display_calibration_ec(const double sample, const int position, const float temperature);
 
   private:
-  Adafruit_SSD1306 m_display;
+  Adafruit_SSD1306 m_display; ///< ssd1306 oled screen
 };
