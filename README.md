@@ -7,9 +7,13 @@
 ![GitHub](https://img.shields.io/github/license/InzynierDomu/PhECMeter?style=flat-square)
 <a href="https://tipo.live/p/inzynierdomu">![support](https://img.shields.io/badge/support-tipo.live-yellow?style=flat-square)</a>
 
-* [Scheme](#Scheme)
-* [IDE](#IDE)
+- [PhECMeter](#phecmeter)
+  - [Description](#description)
+  - [Scheme](#scheme)
+    - [Part list:](#part-list)
+  - [IDE](#ide)
 
+## Description
 The video with the entire project can be watched on this [video](https://youtu.be/vjk0nq04lCo)
 ## Scheme
 ![alt text](http://www.inzynierdomu.pl/wp-content/uploads/2021/01/ph_metr_schemat.png)

@@ -1,3 +1,10 @@
+/**
+ * @file main.cpp
+ * @author by Szymon Markiewicz (https://github.com/InzynierDomu/)
+ * @brief pH and EC meter
+ * @date 2022-06
+ */
+
 #include "Calibration_data_memory.h"
 #include "Config.h"
 #include "DS18B20.h"
@@ -38,7 +45,8 @@ Device_state m_device_state = Device_state::startup; ///< actual device state
 
 bool m_r_button_pressed = false; ///< right button pressed flag
 bool m_l_button_pressed = false; ///< left button pressed flag
-Linear_function ph_probe_characteristic; ///< pf probe linear characteristic
+Linear_function ph_probe_characteristic; ///< ph probe linear characteristic
+Linear_function ec_probe_characteristic; ///< ec probe linear characteristic
 
 /**
  * @brief find thermometer on one wire
@@ -110,9 +118,8 @@ void measurements_ph(const Buttons_action action)
 void measurements_ec(const Buttons_action action)
 {
   float temperature = m_ds_sensor.getTempC();
-  // TODO: change measure to ec pin and characteristic from ec
-  int analog_mes = analogRead(Config::m_ph_pin_probe);
-  float ec = ph_probe_characteristic.find_y(analog_mes);
+  int analog_mes = analogRead(Config::m_ec_pin_probe);
+  float ec = ec_probe_characteristic.find_y(analog_mes);
 
   m_data_presentation.presentation_measurements_ec(temperature, ec);
 
@@ -139,7 +146,7 @@ void measurements_ec(const Buttons_action action)
  * @param sample new reference value
  * @return is calibration finished
  */
-bool save_sample(Point* samples, int sample)
+bool save_sample(Point* samples, double sample)
 {
   static int sample_counter = 0;
   samples[sample_counter].x = sample;
@@ -159,7 +166,7 @@ bool save_sample(Point* samples, int sample)
  */
 void calibration_ph(const Buttons_action action)
 {
-  static int sample = 4;
+  static uint8_t sample = 4;
 
   static Point samples[2] = {};
 
@@ -203,6 +210,10 @@ void calibration_ec(const Buttons_action action)
   switch (action)
   {
     case Buttons_action::two_buttons_2s:
+      break;
+    case Buttons_action::short_left_button:
+      break;
+    case Buttons_action::short_right_button:
       break;
     default:
       break;
@@ -272,6 +283,8 @@ void setup()
   Point points[2];
   m_memory.load_ph_calibration(points);
   ph_probe_characteristic.set_points(points);
+  m_memory.load_ec_calibration(points);
+  ec_probe_characteristic.set_points(points);
 
   pinMode(Config::m_ph_supply_pin_probe, OUTPUT);
   digitalWrite(Config::m_ph_supply_pin_probe, HIGH);
