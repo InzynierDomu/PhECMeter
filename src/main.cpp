@@ -14,6 +14,7 @@
 
 #include <Arduino.h>
 #include <EEPROM.h>
+#include <math.h>
 
 ///< possible device state
 enum class Device_state
@@ -150,8 +151,18 @@ bool save_sample(Point* samples, double sample)
 {
   static int sample_counter = 0;
   samples[sample_counter].x = sample;
-  // TODO: change ph/ec
-  samples[sample_counter].y = analogRead(Config::m_ph_pin_probe);
+  switch (m_device_state)
+  {
+    case Device_state::calibration_ph:
+      samples[sample_counter].y = analogRead(Config::m_ph_pin_probe);
+      break;
+    case Device_state::calibration_ec:
+      samples[sample_counter].y = analogRead(Config::m_ec_pin_probe);
+      break;
+    default:
+      break;
+  }
+
   if (++sample_counter == 2)
   {
     sample_counter = 0;
@@ -202,6 +213,7 @@ void calibration_ph(const Buttons_action action)
 void calibration_ec(const Buttons_action action)
 {
   static double sample = 4.0;
+  static uint8_t position = 0;
 
   static Point samples[2] = {};
 
@@ -210,12 +222,32 @@ void calibration_ec(const Buttons_action action)
   switch (action)
   {
     case Buttons_action::two_buttons_2s:
+      m_data_presentation.display_save_data();
+      if (save_sample(samples, sample))
+      {
+        m_memory.save_ec_calibration(samples);
+        ec_probe_characteristic.set_points(samples);
+        m_device_state = Device_state::display_measure_ec;
+      }
       break;
     case Buttons_action::short_left_button:
+      sample = sample - pow(10.0, position * (-1.0));
       break;
     case Buttons_action::short_right_button:
+      sample = sample + pow(10.0, position * (-1.0));
+      break;
+    case Buttons_action::right_button_2s:
+      if (position < 3)
+      {
+        position++;
+      }
+      else
+      {
+        position = 0;
+      }
       break;
     default:
+      m_data_presentation.display_calibration_ec(sample, position, temperature);
       break;
   }
 }

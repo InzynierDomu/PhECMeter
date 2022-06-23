@@ -20,7 +20,7 @@ class Data_presentation
   void presentation_measurements_ph(const float temperature, const float ph);
   void presentation_measurements_ec(const float temperature, const float ec);
   void display_calibration_ph(const uint8_t sample, const float temperature);
-  void display_calibration_ec(const double sample, const int position, const float temperature);
+  void display_calibration_ec(const double sample, uint8_t position, const float temperature);
 
   private:
   Adafruit_SSD1306 m_display; ///< ssd1306 oled screen

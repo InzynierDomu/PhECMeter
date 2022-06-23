@@ -104,7 +104,8 @@ void Data_presentation::presentation_measurements_ec(const float temperature, co
   m_display.print((char)247);
   m_display.println("C");
   m_display.print(ec);
-  m_display.print("?");
+  m_display.print((char)229);
+  m_display.print("s/cm");
   m_display.display();
 }
 
@@ -142,12 +143,6 @@ void Data_presentation::display_calibration_ph(const uint8_t sample, const float
 
   m_display.print(".0 pH");
   m_display.display();
-
-  // 1.0 pH
-  //  .0 pH
-  // 1.0 pH
-  // 0.0 pH
-  //  .0 pH
 }
 
 /**
@@ -156,21 +151,11 @@ void Data_presentation::display_calibration_ph(const uint8_t sample, const float
  * @param position: toggling digit position
  * @param temperature: current temperature
  */
-void Data_presentation::display_calibration_ec(const double sample, const int position, const float temperature)
+void Data_presentation::display_calibration_ec(const double sample, uint8_t position, const float temperature)
 {
   long loop_time = millis();
   static long time;
   static bool toggle;
-  // static sample_position = 1;
-
-  // 1.00
-  // .0
-  // 1.0
-  // 1.
-  // 1.1
-  // 1.
-
-  // 1.
 
   m_display.clearDisplay();
   m_display.setCursor(0, 0);
@@ -184,12 +169,26 @@ void Data_presentation::display_calibration_ec(const double sample, const int po
     toggle = !toggle;
   }
 
-  double fractpart, intpart;
-  fractpart = modf(sample, &intpart);
+  String text = String(sample, 3);
   if (toggle)
-  {}
+  {
+    m_display.print(text);
+  }
   else
-  {}
+  {
+    if (position > 0)
+    {
+      position++;
+    }
+    if (text.length() > 5)
+    {
+      position++;
+    }
+    text[position] = ' ';
+    m_display.print(text);
+  }
+  m_display.print((char)229);
+  m_display.print("s/cm");
 
   m_display.display();
 }
