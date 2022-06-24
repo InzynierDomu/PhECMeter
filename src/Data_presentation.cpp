@@ -104,8 +104,7 @@ void Data_presentation::presentation_measurements_ec(const float temperature, co
   m_display.print((char)247);
   m_display.println("C");
   m_display.print(ec);
-  m_display.print((char)229);
-  m_display.print("s/cm");
+  m_display.print("ms/cm");
   m_display.display();
 }
 
@@ -187,8 +186,7 @@ void Data_presentation::display_calibration_ec(const double sample, uint8_t posi
     text[position] = ' ';
     m_display.print(text);
   }
-  m_display.print((char)229);
-  m_display.print("s/cm");
+  m_display.print("ms/cm");
 
   m_display.display();
 }

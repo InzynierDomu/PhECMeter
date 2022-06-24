@@ -183,6 +183,7 @@ void calibration_ph(const Buttons_action action)
 
   float temperature = m_ds_sensor.getTempC();
 
+  // TODO: diable value more than 99
   switch (action)
   {
     case Buttons_action::two_buttons_2s:
@@ -219,6 +220,8 @@ void calibration_ec(const Buttons_action action)
 
   float temperature = m_ds_sensor.getTempC();
 
+  // TODO: diable value less than 0 and more than 99
+  // FIXME: problem with unit and five digits "10.000ms/cm" no space on screen - proposition own symbol
   switch (action)
   {
     case Buttons_action::two_buttons_2s:
@@ -301,6 +304,7 @@ Buttons_action check_buttons()
       return Buttons_action::short_right_button;
     }
   }
+  delay(100);
   return Buttons_action::nothig;
 }
 

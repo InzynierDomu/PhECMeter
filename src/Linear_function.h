@@ -26,7 +26,7 @@ struct Point
 class Linear_function
 {
   public:
-  Linear_function(const Point points[2]={});
+  Linear_function(const Point points[2] = {});
   void set_points(const Point points[2]);
   double find_y(uint16_t x);
 
