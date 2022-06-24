@@ -15,6 +15,20 @@
 
 ## Description
 The video with the entire project can be watched on this [video](https://youtu.be/vjk0nq04lCo)
+
+The device has 4 possible states:
+* measure pH
+* measure EC
+* calibartion pH
+* calibration EC
+
+The device start in pH measure mode. To chnage pH/EC measure mode - press rigth button for more than 2s.
+To enter calibration mode press both buttons more 2s.
+Measure pH -> calibration pH.
+Measure EC -> calibartion EC.
+Calibration mode needs 2 points to save.
+Set the value to which sample the probe is immersed. For that use right and left buttons to decrease or increase the value. In EC calibration possible is to change the digit position by pressing 2s right button. To save points press 2s on both buttons. After saving two points, the device changes state to measure.
+
 ## Scheme
 ![alt text](http://www.inzynierdomu.pl/wp-content/uploads/2021/01/ph_metr_schemat.png)
 ### Part list:
