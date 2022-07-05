@@ -14,9 +14,9 @@
  * @brief Construct a new Data_presentation::Data_presentation object
  */
 Data_presentation::Data_presentation()
-: m_display(Config::m_screen_width, Config::m_screen_height, &Wire)
+: m_display(Config::screen_width, Config::screen_height, &Wire)
 {
-  m_display.begin(SSD1306_SWITCHCAPVCC, Config::m_screen_address);
+  m_display.begin(SSD1306_SWITCHCAPVCC, Config::screen_address);
   m_display.clearDisplay();
   m_display.setTextSize(2);
   m_display.setTextColor(SSD1306_WHITE);

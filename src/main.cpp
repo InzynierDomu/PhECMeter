@@ -37,8 +37,8 @@ enum class Buttons_action
 };
 
 byte m_ds_address[8]; ///< ds18b20 thermometer one wire address
-OneWire m_one_wire = OneWire(Config::m_pin_thermometer); ///< one wire bus
-DS18B20 m_ds_sensor = DS18B20(Config::m_pin_thermometer); ///< ds18b20 thermometer
+OneWire m_one_wire = OneWire(Config::pin_thermometer); ///< one wire bus
+DS18B20 m_ds_sensor = DS18B20(Config::pin_thermometer); ///< ds18b20 thermometer
 Data_presentation m_data_presentation; ///< screen and serial handling
 Calibration_data_memory m_memory; ///< memory handling
 
@@ -90,7 +90,7 @@ void button_l_pressed()
 void measurements_ph(const Buttons_action action)
 {
   float temperature = m_ds_sensor.getTempC();
-  int analog_mes = analogRead(Config::m_ph_pin_probe);
+  int analog_mes = analogRead(Config::ph_pin_probe);
   float ph = ph_probe_characteristic.find_y(analog_mes);
 
   m_data_presentation.presentation_measurements_ph(temperature, ph);
@@ -102,8 +102,8 @@ void measurements_ph(const Buttons_action action)
       m_device_state = Device_state::calibration_ph;
       break;
     case Buttons_action::right_button_2s:
-      digitalWrite(Config::m_ph_supply_pin_probe, LOW);
-      digitalWrite(Config::m_ec_supply_pin_probe, HIGH);
+      digitalWrite(Config::ph_supply_pin_probe, LOW);
+      digitalWrite(Config::ec_supply_pin_probe, HIGH);
       m_device_state = Device_state::display_measure_ec;
       break;
     default:
@@ -119,7 +119,7 @@ void measurements_ph(const Buttons_action action)
 void measurements_ec(const Buttons_action action)
 {
   float temperature = m_ds_sensor.getTempC();
-  int analog_mes = analogRead(Config::m_ec_pin_probe);
+  int analog_mes = analogRead(Config::ec_pin_probe);
   float ec = ec_probe_characteristic.find_y(analog_mes);
 
   m_data_presentation.presentation_measurements_ec(temperature, ec);
@@ -131,8 +131,8 @@ void measurements_ec(const Buttons_action action)
       m_device_state = Device_state::calibration_ec;
       break;
     case Buttons_action::right_button_2s:
-      digitalWrite(Config::m_ec_supply_pin_probe, LOW);
-      digitalWrite(Config::m_ph_supply_pin_probe, HIGH);
+      digitalWrite(Config::ec_supply_pin_probe, LOW);
+      digitalWrite(Config::ph_supply_pin_probe, HIGH);
       m_device_state = Device_state::display_measure_ph;
       break;
     default:
@@ -154,10 +154,10 @@ bool save_sample(Point* samples, double sample)
   switch (m_device_state)
   {
     case Device_state::calibration_ph:
-      samples[sample_counter].y = analogRead(Config::m_ph_pin_probe);
+      samples[sample_counter].y = analogRead(Config::ph_pin_probe);
       break;
     case Device_state::calibration_ec:
-      samples[sample_counter].y = analogRead(Config::m_ec_pin_probe);
+      samples[sample_counter].y = analogRead(Config::ec_pin_probe);
       break;
     default:
       break;
@@ -183,7 +183,6 @@ void calibration_ph(const Buttons_action action)
 
   float temperature = m_ds_sensor.getTempC();
 
-  // TODO: diable value more than 99
   switch (action)
   {
     case Buttons_action::two_buttons_2s:
@@ -199,7 +198,10 @@ void calibration_ph(const Buttons_action action)
       sample--;
       break;
     case Buttons_action::short_right_button:
-      sample++;
+      if (sample < Config::max_ph_to_calib)
+      {
+        sample++;
+      }
       break;
     default:
       m_data_presentation.display_calibration_ph(sample, temperature);
@@ -220,7 +222,6 @@ void calibration_ec(const Buttons_action action)
 
   float temperature = m_ds_sensor.getTempC();
 
-  // TODO: diable value less than 0 and more than 99
   // FIXME: problem with unit and five digits "10.000ms/cm" no space on screen - proposition own symbol
   switch (action)
   {
@@ -240,7 +241,7 @@ void calibration_ec(const Buttons_action action)
       sample = sample + pow(10.0, position * (-1.0));
       break;
     case Buttons_action::right_button_2s:
-      if (position < 3)
+      if ((position < 3) && (sample < Config::max_ec_to_calib))
       {
         position++;
       }
@@ -270,28 +271,28 @@ Buttons_action check_buttons()
     do
     {
       long loop_time = millis();
-      if (loop_time - m_buttons_start_press > Config::m_long_press_time)
+      if (loop_time - m_buttons_start_press > Config::long_press_time)
       {
         m_l_button_pressed = false;
         m_r_button_pressed = false;
         return Buttons_action::two_buttons_2s;
       }
-    } while (!digitalRead(Config::m_pin_r_button) && !digitalRead(Config::m_pin_l_button));
+    } while (!digitalRead(Config::pin_r_button) && !digitalRead(Config::pin_l_button));
 
     // right button pressed >2s
     do
     {
       long loop_time = millis();
-      if (loop_time - m_buttons_start_press > Config::m_long_press_time)
+      if (loop_time - m_buttons_start_press > Config::long_press_time)
       {
         m_l_button_pressed = false;
         m_r_button_pressed = false;
         return Buttons_action::right_button_2s;
       }
-    } while (!digitalRead(Config::m_pin_r_button) && digitalRead(Config::m_pin_l_button));
+    } while (!digitalRead(Config::pin_r_button) && digitalRead(Config::pin_l_button));
   }
 
-  if (digitalRead(Config::m_pin_r_button) && digitalRead(Config::m_pin_l_button))
+  if (digitalRead(Config::pin_r_button) && digitalRead(Config::pin_l_button))
   {
     if (m_l_button_pressed)
     {
@@ -322,14 +323,14 @@ void setup()
   m_memory.load_ec_calibration(points);
   ec_probe_characteristic.set_points(points);
 
-  pinMode(Config::m_ph_supply_pin_probe, OUTPUT);
-  digitalWrite(Config::m_ph_supply_pin_probe, HIGH);
-  pinMode(Config::m_ec_supply_pin_probe, OUTPUT);
-  digitalWrite(Config::m_ec_supply_pin_probe, LOW);
-  pinMode(Config::m_pin_r_button, INPUT_PULLUP);
-  pinMode(Config::m_pin_l_button, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(Config::m_pin_r_button), button_r_pressed, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Config::m_pin_l_button), button_l_pressed, FALLING);
+  pinMode(Config::ph_supply_pin_probe, OUTPUT);
+  digitalWrite(Config::ph_supply_pin_probe, HIGH);
+  pinMode(Config::ec_supply_pin_probe, OUTPUT);
+  digitalWrite(Config::ec_supply_pin_probe, LOW);
+  pinMode(Config::pin_r_button, INPUT_PULLUP);
+  pinMode(Config::pin_l_button, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(Config::pin_r_button), button_r_pressed, FALLING);
+  attachInterrupt(digitalPinToInterrupt(Config::pin_l_button), button_l_pressed, FALLING);
 
   m_device_state = Device_state::display_measure_ph;
 }
