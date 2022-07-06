@@ -17,4 +17,8 @@ class Calibration_data_memory
   void save_ec_calibration(const Point points[2]);
   void load_ph_calibration(Point points[2]);
   void load_ec_calibration(Point points[2]);
+
+  private:
+  void save_calibration(const Point points[2], const uint8_t start);
+  void load_calibration(Point points[2], const uint8_t start);
 };
