@@ -8,8 +8,8 @@
 
 namespace Config
 {
-const uint8_t pin_r_button = 3; ///< right button pin number
-const uint8_t pin_l_button = 2; ///< left button pin number
+const uint8_t pin_up_button = 3; ///< up button pin number
+const uint8_t pin_dwn_button = 2; ///< down button pin number
 const uint8_t pin_thermometer = 4; ///< ds18b20 thermometer pin number
 const uint8_t ph_pin_probe = 15; ///< ph probe pin
 const uint8_t ec_pin_probe = 16; ///< ec probe pin

@@ -22,15 +22,17 @@ The device has 4 possible states:
 * calibartion pH
 * calibration EC
 
-The device start in pH measure mode. To chnage pH/EC measure mode - press rigth button for more than 2s.
+![photo](https://www.inzynierdomu.pl/wp-content/uploads/2019/12/IMG_5993-scaled.jpg)
+
+The device start in pH measure mode. To chnage pH/EC measure mode - press up button for more than 2s.
 To enter calibration mode press both buttons more 2s.
 Measure pH -> calibration pH.
 Measure EC -> calibartion EC.
 Calibration mode needs 2 points to save.
-Set the value to which sample the probe is immersed. For that use right and left buttons to decrease or increase the value. In EC calibration possible is to change the digit position by pressing 2s right button. To save points press 2s on both buttons. After saving two points, the device changes state to measure.
+Set the value to which sample the probe is immersed. For that use up and dwn(down) buttons to decrease or increase the value. In EC calibration possible is to change the digit position by pressing 2s up button. To save points press 2s on both buttons. After saving two points, the device changes state to measure.
 
 ## Scheme
-![alt text](http://www.inzynierdomu.pl/wp-content/uploads/2021/01/ph_metr_schemat.png)
+![schem](http://www.inzynierdomu.pl/wp-content/uploads/2021/01/ph_metr_schemat.png)
 ### Part list:
 * pH probe and board like [this](https://botland.com.pl/pl/seria-gravity/15094-gravity-czujnik-miernik-ph-analogowy-v2-dfrobot-sen0161-v2.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)
 * EC probe and board like [this](https://botland.com.pl/gravity-czujniki-pogodowe/15096-gravity-analogowy-czujnik-zasolenia-wody-i-gleby-dfrobot-dfr0300-h-5904422348359.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)

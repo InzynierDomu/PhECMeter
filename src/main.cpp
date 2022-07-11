@@ -31,9 +31,9 @@ enum class Buttons_action
 {
   nothig,
   two_buttons_2s,
-  right_button_2s,
-  short_right_button,
-  short_left_button
+  up_button_2s,
+  short_up_button,
+  short_dwn_button
 };
 
 byte m_ds_address[8]; ///< ds18b20 thermometer one wire address
@@ -101,7 +101,7 @@ void measurements_ph(const Buttons_action action)
       m_data_presentation.display_calib_mode();
       m_device_state = Device_state::calibration_ph;
       break;
-    case Buttons_action::right_button_2s:
+    case Buttons_action::up_button_2s:
       digitalWrite(Config::ph_supply_pin_probe, LOW);
       digitalWrite(Config::ec_supply_pin_probe, HIGH);
       m_device_state = Device_state::display_measure_ec;
@@ -130,7 +130,7 @@ void measurements_ec(const Buttons_action action)
       m_data_presentation.display_calib_mode();
       m_device_state = Device_state::calibration_ec;
       break;
-    case Buttons_action::right_button_2s:
+    case Buttons_action::up_button_2s:
       digitalWrite(Config::ec_supply_pin_probe, LOW);
       digitalWrite(Config::ph_supply_pin_probe, HIGH);
       m_device_state = Device_state::display_measure_ph;
@@ -194,10 +194,10 @@ void calibration_ph(const Buttons_action action)
         m_device_state = Device_state::display_measure_ph;
       }
       break;
-    case Buttons_action::short_left_button:
+    case Buttons_action::short_dwn_button:
       sample--;
       break;
-    case Buttons_action::short_right_button:
+    case Buttons_action::short_up_button:
       if (sample < Config::max_ph_to_calib)
       {
         sample++;
@@ -234,13 +234,13 @@ void calibration_ec(const Buttons_action action)
         m_device_state = Device_state::display_measure_ec;
       }
       break;
-    case Buttons_action::short_left_button:
+    case Buttons_action::short_dwn_button:
       sample = sample - pow(10.0, position * (-1.0));
       break;
-    case Buttons_action::short_right_button:
+    case Buttons_action::short_up_button:
       sample = sample + pow(10.0, position * (-1.0));
       break;
-    case Buttons_action::right_button_2s:
+    case Buttons_action::up_button_2s:
       if ((position < 3) && (sample < Config::max_ec_to_calib))
       {
         position++;
@@ -262,6 +262,7 @@ void calibration_ec(const Buttons_action action)
  */
 Buttons_action check_buttons()
 {
+  // TODO: split to few checks
   long m_buttons_start_press;
   if (m_r_button_pressed || m_l_button_pressed)
   {
@@ -277,9 +278,9 @@ Buttons_action check_buttons()
         m_r_button_pressed = false;
         return Buttons_action::two_buttons_2s;
       }
-    } while (!digitalRead(Config::pin_r_button) && !digitalRead(Config::pin_l_button));
+    } while (!digitalRead(Config::pin_up_button) && !digitalRead(Config::pin_dwn_button));
 
-    // right button pressed >2s
+    // check up button pressed >2s
     do
     {
       long loop_time = millis();
@@ -287,22 +288,22 @@ Buttons_action check_buttons()
       {
         m_l_button_pressed = false;
         m_r_button_pressed = false;
-        return Buttons_action::right_button_2s;
+        return Buttons_action::up_button_2s;
       }
-    } while (!digitalRead(Config::pin_r_button) && digitalRead(Config::pin_l_button));
+    } while (!digitalRead(Config::pin_up_button) && digitalRead(Config::pin_dwn_button));
   }
 
-  if (digitalRead(Config::pin_r_button) && digitalRead(Config::pin_l_button))
+  if (digitalRead(Config::pin_up_button) && digitalRead(Config::pin_dwn_button))
   {
     if (m_l_button_pressed)
     {
       m_l_button_pressed = false;
-      return Buttons_action::short_left_button;
+      return Buttons_action::short_dwn_button;
     }
     else if (m_r_button_pressed)
     {
       m_r_button_pressed = false;
-      return Buttons_action::short_right_button;
+      return Buttons_action::short_up_button;
     }
   }
   delay(100);
@@ -327,10 +328,10 @@ void setup()
   digitalWrite(Config::ph_supply_pin_probe, HIGH);
   pinMode(Config::ec_supply_pin_probe, OUTPUT);
   digitalWrite(Config::ec_supply_pin_probe, LOW);
-  pinMode(Config::pin_r_button, INPUT_PULLUP);
-  pinMode(Config::pin_l_button, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(Config::pin_r_button), button_r_pressed, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Config::pin_l_button), button_l_pressed, FALLING);
+  pinMode(Config::pin_up_button, INPUT_PULLUP);
+  pinMode(Config::pin_dwn_button, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(Config::pin_up_button), button_r_pressed, FALLING);
+  attachInterrupt(digitalPinToInterrupt(Config::pin_dwn_button), button_l_pressed, FALLING);
 
   m_device_state = Device_state::display_measure_ph;
 }
