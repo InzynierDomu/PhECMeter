@@ -10,6 +10,7 @@
 #include "DS18B20.h"
 #include "Data_presentation.h"
 #include "Linear_function.h"
+#include "Buttons.h"
 #include "OneWire.h"
 
 #include <Arduino.h>
@@ -26,16 +27,6 @@ enum class Device_state
   calibration_ec
 };
 
-///< possible recognizing buttons action
-enum class Buttons_action
-{
-  nothig,
-  two_buttons_2s,
-  up_button_2s,
-  short_up_button,
-  short_dwn_button
-};
-
 byte m_ds_address[8]; ///< ds18b20 thermometer one wire address
 OneWire m_one_wire = OneWire(Config::pin_thermometer); ///< one wire bus
 DS18B20 m_ds_sensor = DS18B20(Config::pin_thermometer); ///< ds18b20 thermometer
@@ -44,8 +35,8 @@ Calibration_data_memory m_memory; ///< memory handling
 
 Device_state m_device_state = Device_state::startup; ///< actual device state
 
-bool m_r_button_pressed = false; ///< right button pressed flag
-bool m_l_button_pressed = false; ///< left button pressed flag
+volatile bool m_r_button_pressed = false; ///< right button pressed flag
+volatile bool m_l_button_pressed = false; ///< left button pressed flag
 Linear_function ph_probe_characteristic; ///< ph probe linear characteristic
 Linear_function ec_probe_characteristic; ///< ec probe linear characteristic
 
@@ -222,7 +213,6 @@ void calibration_ec(const Buttons_action action)
 
   float temperature = m_ds_sensor.getTempC();
 
-  // FIXME: problem with unit and five digits "10.000ms/cm" no space on screen - proposition own symbol
   switch (action)
   {
     case Buttons_action::two_buttons_2s:
@@ -257,60 +247,6 @@ void calibration_ec(const Buttons_action action)
 }
 
 /**
- * @brief buttons action reaction
- * @return Buttons_action type of action was done
- */
-Buttons_action check_buttons()
-{
-  // TODO: split to few checks
-  long m_buttons_start_press;
-  if (m_r_button_pressed || m_l_button_pressed)
-  {
-    m_buttons_start_press = millis();
-
-    // two buttons pressed >2s
-    do
-    {
-      long loop_time = millis();
-      if (loop_time - m_buttons_start_press > Config::long_press_time)
-      {
-        m_l_button_pressed = false;
-        m_r_button_pressed = false;
-        return Buttons_action::two_buttons_2s;
-      }
-    } while (!digitalRead(Config::pin_up_button) && !digitalRead(Config::pin_dwn_button));
-
-    // check up button pressed >2s
-    do
-    {
-      long loop_time = millis();
-      if (loop_time - m_buttons_start_press > Config::long_press_time)
-      {
-        m_l_button_pressed = false;
-        m_r_button_pressed = false;
-        return Buttons_action::up_button_2s;
-      }
-    } while (!digitalRead(Config::pin_up_button) && digitalRead(Config::pin_dwn_button));
-  }
-
-  if (digitalRead(Config::pin_up_button) && digitalRead(Config::pin_dwn_button))
-  {
-    if (m_l_button_pressed)
-    {
-      m_l_button_pressed = false;
-      return Buttons_action::short_dwn_button;
-    }
-    else if (m_r_button_pressed)
-    {
-      m_r_button_pressed = false;
-      return Buttons_action::short_up_button;
-    }
-  }
-  delay(100);
-  return Buttons_action::nothig;
-}
-
-/**
  * @brief setup on startup
  */
 void setup()
@@ -341,7 +277,7 @@ void setup()
  */
 void loop()
 {
-  auto action = check_buttons();
+  auto action = Buttons::check_buttons(m_r_button_pressed, m_l_button_pressed);
   switch (m_device_state)
   {
     case Device_state::display_measure_ph:

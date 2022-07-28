@@ -6,6 +6,8 @@
  */
 #pragma once
 
+#include <stdint.h>
+
 namespace Config
 {
 const uint8_t pin_up_button = 3; ///< up button pin number
@@ -22,7 +24,7 @@ const uint8_t screen_height = 32; ///< screen height
 
 const uint8_t blink_time_calibration = 150; ///< toggling digits in calibration mode time
 const uint16_t long_press_time = 2000; ///< time for long buttons press
-const uint8_t max_ph_to_calib = 24;
-const uint8_t max_ec_to_calib = 64;
+const uint8_t max_ph_to_calib = 24; ///< max ph to set in calibration
+const uint8_t max_ec_to_calib = 64; ///< max ec to set in calibration
 
 } // namespace Config
