@@ -278,6 +278,8 @@ void setup()
 void loop()
 {
   auto action = Buttons::check_buttons(m_r_button_pressed, m_l_button_pressed);
+  m_r_button_pressed = false;
+  m_l_button_pressed = false;
   switch (m_device_state)
   {
     case Device_state::display_measure_ph:
