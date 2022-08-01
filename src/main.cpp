@@ -35,8 +35,8 @@ Calibration_data_memory m_memory; ///< memory handling
 
 Device_state m_device_state = Device_state::startup; ///< actual device state
 
-volatile bool m_r_button_pressed = false; ///< right button pressed flag
-volatile bool m_l_button_pressed = false; ///< left button pressed flag
+volatile bool m_up_button_pressed = false; ///< right button pressed flag
+volatile bool m_dwn_button_pressed = false; ///< left button pressed flag
 Linear_function ph_probe_characteristic; ///< ph probe linear characteristic
 Linear_function ec_probe_characteristic; ///< ec probe linear characteristic
 
@@ -63,7 +63,7 @@ void ds_thermometer_init()
  */
 void button_r_pressed()
 {
-  m_r_button_pressed = true;
+  m_up_button_pressed = true;
 }
 
 /**
@@ -71,7 +71,7 @@ void button_r_pressed()
  */
 void button_l_pressed()
 {
-  m_l_button_pressed = true;
+  m_dwn_button_pressed = true;
 }
 
 /**
@@ -277,9 +277,9 @@ void setup()
  */
 void loop()
 {
-  auto action = Buttons::check_buttons(m_r_button_pressed, m_l_button_pressed);
-  m_r_button_pressed = false;
-  m_l_button_pressed = false;
+  auto action = Buttons::check_buttons(m_up_button_pressed, m_dwn_button_pressed);
+  m_up_button_pressed = false;
+  m_dwn_button_pressed = false;
   switch (m_device_state)
   {
     case Device_state::display_measure_ph:
