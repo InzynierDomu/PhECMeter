@@ -1,3 +1,10 @@
+/**
+ * @file Buttons.cpp
+ * @author by Szymon Markiewicz (https://github.com/InzynierDomu/)
+ * @brief buttons handling
+ * @date 2022-08
+ */
+
 #include "Buttons.h"
 
 #include "Config.h"
