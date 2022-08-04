@@ -1,8 +1,9 @@
 #pragma once
 
 #ifdef LCD_SCREEN
-#include <Wire.h> 
 #include "LiquidCrystal_I2C.h"
+
+#include <Wire.h>
 #else
 #include "Adafruit_BusIO_Register.h"
 #include "Adafruit_GFX.h"
