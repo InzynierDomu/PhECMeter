@@ -5,6 +5,8 @@
  * @param points: points to calculate linear function
  */
 Linear_function::Linear_function(const Point points[2])
+: a(1)
+, b(0)
 {
   set_points(points);
 }
