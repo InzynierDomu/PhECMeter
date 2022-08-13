@@ -5,12 +5,12 @@
  * @date 2022-06
  */
 
+#include "Buttons.h"
 #include "Calibration_data_memory.h"
 #include "Config.h"
 #include "DS18B20.h"
 #include "Data_presentation.h"
 #include "Linear_function.h"
-#include "Buttons.h"
 #include "OneWire.h"
 
 #include <Arduino.h>
@@ -251,7 +251,7 @@ void calibration_ec(const Buttons_action action)
  */
 void setup()
 {
-  m_data_presentation.display_start();
+  m_data_presentation.init();
   ds_thermometer_init();
 
   Point points[2];
