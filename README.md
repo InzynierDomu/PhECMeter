@@ -33,10 +33,9 @@ Calibration mode needs 2 points to save.
 Set the value to which sample the probe is immersed. For that use up and dwn(down) buttons to decrease or increase the value. In EC calibration possible is to change the digit position by pressing 2s up button. To save points press 2s on both buttons. After saving two points, the device changes state to measure.
 
 ### Future
-- Add optional other screen - LCD 16x2 via I2C expander.
-- Use accumulator.
-- Add SD card and data recording.
-- Add some communication maybe RS232 or RS485.
+* Use accumulator.
+* Add SD card and data recording.
+* Add some communication maybe RS232 or RS485.
 
 ## Scheme
 ![schem](http://www.inzynierdomu.pl/wp-content/uploads/2021/01/ph_metr_schemat.png)
@@ -46,12 +45,16 @@ Set the value to which sample the probe is immersed. For that use up and dwn(dow
 * A1 Arduino Nano
 * U1 ds18b20 temperature sensor
 * J1 is socket for pH board.
-* J2 is socket for I2C oled screen SSD1306 128x32.
+* J2 is socket for I2C screen OLED SSD1306 128x32 or HD44780 via PCF8574. 
 * R1 Resistor 4,7 kohm
 * SW1, SW2 micro switch
 * SW3 switch to turning on/of power
 * J3 connect to battery box
 ## IDE
+For specific screen is the prepared environment:
+OLED SSD1306 128x32 :nanoatmega328_oled
+HD44780 via PCF8574 :nanoatmega328_lcd
+
 The project is prepared for the Platform IO environment. A video on how to install such an environment can be watched on this [video](https://youtu.be/Em9NuebT2Kc).
 <br><br>
 Formatting is done using clang-format. The description of the tool configuration is in the [video](https://youtu.be/xxuaOG0WjIE).
