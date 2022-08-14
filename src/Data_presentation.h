@@ -24,8 +24,8 @@ class Data_presentation
 
   private:
 #if defined LCD_SCREEN
-  Screen_lcd m_display; ///< screen
+  Screen_lcd m_display; ///< lcd screen
 #else
-  Screen_oled m_display; ///< screen
+  Screen_oled m_display; ///< oled screen
 #endif
 };

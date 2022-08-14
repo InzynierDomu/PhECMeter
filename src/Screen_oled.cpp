@@ -1,6 +1,15 @@
+/**
+ * @file Screen_lcd.cpp
+ * @author by Szymon Markiewicz (https://github.com/InzynierDomu/)
+ * @brief OLED Screen
+ * @date 2022-08
+ */
 #include "Screen_oled.h"
 #ifndef LCD_SCREEN
 
+/**
+ * @brief constructor
+ */
 Screen_oled::Screen_oled()
 : m_display(Config::screen_width, Config::screen_height, &Wire)
 {
@@ -12,6 +21,9 @@ Screen_oled::Screen_oled()
   m_display.display();
 }
 
+/**
+ * @brief display start screen
+ */
 void Screen_oled::display_start()
 {
   m_display.clearDisplay();
@@ -23,6 +35,9 @@ void Screen_oled::display_start()
   m_display.setTextSize(2);
 }
 
+/**
+ * @brief display calibration mode screen
+ */
 void Screen_oled::display_calib_mode()
 {
   m_display.clearDisplay();
@@ -32,6 +47,9 @@ void Screen_oled::display_calib_mode()
   m_display.display();
 }
 
+/**
+ * @brief display save point screen
+ */
 void Screen_oled::display_save_data()
 {
   m_display.clearDisplay();
@@ -41,6 +59,9 @@ void Screen_oled::display_save_data()
   m_display.display();
 }
 
+/**
+ * @brief display ph measurments screen
+ */
 void Screen_oled::display_ph(const float temperature, const float ph)
 {
   m_display.clearDisplay();
@@ -53,6 +74,9 @@ void Screen_oled::display_ph(const float temperature, const float ph)
   m_display.display();
 }
 
+/**
+ * @brief display ec measurments screen
+ */
 void Screen_oled::display_ec(const float temperature, const float ec)
 {
   m_display.clearDisplay();
@@ -65,6 +89,9 @@ void Screen_oled::display_ec(const float temperature, const float ec)
   m_display.display();
 }
 
+/**
+ * @brief display caloibration ph screen
+ */
 void Screen_oled::display_calibration_ph(const uint8_t sample, const float temperature)
 {
   long loop_time = millis();
@@ -96,6 +123,9 @@ void Screen_oled::display_calibration_ph(const uint8_t sample, const float tempe
   m_display.display();
 }
 
+/**
+ * @brief display caloibration ec screen
+ */
 void Screen_oled::display_calibration_ec(const double sample, uint8_t position, const float temperature)
 {
   long loop_time = millis();

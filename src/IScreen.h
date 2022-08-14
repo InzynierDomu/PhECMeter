@@ -1,11 +1,17 @@
+/**
+ * @file IScreen.h
+ * @author by Szymon Markiewicz (https://github.com/InzynierDomu/)
+ * @brief Screens interface
+ * @date 2022-08
+ */
 #pragma once
 
 #include <Wire.h>
 
-class Screen
+class IScreen
 {
   public:
-  ~Screen() {}
+  ~IScreen() {}
   virtual void display_start() = 0;
   virtual void display_calib_mode() = 0;
   virtual void display_save_data() = 0;

@@ -1,11 +1,17 @@
+/**
+ * @file Screen_lcd.h
+ * @author by Szymon Markiewicz (https://github.com/InzynierDomu/)
+ * @brief 16x2 lcd Screen
+ * @date 2022-08
+ */
 #pragma once
 #if defined LCD_SCREEN
 
 #include "Config.h"
 #include "LiquidCrystal_I2C.h"
-#include "Screen.h"
+#include "IScreen.h"
 
-class Screen_lcd : public Screen
+class Screen_lcd : public IScreen
 {
   public:
   Screen_lcd();
@@ -18,6 +24,6 @@ class Screen_lcd : public Screen
   void display_calibration_ec(const double sample, uint8_t position, const float temperature) override;
 
   private:
-  LiquidCrystal_I2C m_display;
+  LiquidCrystal_I2C m_display; ///< HD44780 via PCF8574
 };
 #endif

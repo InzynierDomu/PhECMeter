@@ -1,10 +1,22 @@
+/**
+ * @file Screen_lcd.cpp
+ * @author by Szymon Markiewicz (https://github.com/InzynierDomu/)
+ * @brief 16x2 lcd Screen
+ * @date 2022-08
+ */
 #include "Screen_lcd.h"
 
+/**
+ * @brief constructor
+ */
 #if defined LCD_SCREEN
 Screen_lcd::Screen_lcd()
 : m_display(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE)
 {}
 
+/**
+ * @brief display start screen
+ */
 void Screen_lcd::display_start()
 {
   m_display.begin(16, 2);
@@ -15,6 +27,9 @@ void Screen_lcd::display_start()
   m_display.print("Inzynier Domu");
 }
 
+/**
+ * @brief display calibration mode screen
+ */
 void Screen_lcd::display_calib_mode()
 {
   m_display.clear();
@@ -23,6 +38,9 @@ void Screen_lcd::display_calib_mode()
   m_display.print("MODE");
 }
 
+/**
+ * @brief display save point screen
+ */
 void Screen_lcd::display_save_data()
 {
   m_display.clear();
@@ -31,6 +49,9 @@ void Screen_lcd::display_save_data()
   m_display.print("SAVED");
 }
 
+/**
+ * @brief display ph measurments screen
+ */
 void Screen_lcd::display_ph(const float temperature, const float ph)
 {
   m_display.clear();
@@ -45,6 +66,9 @@ void Screen_lcd::display_ph(const float temperature, const float ph)
   m_display.print("C");
 }
 
+/**
+ * @brief display ec measurments screen
+ */
 void Screen_lcd::display_ec(const float temperature, const float ec)
 {
   m_display.clear();
@@ -57,6 +81,9 @@ void Screen_lcd::display_ec(const float temperature, const float ec)
   m_display.print("C");
 }
 
+/**
+ * @brief display caloibration ph screen
+ */
 void Screen_lcd::display_calibration_ph(const uint8_t sample, const float temperature)
 {
   long loop_time = millis();
@@ -84,6 +111,9 @@ void Screen_lcd::display_calibration_ph(const uint8_t sample, const float temper
   m_display.print(".0 pH");
 }
 
+/**
+ * @brief display caloibration ec screen
+ */
 void Screen_lcd::display_calibration_ec(const double sample, uint8_t position, const float temperature)
 {
   long loop_time = millis();

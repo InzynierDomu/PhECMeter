@@ -1,3 +1,9 @@
+/**
+ * @file Screen_lcd.h
+ * @author by Szymon Markiewicz (https://github.com/InzynierDomu/)
+ * @brief OLED Screen
+ * @date 2022-08
+ */
 #pragma once
 #ifndef LCD_SCREEN
 
@@ -5,9 +11,9 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
 #include "Config.h"
-#include "Screen.h"
+#include "IScreen.h"
 
-class Screen_oled : public Screen
+class Screen_oled : public IScreen
 {
   public:
   Screen_oled();
