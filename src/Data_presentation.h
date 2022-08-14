@@ -6,15 +6,15 @@
  */
 #pragma once
 
-#include "Adafruit_BusIO_Register.h"
-#include "Adafruit_GFX.h"
-#include "Adafruit_SSD1306.h"
+#include <stdint.h>
+#include "Screen_lcd.h"
+#include "Screen_oled.h"
 
 class Data_presentation
 {
   public:
   Data_presentation();
-  void display_start();
+  void init();
   void display_calib_mode();
   void display_save_data();
   void presentation_measurements_ph(const float temperature, const float ph);
@@ -23,5 +23,9 @@ class Data_presentation
   void display_calibration_ec(const double sample, uint8_t position, const float temperature);
 
   private:
-  Adafruit_SSD1306 m_display; ///< ssd1306 oled screen
+#if defined LCD_SCREEN
+  Screen_lcd m_display; ///< lcd screen
+#else
+  Screen_oled m_display; ///< oled screen
+#endif
 };

@@ -33,6 +33,9 @@ jobs:
       - name: Run PlatformIO
         run: pio run -e nanoatmega328_oled
 
+      - name: Run PlatformIO
+        run: pio run -e nanoatmega328_lcd
+
       - name: Install native
         run: pio platform install native
 
