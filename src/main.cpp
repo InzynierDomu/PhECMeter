@@ -12,6 +12,7 @@
 #include "Data_presentation.h"
 #include "Linear_function.h"
 #include "OneWire.h"
+#include "Sd_card.h"
 
 #include <Arduino.h>
 #include <EEPROM.h>
@@ -32,6 +33,7 @@ OneWire m_one_wire = OneWire(Config::pin_thermometer); ///< one wire bus
 DS18B20 m_ds_sensor = DS18B20(Config::pin_thermometer); ///< ds18b20 thermometer
 Data_presentation m_data_presentation; ///< screen and serial handling
 Calibration_data_memory m_memory; ///< memory handling
+Sd_card m_sd_card; ///< sd crad handling
 
 Device_state m_device_state = Device_state::startup; ///< actual device state
 
@@ -270,6 +272,11 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(Config::pin_dwn_button), button_l_pressed, FALLING);
 
   m_device_state = Device_state::display_measure_ph;
+
+  if(m_sd_card.is_card_available())
+  {
+    Serial.println("SD card is present");
+  }
 }
 
 /**
