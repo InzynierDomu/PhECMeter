@@ -1,3 +1,9 @@
+/**
+ * @file Sd_card.h
+ * @author by Szymon Markiewicz (https://github.com/InzynierDomu/)
+ * @brief sd card handling
+ * @date 2022-08
+ */
 #pragma once
 
 #include <SD.h>
@@ -12,6 +18,7 @@ class Sd_card
   void save_ec_measurement(const float temperature, const float ec);
 
   private:
+  bool m_card_available; ///< is sd card available
+
   void save_measurement(String& measurement);
-  bool m_card_available;
 };
