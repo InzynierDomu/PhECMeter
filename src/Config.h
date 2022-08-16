@@ -29,6 +29,6 @@ const uint16_t long_press_time = 2000; ///< time for long buttons press
 const uint8_t max_ph_to_calib = 24; ///< max ph to set in calibration
 const uint8_t max_ec_to_calib = 64; ///< max ec to set in calibration
 
-const String file_name = "Measurments.log"; ///< file name on SD card to save measurments
+const String file_name = "data.log"; ///< file name on SD card to save measurments
 
 } // namespace Config

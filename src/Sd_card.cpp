@@ -17,7 +17,7 @@ bool Sd_card::is_card_available()
 {
   if (!m_card_available)
   {
-    if (!SD.begin(Config::sd_card_cs_pin))
+    if (SD.begin(Config::sd_card_cs_pin))
     {
       m_card_available = true;
       return true;
@@ -55,8 +55,12 @@ void Sd_card::save_measurement(String& measurement)
     File dataFile = SD.open(Config::file_name, FILE_WRITE);
     if (dataFile)
     {
-      dataFile.println();
+      dataFile.println(measurement);
       dataFile.close();
+    }
+    else
+    {
+      Serial.println("problem with create log file");
     }
   }
 }

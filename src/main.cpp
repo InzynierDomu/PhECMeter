@@ -99,6 +99,10 @@ void measurements_ph(const Buttons_action action)
       digitalWrite(Config::ec_supply_pin_probe, HIGH);
       m_device_state = Device_state::display_measure_ec;
       break;
+    case Buttons_action::short_dwn_button:
+      m_sd_card.save_ph_measurement(temperature, ph);
+      m_data_presentation.display_save_data();
+      break;
     default:
       m_device_state = Device_state::display_measure_ph;
       break;
@@ -127,6 +131,10 @@ void measurements_ec(const Buttons_action action)
       digitalWrite(Config::ec_supply_pin_probe, LOW);
       digitalWrite(Config::ph_supply_pin_probe, HIGH);
       m_device_state = Device_state::display_measure_ph;
+      break;
+    case Buttons_action::short_dwn_button:
+      m_sd_card.save_ec_measurement(temperature, ec);
+      m_data_presentation.display_save_data();
       break;
     default:
       m_device_state = Device_state::display_measure_ec;
@@ -273,7 +281,7 @@ void setup()
 
   m_device_state = Device_state::display_measure_ph;
 
-  if(m_sd_card.is_card_available())
+  if (m_sd_card.is_card_available())
   {
     Serial.println("SD card is present");
   }
