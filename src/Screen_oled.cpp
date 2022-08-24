@@ -11,14 +11,10 @@
  * @brief constructor
  */
 Screen_oled::Screen_oled()
-: m_display(Config::screen_width, Config::screen_height, &Wire)
 {
-  m_display.begin(SSD1306_SWITCHCAPVCC, Config::screen_address);
-  m_display.clearDisplay();
-  m_display.setRotation(2);
-  m_display.setTextSize(2);
-  m_display.setTextColor(SSD1306_WHITE);
-  m_display.display();
+  ssd1306_128x32_i2c_init();
+  ssd1306_clearScreen();
+  ssd1306_setFixedFont(ssd1306xled_font6x8);
 }
 
 /**
@@ -26,13 +22,9 @@ Screen_oled::Screen_oled()
  */
 void Screen_oled::display_start()
 {
-  m_display.clearDisplay();
-  m_display.setCursor(0, 0);
-  m_display.setTextSize(1);
-  m_display.println("pH/EC meter");
-  m_display.println("Inzynier Domu");
-  m_display.display();
-  m_display.setTextSize(2);
+  ssd1306_clearScreen();
+  ssd1306_charF6x8(0, 0, "pH/EC meter");
+  ssd1306_charF6x8(0, 1, "Inzynier Domu");
 }
 
 /**
@@ -40,11 +32,9 @@ void Screen_oled::display_start()
  */
 void Screen_oled::display_calib_mode()
 {
-  m_display.clearDisplay();
-  m_display.setCursor(0, 0);
-  m_display.println("CALIB");
-  m_display.println("MODE");
-  m_display.display();
+  ssd1306_clearScreen();
+  ssd1306_charF12x16(0, 0, "CALIB", STYLE_NORMAL);
+  ssd1306_charF12x16(0, 0, "MODE", STYLE_NORMAL);
 }
 
 /**
@@ -52,11 +42,9 @@ void Screen_oled::display_calib_mode()
  */
 void Screen_oled::display_save_data()
 {
-  m_display.clearDisplay();
-  m_display.setCursor(0, 0);
-  m_display.println("POINT");
-  m_display.println("SAVED");
-  m_display.display();
+  ssd1306_clearScreen();
+  ssd1306_charF12x16(0, 0, "POINT", STYLE_NORMAL);
+  ssd1306_charF12x16(0, 2, "SAVED", STYLE_NORMAL);
 }
 
 /**
@@ -64,14 +52,15 @@ void Screen_oled::display_save_data()
  */
 void Screen_oled::display_ph(const float temperature, const float ph)
 {
-  m_display.clearDisplay();
-  m_display.setCursor(0, 0);
-  m_display.print(temperature);
-  m_display.print((char)247);
-  m_display.println("C");
-  m_display.print(ph);
-  m_display.print("pH");
-  m_display.display();
+  ssd1306_clearScreen();
+  char buf[10];
+  String text = String(temperature) + "'C";
+  // TODO: fix degree char
+  text.toCharArray(buf, 10);
+  ssd1306_charF12x16(0, 0, buf, STYLE_NORMAL);
+  text = String(ph) + "pH";
+  text.toCharArray(buf, 10);
+  ssd1306_charF12x16(0, 2, buf, STYLE_NORMAL);
 }
 
 /**
@@ -79,14 +68,15 @@ void Screen_oled::display_ph(const float temperature, const float ph)
  */
 void Screen_oled::display_ec(const float temperature, const float ec)
 {
-  m_display.clearDisplay();
-  m_display.setCursor(0, 0);
-  m_display.print(temperature);
-  m_display.print((char)247);
-  m_display.println("C");
-  m_display.print(ec);
-  m_display.print("ms/cm");
-  m_display.display();
+  ssd1306_clearScreen();
+  char buf[10];
+  String text = String(temperature) + "'C";
+  // TODO: fix degree char
+  text.toCharArray(buf, 10);
+  ssd1306_charF12x16(0, 0, buf, STYLE_NORMAL);
+  text = String(ec) + "ms/cm";
+  text.toCharArray(buf, 10);
+  ssd1306_charF12x16(0, 2, buf, STYLE_NORMAL);
 }
 
 /**
@@ -98,11 +88,12 @@ void Screen_oled::display_calibration_ph(const uint8_t sample, const float tempe
   static long time;
   static bool toggle;
 
-  m_display.clearDisplay();
-  m_display.setCursor(0, 0);
-  m_display.print(temperature);
-  m_display.print((char)247);
-  m_display.println("C");
+  ssd1306_clearScreen();
+  char buf[10];
+  String text = String(temperature) + "'C";
+  // TODO: fix degree char
+  text.toCharArray(buf, 10);
+  ssd1306_charF12x16(0, 0, buf, STYLE_NORMAL);
 
   if (loop_time - time > Config::blink_time_calibration)
   {
@@ -112,15 +103,14 @@ void Screen_oled::display_calibration_ph(const uint8_t sample, const float tempe
 
   if (toggle)
   {
-    m_display.print(sample);
+    ssd1306_print(sample);
   }
   else
   {
-    m_display.print(" ");
+    ssd1306_print(" ");
   }
 
-  m_display.print(".0 pH");
-  m_display.display();
+  ssd1306_print(".0 pH");
 }
 
 /**
@@ -132,11 +122,12 @@ void Screen_oled::display_calibration_ec(const double sample, uint8_t position, 
   static long time;
   static bool toggle;
 
-  m_display.clearDisplay();
-  m_display.setCursor(0, 0);
-  m_display.print(temperature);
-  m_display.print((char)247);
-  m_display.println("C");
+  ssd1306_clearScreen();
+  char buf[10];
+  String text = String(temperature) + "'C";
+  // TODO: fix degree char
+  text.toCharArray(buf, 10);
+  ssd1306_charF12x16(0, 0, buf, STYLE_NORMAL);
 
   if (loop_time - time > Config::blink_time_calibration)
   {
@@ -147,7 +138,8 @@ void Screen_oled::display_calibration_ec(const double sample, uint8_t position, 
   String text = String(sample, 3);
   if (toggle)
   {
-    m_display.print(text);
+    text.toCharArray(buf, 8);
+    ssd1306_print(buf);
   }
   else
   {
@@ -160,10 +152,9 @@ void Screen_oled::display_calibration_ec(const double sample, uint8_t position, 
       position++;
     }
     text[position] = ' ';
-    m_display.print(text);
+    text.toCharArray(buf, 8);
+    ssd1306_print(buf);
   }
-  m_display.print("ms/cm");
-
-  m_display.display();
+  ssd1306_print("ms/cm");
 }
 #endif
