@@ -33,6 +33,15 @@ bool Sd_card::is_card_available()
 }
 
 /**
+ * @brief get is sd card available
+ * @return is sd card available
+ */
+bool Sd_card::get_card_status()
+{
+  return m_card_available;
+}
+
+/**
  * @brief save ph measurement on sd
  * @param temperature actual temperature to save
  * @param ph actual ph value to save
