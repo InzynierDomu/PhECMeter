@@ -26,7 +26,7 @@ Buttons_action Buttons::check_buttons(bool up_button_pressed, bool dwn_button_pr
       return Buttons_action::up_button_long;
     }
   }
-  delay(100);
+
   if (digitalRead(Config::pin_up_button) && digitalRead(Config::pin_dwn_button))
   {
     if (dwn_button_pressed)
@@ -38,7 +38,7 @@ Buttons_action Buttons::check_buttons(bool up_button_pressed, bool dwn_button_pr
       return Buttons_action::short_up_button;
     }
   }
-  delay(100);
+
   return Buttons_action::nothing;
 }
 

@@ -313,6 +313,7 @@ void loop()
     {
       m_up_button_pressed = false;
       m_dwn_button_pressed = false;
+      delay(100);
     }
   }
   switch (m_device_state)
