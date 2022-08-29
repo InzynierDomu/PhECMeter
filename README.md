@@ -33,9 +33,9 @@ Calibration mode needs 2 points to save.
 Set the value to which sample the probe is immersed. For that use up and dwn(down) buttons to decrease or increase the value. In EC calibration possible is to change the digit position by pressing 2s up button. To save points press 2s on both buttons. After saving two points, the device changes state to measure.
 
 ### Future
-- Add optional other screen - LCD 16x2 via I2C expander.
+- Add optional other screen - LCD 16x2 via I2C expander. (added after 1.0)
 - Use accumulator.
-- Add SD card and data recording.
+- Add SD card and data recording. (added on branch)
 - Add some communication maybe RS232 or RS485.
 
 ## Scheme
