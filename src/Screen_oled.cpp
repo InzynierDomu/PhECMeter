@@ -103,14 +103,16 @@ void Screen_oled::display_calibration_ph(const uint8_t sample, const float tempe
 
   if (toggle)
   {
-    ssd1306_print(sample);
+    text = String(sample);
   }
   else
   {
-    ssd1306_print(" ");
+    text = String(" ");
   }
 
-  ssd1306_print(".0 pH");
+  text += ".0 pH";
+  text.toCharArray(buf, 10);
+  ssd1306_charF12x16(0, 2, buf, STYLE_NORMAL);
 }
 
 /**
@@ -135,11 +137,10 @@ void Screen_oled::display_calibration_ec(const double sample, uint8_t position, 
     toggle = !toggle;
   }
 
-  String text = String(sample, 3);
+  text = String(sample, 3);
   if (toggle)
   {
     text.toCharArray(buf, 8);
-    ssd1306_print(buf);
   }
   else
   {
@@ -152,9 +153,8 @@ void Screen_oled::display_calibration_ec(const double sample, uint8_t position, 
       position++;
     }
     text[position] = ' ';
-    text.toCharArray(buf, 8);
-    ssd1306_print(buf);
   }
-  ssd1306_print("ms/cm");
+  text += "ms/cm";
+  ssd1306_charF12x16(0, 2, buf, STYLE_NORMAL);
 }
 #endif
