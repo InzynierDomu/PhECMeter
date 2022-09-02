@@ -48,13 +48,17 @@ When SD card is plugged, after short press down button measurements will be save
 * A1 Arduino Nano
 * U1 ds18b20 temperature sensor
 * J1 is socket for pH board.
-* J2 is socket for I2C oled screen SSD1306 128x32.
+* J2 is socket for I2C screen OLED SSD1306 128x32 or HD44780 via PCF8574. 
 * R1 Resistor 4,7 kohm
 * SW1, SW2 micro switch
 * SW3 switch to turning on/of power
 * J3 connect to battery box
 * J5 SD card socket
 ## IDE
+For specific screen is the prepared environment:
+OLED SSD1306 128x32 :nanoatmega328_oled
+HD44780 via PCF8574 :nanoatmega328_lcd
+
 The project is prepared for the Platform IO environment. A video on how to install such an environment can be watched on this [video](https://youtu.be/Em9NuebT2Kc).
 <br><br>
 Formatting is done using clang-format. The description of the tool configuration is in the [video](https://youtu.be/xxuaOG0WjIE).
