@@ -1,4 +1,21 @@
 @startuml
-[*]->Setup
+[*]->startup
+startup --> measure_ph
+measure_ph --> measure_ec : long_press_up 
+measure_ph --> calibration_ph : long_press_two_buttons 
+measure_ec --> calibration_ec : long_press_two_buttons
+measure_ec --> measure_ph : long_press_up 
+
+state calibration_ph{
+    [*] -> set_first_sample_ph
+    set_first_sample_ph --> set_second_sample_ph : long_press_two_buttons
+    set_second_sample_ph --> measure_ph : long_press_two_buttons
+}
+
+state calibration_ec{
+    [*] -> set_first_sample_ec
+    set_first_sample_ec --> set_second_sample_ec : long_press_two_buttons
+    set_second_sample_ec --> measure_ec : long_press_two_buttons
+}
 
 @enduml
