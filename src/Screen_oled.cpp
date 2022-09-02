@@ -34,7 +34,7 @@ void Screen_oled::display_calib_mode()
 {
   ssd1306_clearScreen();
   ssd1306_charF12x16(0, 0, "CALIB", STYLE_NORMAL);
-  ssd1306_charF12x16(0, 0, "MODE", STYLE_NORMAL);
+  ssd1306_charF12x16(0, 2, "MODE", STYLE_NORMAL);
 }
 
 /**
