@@ -34,8 +34,7 @@ void Screen_lcd::display_calib_mode()
 {
   m_display.clear();
   m_display.setCursor(0, 0);
-  m_display.print("CALIB");
-  m_display.print("MODE");
+  m_display.print("CALIB MODE");
 }
 
 /**
@@ -45,8 +44,7 @@ void Screen_lcd::display_save_data()
 {
   m_display.clear();
   m_display.setCursor(0, 0);
-  m_display.print("POINT");
-  m_display.print("SAVED");
+  m_display.print("POINT SAVED");
 }
 
 /**

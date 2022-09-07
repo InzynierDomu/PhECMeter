@@ -12,9 +12,9 @@
 ///< possible recognizing buttons action
 enum class Buttons_action
 {
-  nothig,
-  two_buttons_2s,
-  up_button_2s,
+  nothing,
+  two_buttons_long,
+  up_button_long,
   short_up_button,
   short_dwn_button
 };
@@ -25,6 +25,6 @@ class Buttons
   static Buttons_action check_buttons(bool r_button_pressed, bool l_button_pressed);
 
   private:
-  static bool check_two_buttons_2s(bool r_button_pressed, bool l_button_pressed);
-  static bool check_up_botton_2s(bool r_button_pressed, bool l_button_pressed);
+  static bool check_two_buttons_long();
+  static bool check_up_botton_long();
 };

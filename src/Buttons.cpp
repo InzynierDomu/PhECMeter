@@ -17,13 +17,13 @@ Buttons_action Buttons::check_buttons(bool up_button_pressed, bool dwn_button_pr
 {
   if (up_button_pressed || dwn_button_pressed)
   {
-    if (check_two_buttons_2s(up_button_pressed, dwn_button_pressed))
+    if (check_two_buttons_long())
     {
-      return Buttons_action::two_buttons_2s;
+      return Buttons_action::two_buttons_long;
     }
-    if (check_up_botton_2s(up_button_pressed, dwn_button_pressed))
+    if (check_up_botton_long())
     {
-      return Buttons_action::up_button_2s;
+      return Buttons_action::up_button_long;
     }
   }
 
@@ -38,11 +38,11 @@ Buttons_action Buttons::check_buttons(bool up_button_pressed, bool dwn_button_pr
       return Buttons_action::short_up_button;
     }
   }
-  delay(100);
-  return Buttons_action::nothig;
+
+  return Buttons_action::nothing;
 }
 
-bool Buttons::check_two_buttons_2s(bool up_button_pressed, bool dwn_button_pressed)
+bool Buttons::check_two_buttons_long()
 {
   long buttons_start_press = millis();
   do
@@ -50,15 +50,13 @@ bool Buttons::check_two_buttons_2s(bool up_button_pressed, bool dwn_button_press
     long loop_time = millis();
     if (loop_time - buttons_start_press > Config::long_press_time)
     {
-      dwn_button_pressed = false;
-      up_button_pressed = false;
       return true;
     }
   } while (!digitalRead(Config::pin_up_button) && !digitalRead(Config::pin_dwn_button));
   return false;
 }
 
-bool Buttons::check_up_botton_2s(bool up_button_pressed, bool dwn_button_pressed)
+bool Buttons::check_up_botton_long()
 {
   long buttons_start_press = millis();
   do
@@ -66,8 +64,6 @@ bool Buttons::check_up_botton_2s(bool up_button_pressed, bool dwn_button_pressed
     long loop_time = millis();
     if (loop_time - buttons_start_press > Config::long_press_time)
     {
-      dwn_button_pressed = false;
-      up_button_pressed = false;
       return true;
     }
   } while (!digitalRead(Config::pin_up_button) && digitalRead(Config::pin_dwn_button));
