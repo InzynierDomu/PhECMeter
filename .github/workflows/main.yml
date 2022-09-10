@@ -31,7 +31,7 @@ jobs:
         run: pio lib -g install https://github.com/adafruit/Adafruit-GFX-Library/archive/refs/tags/1.11.1.zip
 
       - name: Run PlatformIO
-        run: pio run -e nanoatmega328_oled
+        run: pio run -e nanoatmega328_oled_new
 
       - name: Run PlatformIO
         run: pio run -e nanoatmega328_lcd

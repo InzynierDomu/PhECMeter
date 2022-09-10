@@ -1,4 +1,11 @@
-.pio
+.pio/build
+.pio/libdeps/check
+.pio/libdeps/nanoatmega328
+.pio/libdeps/nanoatmega328_lcd
+.pio/libdeps/nanoatmega328_oled
+.pio/libdeps/nanoatmega328_oled_new/DS18B20
+.pio/libdeps/nanoatmega328_oled_new/OneWire
+.pio/libdeps/nanoatmega328_oled_new/integrity.dat
 .vscode/.browse.c_cpp.db*
 .vscode/c_cpp_properties.json
 .vscode/launch.json
