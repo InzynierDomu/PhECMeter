@@ -32,13 +32,15 @@ Measure EC -> calibartion EC.</br>
 Calibration mode needs 2 points to save.</br>
 Set the value to which sample the probe is immersed. For that use up and dwn(down) buttons to decrease or increase the value. In EC calibration possible is to change the digit position by pressing 2s up button. To save points press 2s on both buttons. After saving two points, the device changes state to measure.
 
+When SD card is plugged, after short press down button measurements will be save in file on SD.
+
 ### Future
-* Add SD card and data recording. (added on branch)
-* Add some communication maybe RS232 or RS485.
+- Use accumulator.
+- Add some communication maybe RS232 or RS485.
 
 ## Scheme
-![schem](http://www.inzynierdomu.pl/wp-content/uploads/2021/01/ph_metr_schemat.png)
-### Part list:
+![schem](https://github.com/InzynierDomu/PhECMeter/blob/Add_sd_handling/schems/Screen.png)
+### Part list
 * pH probe and board like [this](https://botland.com.pl/pl/seria-gravity/15094-gravity-czujnik-miernik-ph-analogowy-v2-dfrobot-sen0161-v2.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)
 * EC probe and board like [this](https://botland.com.pl/gravity-czujniki-pogodowe/15096-gravity-analogowy-czujnik-zasolenia-wody-i-gleby-dfrobot-dfr0300-h-5904422348359.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)
 * A1 Arduino Nano
@@ -49,7 +51,8 @@ Set the value to which sample the probe is immersed. For that use up and dwn(dow
 * SW1, SW2 micro switch
 * SW3 switch to turning on/of power
 * J3 connect to battery box
-  
+* J5 SD card socket
+
 ## IDE
 For specific screen is the prepared environment:
 OLED SSD1306 128x32 :nanoatmega328_oled
