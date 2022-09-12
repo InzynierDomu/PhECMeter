@@ -55,7 +55,6 @@ void Screen_oled::display_ph(const float temperature, const float ph)
   ssd1306_clearScreen();
   char buf[10];
   String text = String(temperature) + "'C";
-  // TODO: fix degree char
   text.toCharArray(buf, 10);
   ssd1306_charF12x16(0, 0, buf, STYLE_NORMAL);
   text = String(ph) + "pH";
@@ -71,7 +70,6 @@ void Screen_oled::display_ec(const float temperature, const float ec)
   ssd1306_clearScreen();
   char buf[10];
   String text = String(temperature) + "'C";
-  // TODO: fix degree char
   text.toCharArray(buf, 10);
   ssd1306_charF12x16(0, 0, buf, STYLE_NORMAL);
   text = String(ec) + "ms/cm";
@@ -91,7 +89,6 @@ void Screen_oled::display_calibration_ph(const uint8_t sample, const float tempe
   ssd1306_clearScreen();
   char buf[10];
   String text = String(temperature) + "'C";
-  // TODO: fix degree char
   text.toCharArray(buf, 10);
   ssd1306_charF12x16(0, 0, buf, STYLE_NORMAL);
 
@@ -127,7 +124,6 @@ void Screen_oled::display_calibration_ec(const double sample, uint8_t position, 
   ssd1306_clearScreen();
   char buf[10];
   String text = String(temperature) + "'C";
-  // TODO: fix degree char
   text.toCharArray(buf, 10);
   ssd1306_charF12x16(0, 0, buf, STYLE_NORMAL);
 
