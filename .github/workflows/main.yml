@@ -27,9 +27,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade platformio
 
-      - name: Install lib adafruit GFX
-        run: pio lib -g install https://github.com/adafruit/Adafruit-GFX-Library/archive/refs/tags/1.11.1.zip
-
       - name: Run PlatformIO
         run: pio run -e nanoatmega328_oled
 
