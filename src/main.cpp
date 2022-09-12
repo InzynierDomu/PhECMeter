@@ -316,6 +316,7 @@ void loop()
       delay(100);
     }
   }
+
   switch (m_device_state)
   {
     case Device_state::display_measure_ph:

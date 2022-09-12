@@ -25,19 +25,17 @@ The device has 4 possible states:
 
 ![photo](https://www.inzynierdomu.pl/wp-content/uploads/2019/12/IMG_5993-scaled.jpg)
 
-The device start in pH measure mode. To chnage pH/EC measure mode - press up button for more than 2s.
-To enter calibration mode press both buttons more 2s.
-Measure pH -> calibration pH.
-Measure EC -> calibartion EC.
-Calibration mode needs 2 points to save.
+The device start in pH measure mode. To chnage pH/EC measure mode - press up button for more than 2s.</br>
+To enter calibration mode press both buttons more 2s.</br>
+Measure pH -> calibration pH.</br>
+Measure EC -> calibartion EC.</br>
+Calibration mode needs 2 points to save.</br>
 Set the value to which sample the probe is immersed. For that use up and dwn(down) buttons to decrease or increase the value. In EC calibration possible is to change the digit position by pressing 2s up button. To save points press 2s on both buttons. After saving two points, the device changes state to measure.
 
 When SD card is plugged, after short press down button measurements will be save in file on SD.
 
 ### Future
-- Add optional other screen - LCD 16x2 via I2C expander. (added after 1.0)
 - Use accumulator.
-- Add SD card and data recording. (added on branch)
 - Add some communication maybe RS232 or RS485.
 
 ## Scheme
@@ -54,6 +52,7 @@ When SD card is plugged, after short press down button measurements will be save
 * SW3 switch to turning on/of power
 * J3 connect to battery box
 * J5 SD card socket
+
 ## IDE
 For specific screen is the prepared environment:
 OLED SSD1306 128x32 :nanoatmega328_oled

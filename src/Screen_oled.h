@@ -7,9 +7,9 @@
 #pragma once
 #ifndef LCD_SCREEN
 
-#include "Adafruit_BusIO_Register.h"
-#include "Adafruit_GFX.h"
-#include "Adafruit_SSD1306.h"
+#include <SPI.h>
+#include "ssd1306.h"
+#include "ssd1306_console.h"
 #include "Config.h"
 #include "IScreen.h"
 
@@ -24,8 +24,5 @@ class Screen_oled : public IScreen
   void display_ec(const float temperature, const float ec) override;
   void display_calibration_ph(const uint8_t sample, const float temperature) override;
   void display_calibration_ec(const double sample, uint8_t position, const float temperature) override;
-
-  private:
-  Adafruit_SSD1306 m_display; ///< ssd1306 oled screen
 };
 #endif
