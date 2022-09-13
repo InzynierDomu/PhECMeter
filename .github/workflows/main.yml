@@ -42,6 +42,15 @@ jobs:
       - name: doxygen
         uses: mattnotmitt/doxygen-action@v1.9.2
 
+      - name: palntuml
+        id: plantuml
+        uses: grassedge/generate-plantuml-action@v1.5
+        with:
+          path: .
+          message: "Render PlantUML files"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: GH Pages Deployment
         uses: peaceiris/actions-gh-pages@v3
         with:
