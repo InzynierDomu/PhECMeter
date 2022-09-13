@@ -17,5 +17,4 @@ state calibration_ec{
     set_first_sample_ec --> set_second_sample_ec : long_press_two_buttons
     set_second_sample_ec --> measure_ec : long_press_two_buttons
 }
-
 @enduml
