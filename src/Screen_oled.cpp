@@ -15,8 +15,8 @@ Screen_oled::Screen_oled()
   ssd1306_128x32_i2c_init();
   ssd1306_clearScreen();
   ssd1306_setFixedFont(ssd1306xled_font6x8);
-  ssd1306_flipHorizontal();
-  ssd1306_flipVertical();
+  ssd1306_flipHorizontal(1);
+  ssd1306_flipVertical(1);
 }
 
 /**
