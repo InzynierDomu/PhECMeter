@@ -40,7 +40,7 @@ When SD card is plugged, after short press down button measurements will be save
 * Add some communication maybe RS232 or RS485.
 
 ## Scheme
-![schem](https://github.com/InzynierDomu/PhECMeter/blob/Add_sd_handling/schems/electrical/Screen.png)
+![schem](https://github.com/InzynierDomu/PhECMeter/schems/electrical/Screen.png)
 ### Part list
 * pH probe and board like [this](https://botland.com.pl/pl/seria-gravity/15094-gravity-czujnik-miernik-ph-analogowy-v2-dfrobot-sen0161-v2.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)
 * EC probe and board like [this](https://botland.com.pl/gravity-czujniki-pogodowe/15096-gravity-analogowy-czujnik-zasolenia-wody-i-gleby-dfrobot-dfr0300-h-5904422348359.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)
@@ -55,7 +55,7 @@ When SD card is plugged, after short press down button measurements will be save
 * J5 SD card socket (optional)
 
 ## State chart
-![state_chart](https://github.com/InzynierDomu/PhECMeter/blob/Add_sd_handling/schems/state_chart/work_schem.svg)
+![state_chart](https://github.com/InzynierDomu/PhECMeter/schems/state_chart/work_schem.svg)
 
 ## IDE
 For specific screen is the prepared environment:
