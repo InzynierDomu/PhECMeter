@@ -40,7 +40,7 @@ When SD card is plugged, after short press down button measurements will be save
 * Add some communication maybe RS232 or RS485.
 
 ## Scheme
-![schem](https://github.com/InzynierDomu/PhECMeter/schems/electrical/Screen.png)
+![schem](https://github.com/InzynierDomu/PhECMeter/blob/master/schems/electrical/Screen.png)
 ### Part list
 * pH probe and board like [this](https://botland.com.pl/pl/seria-gravity/15094-gravity-czujnik-miernik-ph-analogowy-v2-dfrobot-sen0161-v2.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)
 * EC probe and board like [this](https://botland.com.pl/gravity-czujniki-pogodowe/15096-gravity-analogowy-czujnik-zasolenia-wody-i-gleby-dfrobot-dfr0300-h-5904422348359.html?utm_source=blog&utm_medium=link&utm_campaign=inzynierdomu)
@@ -55,13 +55,13 @@ When SD card is plugged, after short press down button measurements will be save
 * J5 SD card socket (optional)
 
 ## State chart
-![state_chart](https://github.com/InzynierDomu/PhECMeter/schems/state_chart/work_schem.svg)
+![state_chart](https://github.com/InzynierDomu/PhECMeter/blob/master/schems/state_chart/work_schem.svg)
 
 ## IDE
-For specific screen is the prepared environment:
-OLED SSD1306 128x32 :nanoatmega328_oled
-HD44780 via PCF8574 :nanoatmega328_lcd
-
+For specific screen is the prepared environment:</br>
+OLED SSD1306 128x32 :nanoatmega328_oled</br>
+HD44780 via PCF8574 :nanoatmega328_lcd</br>
+</br>
 The project is prepared for the Platform IO environment. A video on how to install such an environment can be watched on this [video](https://youtu.be/Em9NuebT2Kc).
 <br><br>
 Formatting is done using clang-format. The description of the tool configuration is in the [video](https://youtu.be/xxuaOG0WjIE).
