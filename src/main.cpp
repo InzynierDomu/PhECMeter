@@ -335,3 +335,12 @@ void loop()
       break;
   }
 }
+
+
+/*! \mainpage index test
+ *
+ * \section intro_sec Introduction
+ *
+ * This is the introduction.
+ *
+ */
