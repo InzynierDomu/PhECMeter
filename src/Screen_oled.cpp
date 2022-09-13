@@ -151,6 +151,7 @@ void Screen_oled::display_calibration_ec(const double sample, uint8_t position, 
     text[position] = ' ';
   }
   text += "ms/cm";
+  text.toCharArray(buf, 10);
   ssd1306_charF12x16(0, 2, buf, STYLE_NORMAL);
 }
 #endif

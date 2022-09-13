@@ -25,18 +25,18 @@ The device has 4 possible states:
 
 ![photo](https://www.inzynierdomu.pl/wp-content/uploads/2019/12/IMG_5993-scaled.jpg)
 
-The device start in pH measure mode. To chnage pH/EC measure mode - press up button for more than 2s.</br>
-To enter calibration mode press both buttons more 2s.</br>
+The device start in pH measure mode. To chnage pH/EC measure mode - press up button for more than 1s.</br>
+To enter calibration mode press both buttons more 1s.</br>
 Measure pH -> calibration pH.</br>
 Measure EC -> calibartion EC.</br>
 Calibration mode needs 2 points to save.</br>
-Set the value to which sample the probe is immersed. For that use up and dwn(down) buttons to decrease or increase the value. In EC calibration possible is to change the digit position by pressing 2s up button. To save points press 2s on both buttons. After saving two points, the device changes state to measure.
-
+Set the value to which sample the probe is immersed. For that use up and dwn(down) buttons to decrease or increase the value. In EC calibration possible is to change the digit position by pressing 1s up button. To save points press 1s on both buttons. After saving two points, the device changes state to measure.</br>
+</br>
 When SD card is plugged, after short press down button measurements will be save in file on SD.
 
 ### Future
-- Use accumulator.
-- Add some communication maybe RS232 or RS485.
+* Use accumulator.
+* Add some communication maybe RS232 or RS485.
 
 ## Scheme
 ![schem](https://github.com/InzynierDomu/PhECMeter/blob/Add_sd_handling/schems/Screen.png)
@@ -51,7 +51,7 @@ When SD card is plugged, after short press down button measurements will be save
 * SW1, SW2 micro switch
 * SW3 switch to turning on/of power
 * J3 connect to battery box
-* J5 SD card socket
+* J5 SD card socket (optional)
 
 ## IDE
 For specific screen is the prepared environment:
