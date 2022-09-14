@@ -6,14 +6,14 @@
  */
 #pragma once
 
-#include <stdint.h>
 #include <Arduino.h>
+#include <stdint.h>
 
 namespace Config
 {
-const uint8_t pin_up_button = 3; ///< up button pin number
-const uint8_t pin_dwn_button = 2; ///< down button pin number
-const uint8_t pin_thermometer = 4; ///< ds18b20 thermometer pin number
+const uint8_t pin_up_button = 3; ///< up button pin
+const uint8_t pin_down_button = 2; ///< down button pin
+const uint8_t pin_thermometer = 4; ///< ds18b20 thermometer pin
 const uint8_t ph_pin_probe = 15; ///< ph probe pin
 const uint8_t ec_pin_probe = 16; ///< ec probe pin
 const uint8_t ph_supply_pin_probe = 5; ///< ph probe supply pin
@@ -30,5 +30,11 @@ const uint8_t max_ph_to_calib = 24; ///< max ph to set in calibration
 const uint8_t max_ec_to_calib = 64; ///< max ec to set in calibration
 
 const String file_name = "data.log"; ///< file name on SD card to save measurments
+
+const uint8_t pin_left_button = 7; ///< left button pin
+const uint8_t pin_right_button = 8; ///< right button pin
+const uint8_t pin_center_button = 9; ///< center button pin
+const uint8_t pin_ph_relay = 13; ///< ph control relay pin
+const uint8_t pin_ec_relay = 14; ///< ec control relay pin
 
 } // namespace Config

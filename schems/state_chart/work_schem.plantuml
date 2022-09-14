@@ -1,20 +1,33 @@
 @startuml
 [*]->startup
 startup --> measure_ph
-measure_ph --> measure_ec : long_press_up 
-measure_ph --> calibration_ph : long_press_two_buttons 
-measure_ec --> calibration_ec : long_press_two_buttons
-measure_ec --> measure_ph : long_press_up 
+measure_ph --> measure_ec : left_pressed 
+measure_ph --> calibration_ph : up_pressed
+measure_ph --> change_ph_range :down_pressed
+measure_ec --> calibration_ec : up_pressed
+measure_ec --> change_ec_range :down_pressed
+measure_ec --> measure_ph : left_pressed
 
 state calibration_ph{
     [*] -> set_first_sample_ph
-    set_first_sample_ph --> set_second_sample_ph : long_press_two_buttons
-    set_second_sample_ph --> measure_ph : long_press_two_buttons
+    set_first_sample_ph --> set_second_sample_ph : center_pressed
+    set_second_sample_ph --> measure_ph : center_pressed
 }
 
 state calibration_ec{
     [*] -> set_first_sample_ec
-    set_first_sample_ec --> set_second_sample_ec : long_press_two_buttons
-    set_second_sample_ec --> measure_ec : long_press_two_buttons
+    set_first_sample_ec --> set_second_sample_ec : center_pressed
+    set_second_sample_ec --> measure_ec : center_pressed
 }
+
+state change_ph_range{
+    [*] -> set_ph_range
+    set_ph_range --> measure_ph : center_pressed  
+}
+
+state change_ec_range{
+    [*] -> set_ec_range
+    set_ec_range --> measure_ec : center_pressed  
+}
+
 @enduml

@@ -54,9 +54,6 @@ When SD card is plugged, after short press down button measurements will be save
 * J3 connect to battery box
 * J5 SD card socket (optional)
 
-## State chart
-![state_chart](https://github.com/InzynierDomu/PhECMeter/blob/master/schems/state_chart/work_schem.svg)
-
 ## IDE
 For specific screen is the prepared environment:</br>
 OLED SSD1306 128x32 :nanoatmega328_oled</br>

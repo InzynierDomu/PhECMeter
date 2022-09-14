@@ -19,23 +19,23 @@ Buttons_action Buttons::check_buttons(bool up_button_pressed, bool dwn_button_pr
   {
     if (check_two_buttons_long())
     {
-      return Buttons_action::two_buttons_long;
+      return Buttons_action::center_pressed;
     }
     if (check_up_botton_long())
     {
-      return Buttons_action::up_button_long;
+      return Buttons_action::right_pressed;
     }
   }
 
-  if (digitalRead(Config::pin_up_button) && digitalRead(Config::pin_dwn_button))
+  if (digitalRead(Config::pin_up_button) && digitalRead(Config::pin_down_button))
   {
     if (dwn_button_pressed)
     {
-      return Buttons_action::short_dwn_button;
+      return Buttons_action::down_pressed;
     }
     else if (up_button_pressed)
     {
-      return Buttons_action::short_up_button;
+      return Buttons_action::up_pressed;
     }
   }
 
@@ -52,7 +52,7 @@ bool Buttons::check_two_buttons_long()
     {
       return true;
     }
-  } while (!digitalRead(Config::pin_up_button) && !digitalRead(Config::pin_dwn_button));
+  } while (!digitalRead(Config::pin_up_button) && !digitalRead(Config::pin_down_button));
   return false;
 }
 
@@ -66,6 +66,6 @@ bool Buttons::check_up_botton_long()
     {
       return true;
     }
-  } while (!digitalRead(Config::pin_up_button) && digitalRead(Config::pin_dwn_button));
+  } while (!digitalRead(Config::pin_up_button) && digitalRead(Config::pin_down_button));
   return false;
 }
