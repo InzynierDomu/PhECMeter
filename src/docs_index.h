@@ -1,7 +1,7 @@
 /*! \mainpage pH EC metr
  *
- * \section Main state machine
+ * \section main state machine
  *
- * \image html https://github.com/InzynierDomu/PhECMeter/blob/master/schems/state_chart/work_schem.svg
+ * \image html schems\state_chart\work_schem.svg
  *
  */
