@@ -1,7 +1,7 @@
 /*! \mainpage pH EC metr
  *
- * \section main state machine
+ * \section State machine
  *
- * \image html schems\state_chart\work_schem.svg
+ * \image html work_schem.svg
  *
  */
