@@ -13,10 +13,11 @@
 enum class Buttons_action
 {
   nothing,
-  two_buttons_long,
-  up_button_long,
-  short_up_button,
-  short_dwn_button
+  center_pressed,
+  up_pressed,
+  down_pressed,
+  left_pressed,
+  right_pressed
 };
 
 class Buttons

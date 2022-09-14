@@ -90,16 +90,16 @@ void measurements_ph(const Buttons_action action)
 
   switch (action)
   {
-    case Buttons_action::two_buttons_long:
+    case Buttons_action::down_pressed:
       m_data_presentation.display_calib_mode();
       m_device_state = Device_state::calibration_ph;
       break;
-    case Buttons_action::up_button_long:
+    case Buttons_action::left_pressed:
       digitalWrite(Config::ph_supply_pin_probe, LOW);
       digitalWrite(Config::ec_supply_pin_probe, HIGH);
       m_device_state = Device_state::display_measure_ec;
       break;
-    case Buttons_action::short_dwn_button:
+    case Buttons_action::right_pressed:
       if (m_sd_card.get_card_status())
       {
         m_sd_card.save_ph_measurement(temperature, ph);
@@ -126,16 +126,16 @@ void measurements_ec(const Buttons_action action)
 
   switch (action)
   {
-    case Buttons_action::two_buttons_long:
+    case Buttons_action::down_pressed:
       m_data_presentation.display_calib_mode();
       m_device_state = Device_state::calibration_ec;
       break;
-    case Buttons_action::up_button_long:
+    case Buttons_action::left_pressed:
       digitalWrite(Config::ec_supply_pin_probe, LOW);
       digitalWrite(Config::ph_supply_pin_probe, HIGH);
       m_device_state = Device_state::display_measure_ph;
       break;
-    case Buttons_action::short_dwn_button:
+    case Buttons_action::right_pressed:
       if (m_sd_card.get_card_status())
       {
         m_sd_card.save_ec_measurement(temperature, ec);
@@ -192,7 +192,7 @@ void calibration_ph(const Buttons_action action)
 
   switch (action)
   {
-    case Buttons_action::two_buttons_long:
+    case Buttons_action::center_pressed:
       m_data_presentation.display_save_data();
       if (save_sample(samples, sample))
       {
@@ -201,13 +201,13 @@ void calibration_ph(const Buttons_action action)
         m_device_state = Device_state::display_measure_ph;
       }
       break;
-    case Buttons_action::short_dwn_button:
+    case Buttons_action::down_pressed:
       if (sample > 1)
       {
         sample--;
       }
       break;
-    case Buttons_action::short_up_button:
+    case Buttons_action::up_pressed:
       if (sample < Config::max_ph_to_calib)
       {
         sample++;
@@ -234,7 +234,7 @@ void calibration_ec(const Buttons_action action)
 
   switch (action)
   {
-    case Buttons_action::two_buttons_long:
+    case Buttons_action::center_pressed:
       m_data_presentation.display_save_data();
       if (save_sample(samples, sample))
       {
@@ -243,17 +243,17 @@ void calibration_ec(const Buttons_action action)
         m_device_state = Device_state::display_measure_ec;
       }
       break;
-    case Buttons_action::short_dwn_button:
+    case Buttons_action::down_pressed:
       // FIXME: min value
       sample = sample - pow(10.0, position * (-1.0));
       break;
-    case Buttons_action::short_up_button:
+    case Buttons_action::up_pressed:
       if (sample < Config::max_ec_to_calib)
       {
         sample = sample + pow(10.0, position * (-1.0));
       }
       break;
-    case Buttons_action::up_button_long:
+    case Buttons_action::right_pressed:
       if (position < 3)
       {
         position++;
@@ -288,9 +288,9 @@ void setup()
   pinMode(Config::ec_supply_pin_probe, OUTPUT);
   digitalWrite(Config::ec_supply_pin_probe, LOW);
   pinMode(Config::pin_up_button, INPUT_PULLUP);
-  pinMode(Config::pin_dwn_button, INPUT_PULLUP);
+  pinMode(Config::pin_down_button, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(Config::pin_up_button), button_r_pressed, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Config::pin_dwn_button), button_l_pressed, FALLING);
+  attachInterrupt(digitalPinToInterrupt(Config::pin_down_button), button_l_pressed, FALLING);
 
   m_device_state = Device_state::display_measure_ph;
 
@@ -335,12 +335,3 @@ void loop()
       break;
   }
 }
-
-
-/*! \mainpage index test
- *
- * \section intro_sec Introduction
- *
- * This is the introduction.
- *
- */
