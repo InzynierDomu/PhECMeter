@@ -13,12 +13,12 @@ namespace Config
 {
 const uint8_t pin_up_button = 3; ///< up button pin
 const uint8_t pin_down_button = 2; ///< down button pin
-const uint8_t pin_thermometer = 4; ///< ds18b20 thermometer pin
+const uint8_t pin_thermometer = 7; ///< ds18b20 thermometer pin
 const uint8_t ph_pin_probe = 15; ///< ph probe pin
 const uint8_t ec_pin_probe = 16; ///< ec probe pin
-const uint8_t ph_supply_pin_probe = 5; ///< ph probe supply pin
-const uint8_t ec_supply_pin_probe = 6; ///< ec probe supply pin
-const uint8_t sd_card_cs_pin = 7; ///< cs pin in spi communication to sd card
+const uint8_t ph_supply_pin_probe = 8; ///< ph probe supply pin
+const uint8_t ec_supply_pin_probe = 9; ///< ec probe supply pin
+const uint8_t sd_card_cs_pin = 10; ///< cs pin in spi communication to sd card
 
 const uint8_t screen_address = 0x3C; ///< ssd1306 oled screen i2c address
 const uint8_t screen_width = 128; ///< screen width
@@ -31,10 +31,13 @@ const uint8_t max_ec_to_calib = 64; ///< max ec to set in calibration
 
 const String file_name = "data.log"; ///< file name on SD card to save measurments
 
-const uint8_t pin_left_button = 7; ///< left button pin
-const uint8_t pin_right_button = 8; ///< right button pin
-const uint8_t pin_center_button = 9; ///< center button pin
+const uint8_t pin_left_button = 4; ///< left button pin
+const uint8_t pin_right_button = 5; ///< right button pin
+const uint8_t pin_center_button = 6; ///< center button pin
 const uint8_t pin_ph_relay = 13; ///< ph control relay pin
 const uint8_t pin_ec_relay = 14; ///< ec control relay pin
+
+const uint8_t ports_with_interrupt = B00000100;
+const uint8_t pins_interrupt_D = B01111100;
 
 } // namespace Config

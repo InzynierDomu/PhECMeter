@@ -22,6 +22,8 @@ class Screen_lcd : public IScreen
   void display_ec(const float temperature, const float ec) override;
   void display_calibration_ph(const uint8_t sample, const float temperature) override;
   void display_calibration_ec(const double sample, uint8_t position, const float temperature) override;
+  void display_change_ph_range(const double value, uint8_t position);
+  void display_change_ec_range(const double value, uint8_t position);
 
   private:
   LiquidCrystal_I2C m_display; ///< HD44780 via PCF8574
