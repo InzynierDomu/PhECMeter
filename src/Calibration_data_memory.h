@@ -10,8 +10,6 @@
 
 #include <EEPROM.h>
 
-//TODO: memory map
-
 class Calibration_data_memory
 {
   public:
