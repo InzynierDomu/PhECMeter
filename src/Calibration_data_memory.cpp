@@ -24,6 +24,9 @@ void Calibration_data_memory::save_ec_calibration(const Point points[2])
   save_calibration(points, 4);
 }
 
+void Calibration_data_memory::save_ph_max(const double value) {}
+void Calibration_data_memory::save_ec_max(const double value) {}
+
 /**
  * @brief load ph calibration data
  * @param points calibration data to fill
@@ -41,6 +44,9 @@ void Calibration_data_memory::load_ec_calibration(Point points[2])
 {
   load_calibration(points, 4);
 }
+
+double Calibration_data_memory::load_ph_max() {}
+double Calibration_data_memory::load_ec_max() {}
 
 void Calibration_data_memory::save_calibration(const Point points[2], const uint8_t start)
 {

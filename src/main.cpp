@@ -77,7 +77,7 @@ void button_l_pressed()
 }
 
 /**
- * @brief ph measure
+ * @brief state - ph measure
  * @param action: buttons action
  */
 void measurements_ph(const Buttons_action action)
@@ -113,7 +113,7 @@ void measurements_ph(const Buttons_action action)
 }
 
 /**
- * @brief ec measure
+ * @brief state - ec measure
  * @param action: buttons action
  */
 void measurements_ec(const Buttons_action action)
@@ -179,7 +179,7 @@ bool save_sample(Point* samples, double sample)
 }
 
 /**
- * @brief calibration ph procedure
+ * @brief state -calibration ph procedure
  * @param action buttons action
  */
 void calibration_ph(const Buttons_action action)
@@ -220,7 +220,7 @@ void calibration_ph(const Buttons_action action)
 }
 
 /**
- * @brief calibration ec procedure
+ * @brief state -calibration ec procedure
  * @param action buttons action
  */
 void calibration_ec(const Buttons_action action)
@@ -268,6 +268,20 @@ void calibration_ec(const Buttons_action action)
       break;
   }
 }
+
+// TODO: state template?
+
+/**
+ * @brief state -change ph range for automation
+ * @param action buttons action
+ */
+void change_ph_range(const Buttons_action action) {}
+
+/**
+ * @brief state - change ec range for automation
+ * @param action buttons action
+ */
+void change_ec_range(const Buttons_action action) {}
 
 /**
  * @brief setup on startup
