@@ -305,8 +305,10 @@ void setup()
   digitalWrite(Config::ec_supply_pin_probe, LOW);
   pinMode(Config::pin_up_button, INPUT_PULLUP);
   pinMode(Config::pin_down_button, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(Config::pin_up_button), button_r_pressed, FALLING);
-  attachInterrupt(digitalPinToInterrupt(Config::pin_down_button), button_l_pressed, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(Config::pin_up_button), button_r_pressed, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(Config::pin_down_button), button_l_pressed, FALLING);
+  PCICR |= Config::ports_with_interrupt;
+  PCMSK2 |= Config::pins_interrupt_D;
 
   m_device_state = Device_state::display_measure_ph;
 
@@ -355,5 +357,17 @@ void loop()
       break;
     default:
       break;
+  }
+}
+
+ISR(PCINT2_vect)
+{
+  if (digitalRead(Config::pin_up_button == LOW))
+  {
+    m_up_button_pressed = true;
+  }
+  if (digitalRead(Config::pin_down_button == LOW))
+  {
+    m_dwn_button_pressed = true;
   }
 }

@@ -148,4 +148,8 @@ void Screen_lcd::display_calibration_ec(const double sample, uint8_t position, c
   }
   m_display.print("ms/cm");
 }
+
+void Screen_lcd::display_change_ph_range(const double value, uint8_t position) {}
+void Screen_lcd::display_change_ec_range(const double value, uint8_t position) {}
+
 #endif
