@@ -25,7 +25,9 @@ enum class Device_state
   display_measure_ph,
   display_measure_ec,
   calibration_ph,
-  calibration_ec
+  calibration_ec,
+  change_ph_range,
+  change_ec_range
 };
 
 byte m_ds_address[8]; ///< ds18b20 thermometer one wire address
@@ -344,6 +346,12 @@ void loop()
       break;
     case Device_state::calibration_ec:
       calibration_ec(action);
+      break;
+    case Device_state::change_ph_range:
+      change_ph_range(action);
+      break;
+    case Device_state::change_ec_range:
+      change_ec_range(action);
       break;
     default:
       break;
