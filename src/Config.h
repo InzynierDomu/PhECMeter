@@ -36,6 +36,7 @@ const uint8_t pin_right_button = 5; ///< right button pin
 const uint8_t pin_center_button = 6; ///< center button pin
 const uint8_t pin_ph_relay = 13; ///< ph control relay pin
 const uint8_t pin_ec_relay = 14; ///< ec control relay pin
+const uint8_t pin_enable_automation = 17; ///< enable/disable automation input pin
 
 const uint8_t ports_with_interrupt = B00000100;
 const uint8_t pins_interrupt_D = B01111100;

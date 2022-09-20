@@ -39,8 +39,11 @@ Sd_card m_sd_card; ///< sd crad handling
 
 Device_state m_device_state = Device_state::startup; ///< actual device state
 
-volatile bool m_up_button_pressed = false; ///< right button pressed flag
-volatile bool m_dwn_button_pressed = false; ///< left button pressed flag
+volatile bool m_up_button_pressed = false; ///< up button pressed flag
+volatile bool m_down_button_pressed = false; ///< down button pressed flag
+volatile bool m_right_button_pressed = false; ///< right button pressed flag
+volatile bool m_left_button_pressed = false; ///< left button pressed flag
+volatile bool m_center_button_pressed = false; ///< center button pressed flag
 Linear_function ph_probe_characteristic; ///< ph probe linear characteristic
 Linear_function ec_probe_characteristic; ///< ec probe linear characteristic
 
@@ -75,7 +78,7 @@ void button_r_pressed()
  */
 void button_l_pressed()
 {
-  m_dwn_button_pressed = true;
+  m_down_button_pressed = true;
 }
 
 /**
@@ -271,7 +274,7 @@ void calibration_ec(const Buttons_action action)
   }
 }
 
-// TODO: state template?
+// TODO: try state chart with variant and visit
 
 /**
  * @brief state -change ph range for automation
@@ -303,8 +306,16 @@ void setup()
   digitalWrite(Config::ph_supply_pin_probe, HIGH);
   pinMode(Config::ec_supply_pin_probe, OUTPUT);
   digitalWrite(Config::ec_supply_pin_probe, LOW);
+  pinMode(Config::pin_ph_relay, OUTPUT);
+  digitalWrite(Config::pin_ph_relay, LOW);
+  pinMode(Config::pin_ec_relay, OUTPUT);
+  digitalWrite(Config::pin_ec_relay, LOW);
+
   pinMode(Config::pin_up_button, INPUT_PULLUP);
   pinMode(Config::pin_down_button, INPUT_PULLUP);
+  pinMode(Config::pin_right_button, INPUT_PULLUP);
+  pinMode(Config::pin_left_button, INPUT_PULLUP);
+  pinMode(Config::pin_center_button, INPUT_PULLUP);
   // attachInterrupt(digitalPinToInterrupt(Config::pin_up_button), button_r_pressed, FALLING);
   // attachInterrupt(digitalPinToInterrupt(Config::pin_down_button), button_l_pressed, FALLING);
   PCICR |= Config::ports_with_interrupt;
@@ -324,13 +335,18 @@ void setup()
 void loop()
 {
   Buttons_action action = Buttons_action::nothing;
-  if (m_up_button_pressed || m_dwn_button_pressed)
+  if (m_up_button_pressed || m_down_button_pressed)
   {
-    action = Buttons::check_buttons(m_up_button_pressed, m_dwn_button_pressed);
+    action = Buttons::check_buttons(
+        m_up_button_pressed, m_down_button_pressed, m_right_button_pressed, m_left_button_pressed, m_center_button_pressed);
     if (action != Buttons_action::nothing)
     {
+      // TODO: struct?
       m_up_button_pressed = false;
-      m_dwn_button_pressed = false;
+      m_down_button_pressed = false;
+      m_right_button_pressed = false;
+      m_left_button_pressed = false;
+      m_up_button_pressed = false;
       delay(100);
     }
   }
@@ -360,6 +376,9 @@ void loop()
   }
 }
 
+/**
+ * @brief Interrupts
+ */
 ISR(PCINT2_vect)
 {
   if (digitalRead(Config::pin_up_button == LOW))
@@ -368,6 +387,18 @@ ISR(PCINT2_vect)
   }
   if (digitalRead(Config::pin_down_button == LOW))
   {
-    m_dwn_button_pressed = true;
+    m_down_button_pressed = true;
+  }
+  if (digitalRead(Config::pin_right_button == LOW))
+  {
+    m_right_button_pressed = true;
+  }
+  if (digitalRead(Config::pin_left_button == LOW))
+  {
+    m_left_button_pressed = true;
+  }
+  if (digitalRead(Config::pin_center_button == LOW))
+  {
+    m_center_button_pressed = true;
   }
 }
