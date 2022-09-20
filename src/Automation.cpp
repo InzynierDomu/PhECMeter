@@ -7,15 +7,85 @@
 
 #include "Automation.h"
 
-Automation::Automation(const double max_ph, const double max_ec)
-: m_max_ph(max_ph)
-, m_max_ec(max_ec)
+#include "Arduino.h"
+#include "Config.h"
+
+/**
+ * @brief Construct a new Automation:: Automation object
+ * @param min_ph minimal ph value to fill
+ * @param min_ec minimal ec value to fill
+ */
+Automation::Automation(const double min_ph, const double min_ec)
+: m_min_ph(min_ph)
+, m_min_ec(min_ec)
 {}
-void Automation::change_max_ph(const double max_ph) {}
-void Automation::change_max_ec(const double max_ec) {}
-bool Automation::check_ph_value(const double value) {}
-bool Automation::check_ec_value(const double value) {}
-void Automation::turn_on_fill_ph() {}
-void Automation::turn_on_fill_ec() {}
-void Automation::turn_off_fill_ph() {}
-void Automation::turn_off_fill_ec() {}
+
+/**
+ * @brief set new value for minimal ph
+ * @param min_ph minimal ph value
+ */
+void Automation::set_min_ph(const double min_ph)
+{
+  m_min_ph = min_ph;
+}
+
+/**
+ * @brief set new value for minimal ec
+ * @param min_ec minimal ec value
+ */
+void Automation::set_min_ec(const double min_ec)
+{
+  m_min_ec = min_ec;
+}
+
+/**
+ * @brief check is ph level is correct
+ * @param value ph level
+ * @return is ph level is to low
+ */
+bool Automation::check_ph_value(const double value)
+{
+  if (value < m_min_ph)
+  {
+    return true;
+    turn_on_fill_ph();
+  }
+  turn_off_fill_ph();
+  return false;
+}
+
+/**
+ * @brief check is ec level is correct
+ * @param value ec level
+ * @return is ec level is to low
+ */
+bool Automation::check_ec_value(const double value)
+{
+  if (value < m_min_ec)
+  {
+    return true;
+    turn_on_fill_ec();
+  }
+  turn_off_fill_ec();
+  return false;
+}
+
+void Automation::turn_on_fill_ph()
+{
+  digitalWrite(Config::pin_ph_relay, HIGH);
+}
+
+void Automation::turn_on_fill_ec()
+{
+  digitalWrite(Config::pin_ec_relay, HIGH);
+}
+
+void Automation::turn_off_fill_ph()
+{
+  digitalWrite(Config::pin_ph_relay, LOW);
+}
+
+void Automation::turn_off_fill_ec()
+{
+  digitalWrite(Config::pin_ec_relay, LOW);
+}
