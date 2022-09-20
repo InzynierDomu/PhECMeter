@@ -13,6 +13,7 @@
 #include "Linear_function.h"
 #include "OneWire.h"
 #include "Sd_card.h"
+#include "Automation.h"
 
 #include <Arduino.h>
 #include <EEPROM.h>
@@ -36,6 +37,7 @@ DS18B20 m_ds_sensor = DS18B20(Config::pin_thermometer); ///< ds18b20 thermometer
 Data_presentation m_data_presentation; ///< screen and serial handling
 Calibration_data_memory m_memory; ///< memory handling
 Sd_card m_sd_card; ///< sd crad handling
+Automation m_automation;
 
 Device_state m_device_state = Device_state::startup; ///< actual device state
 

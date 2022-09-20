@@ -10,15 +10,15 @@
 class Automation
 {
   public:
-  Automation(const double max_ph, const double max_ec);
-  void change_max_ph(const double max_ph);
-  void change_max_ec(const double max_ec);
+  Automation(const double min_ph = 0, const double min_ec = 0);
+  void set_min_ph(const double min_ph);
+  void set_min_ec(const double min_ec);
   bool check_ph_value(const double value);
   bool check_ec_value(const double value);
 
   private:
-  double m_max_ph;
-  double m_max_ec;  
+  double m_min_ph; ///< minimal correct ph level
+  double m_min_ec; ///< minimal correct ec level
 
   void turn_on_fill_ph();
   void turn_on_fill_ec();
