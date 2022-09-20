@@ -23,7 +23,8 @@ enum class Buttons_action
 class Buttons
 {
   public:
-  static Buttons_action check_buttons(bool r_button_pressed, bool l_button_pressed);
+  static Buttons_action check_buttons(bool up_button_pressed, bool down_button_pressed, bool left_button_pressed, bool right_button_pressed,
+                                      bool center_button_pressed);
 
   private:
   static bool check_two_buttons_long();

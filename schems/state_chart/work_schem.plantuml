@@ -30,4 +30,26 @@ state change_ec_range{
     set_ec_range --> measure_ec : center_pressed  
 }
 
+state measure_ph{
+    [*] -> present_ph_data
+    present_ph_data --> automation
+    automation --> present_ph_data
+}
+
+state measure_ec{
+    [*] -> present_ec_data
+    present_ec_data --> automation
+    automation --> present_ec_data
+}
+
+state automation{
+    [*] -> check_ph_automation
+    check_ph_automation --> fill_ph : ec_out_of_range
+    check_ph_automation --> check_ec_automation : correct_ph
+    check_ec_automation --> fill_ec : ph_out_of_range
+    check_ec_automation --> [*] : correct_ec
+    fill_ph --> [*]
+    fill_ec --> [*]
+}
+
 @enduml
