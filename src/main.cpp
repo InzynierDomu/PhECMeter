@@ -5,6 +5,7 @@
  * @date 2022-06
  */
 
+#include "Automation.h"
 #include "Buttons.h"
 #include "Calibration_data_memory.h"
 #include "Config.h"
@@ -13,11 +14,11 @@
 #include "Linear_function.h"
 #include "OneWire.h"
 #include "Sd_card.h"
-#include "Automation.h"
 
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <math.h>
+
 
 ///< possible device state
 enum class Device_state
@@ -313,13 +314,17 @@ void setup()
   pinMode(Config::pin_ec_relay, OUTPUT);
   digitalWrite(Config::pin_ec_relay, LOW);
 
+  m_up_button_pressed = false;
+  m_down_button_pressed = false;
+  m_right_button_pressed = false;
+  m_left_button_pressed = false;
+  m_up_button_pressed = false;
+
   pinMode(Config::pin_up_button, INPUT_PULLUP);
   pinMode(Config::pin_down_button, INPUT_PULLUP);
   pinMode(Config::pin_right_button, INPUT_PULLUP);
   pinMode(Config::pin_left_button, INPUT_PULLUP);
   pinMode(Config::pin_center_button, INPUT_PULLUP);
-  // attachInterrupt(digitalPinToInterrupt(Config::pin_up_button), button_r_pressed, FALLING);
-  // attachInterrupt(digitalPinToInterrupt(Config::pin_down_button), button_l_pressed, FALLING);
   PCICR |= Config::ports_with_interrupt;
   PCMSK2 |= Config::pins_interrupt_D;
 
@@ -336,22 +341,19 @@ void setup()
  */
 void loop()
 {
-  Buttons_action action = Buttons_action::nothing;
-  if (m_up_button_pressed || m_down_button_pressed)
+  Buttons_action action = Buttons::check_buttons(
+      m_up_button_pressed, m_down_button_pressed, m_right_button_pressed, m_left_button_pressed, m_center_button_pressed);
+  if (action != Buttons_action::nothing)
   {
-    action = Buttons::check_buttons(
-        m_up_button_pressed, m_down_button_pressed, m_right_button_pressed, m_left_button_pressed, m_center_button_pressed);
-    if (action != Buttons_action::nothing)
-    {
-      // TODO: struct?
-      m_up_button_pressed = false;
-      m_down_button_pressed = false;
-      m_right_button_pressed = false;
-      m_left_button_pressed = false;
-      m_up_button_pressed = false;
-      delay(100);
-    }
+    // TODO: struct?
+    m_up_button_pressed = false;
+    m_down_button_pressed = false;
+    m_right_button_pressed = false;
+    m_left_button_pressed = false;
+    m_center_button_pressed = false;
+    delay(100);
   }
+
 
   switch (m_device_state)
   {
