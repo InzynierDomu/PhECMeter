@@ -19,23 +19,23 @@ Buttons_action Buttons::check_buttons(bool up_button_pressed, bool down_button_p
   // TODO: const bool?
   if (up_button_pressed)
   {
-    Buttons_action::up_pressed;
+    return Buttons_action::up_pressed;
   }
   if (down_button_pressed)
   {
-    Buttons_action::down_pressed;
+    return Buttons_action::down_pressed;
   }
   if (right_button_pressed)
   {
-    Buttons_action::right_pressed;
+    return Buttons_action::right_pressed;
   }
   if (left_button_pressed)
   {
-    Buttons_action::left_pressed;
+    return Buttons_action::left_pressed;
   }
   if (center_button_pressed)
   {
-    Buttons_action::center_pressed;
+    return Buttons_action::center_pressed;
   }
 
   return Buttons_action::nothing;
