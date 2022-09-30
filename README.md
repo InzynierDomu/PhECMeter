@@ -12,7 +12,6 @@
     - [Future](#future)
   - [Scheme](#scheme)
     - [Part list](#part-list)
-  - [State chart](#state-chart)
   - [IDE](#ide)
 
 ## Description
@@ -53,9 +52,6 @@ When SD card is plugged, after short press down button measurements will be save
 * SW3 switch to turning on/of power
 * J3 connect to battery box
 * J5 SD card socket (optional)
-
-## State chart
-![state_chart](https://github.com/InzynierDomu/PhECMeter/blob/master/schems/state_chart/work_schem.svg)
 
 ## IDE
 For specific screen is the prepared environment:</br>
