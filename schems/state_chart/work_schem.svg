@@ -35,7 +35,7 @@ link present_ph_data to automation--><g id="link_present_ph_data_automation"><pa
 link automation to present_ph_data--><g id="link_automation_present_ph_data"><path d="M937.44,590.255 C931.76,600.242 926.248,610.195 921,620 C903.5,652.696 886.5,691.826 875.688,717.929 " fill="none" id="automation-to-present_ph_data" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="873.742,722.6466,880.8709,715.8512,875.6481,718.0242,873.4751,712.8014,873.742,722.6466" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[15a3c726a2faafd92f9f30a0da56c17d]
 link *start*measure_ec to present_ec_data--><g id="link_*start*measure_ec_present_ec_data"><path d="M1043.33,748 C1053.08,748 1062.83,748 1072.58,748 " fill="none" id="*start*measure_ec-to-present_ec_data" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1077.68,748,1068.68,744,1072.68,748,1068.68,752,1077.68,748" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[5f7c4a2cc5020237fae9e60c6ff7b51d]
 link present_ec_data to automation--><g id="link_present_ec_data_automation"><path d="M1142.17,722.7749 C1135.46,694.932 1123.78,646.426 1111.42,595.09 " fill="none" id="present_ec_data-to-automation" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1110.22,590.113,1108.4389,599.7995,1111.3909,594.974,1116.2164,597.926,1110.22,590.113" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[e098c8607c3b7c982e7698fea6da25d1]
-link automation to present_ec_data--><g id="link_automation_present_ec_data"><path d="M1125.07,590.075 C1127.56,600.155 1129.9,610.172 1132,620 C1139.11,653.207 1143.43,692.023 1145.76,717.918 " fill="none" id="automation-to-present_ec_data" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1146.2,722.9198,1149.3986,713.6048,1145.7633,717.9389,1141.4292,714.3036,1146.2,722.9198" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[3bca188dd816df12f8914d97303755b2]
+link automation to present_ec_data--><g id="link_automation_present_ec_data"><path d="M1125.07,590.075 C1127.56,600.155 1129.9,610.172 1132,620 C1139.11,653.207 1143.43,692.023 1145.76,717.918 " fill="none" id="automation-to-present_ec_data" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1146.2,722.9198,1149.3986,713.6048,1145.7633,717.9389,1141.4292,714.3036,1146.2,722.9198" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[38c9467b07b5447b8e5cf05ffa04b523]
 @startuml
 [*]->startup
 startup - -> measure_ph
@@ -91,7 +91,7 @@ state automation{
 }
 @enduml
 
-PlantUML version 1.2022.8beta9(Unknown compile time)
+PlantUML version 1.2022.9(Tue Sep 27 16:10:06 UTC 2022)
 (GPL source distribution)
 Java Runtime: Java(TM) SE Runtime Environment
 JVM: Java HotSpot(TM) 64-Bit Server VM
