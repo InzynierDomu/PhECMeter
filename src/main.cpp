@@ -262,6 +262,7 @@ void calibration_ec(const Buttons_action action)
       }
       break;
     case Buttons_action::right_pressed:
+      // TODO: remove magic number
       if (position < 3)
       {
         position++;
@@ -269,6 +270,15 @@ void calibration_ec(const Buttons_action action)
       else
       {
         position = 0;
+      }
+    case Buttons_action::left_pressed:
+      if (position > 0)
+      {
+        position--;
+      }
+      else
+      {
+        position = 2;
       }
       break;
     default:
@@ -278,12 +288,55 @@ void calibration_ec(const Buttons_action action)
 }
 
 // TODO: try state chart with variant and visit
+// TODO: state as struct/class
 
 /**
  * @brief state -change ph range for automation
  * @param action buttons action
  */
-void change_ph_range(const Buttons_action action) {}
+void change_ph_range(const Buttons_action action)
+{
+  static double sample = 4.0;
+  static uint8_t position = 0;
+
+  float temperature = m_ds_sensor.getTempC();
+  switch (action)
+  {
+    case Buttons_action::center_pressed:
+      m_data_presentation.display_save_data();
+      m_memory.save_ph_max(sample);
+      m_device_state = Device_state::display_measure_ph;
+      break;
+    case Buttons_action::up_pressed:
+      sample++;
+      break;
+    case Buttons_action::down_pressed:
+      sample--;
+      break;
+    case Buttons_action::right_pressed:
+      if (position < 3)
+      {
+        position++;
+      }
+      else
+      {
+        position = 0;
+      }
+    case Buttons_action::left_pressed:
+      if (position > 0)
+      {
+        position--;
+      }
+      else
+      {
+        position = 2;
+      }
+      break;
+    default:
+      m_data_presentation.display_calibration_ph(sample, temperature);
+      break;
+  }
+}
 
 /**
  * @brief state - change ec range for automation
@@ -381,27 +434,27 @@ void loop()
 }
 
 /**
- * @brief Interrupts
+ * @brief port D Interrupts
  */
 ISR(PCINT2_vect)
 {
-  if (digitalRead(Config::pin_up_button == LOW))
+  if (digitalRead(Config::pin_up_button) == LOW)
   {
     m_up_button_pressed = true;
   }
-  if (digitalRead(Config::pin_down_button == LOW))
+  if (digitalRead(Config::pin_down_button) == LOW)
   {
     m_down_button_pressed = true;
   }
-  if (digitalRead(Config::pin_right_button == LOW))
+  if (digitalRead(Config::pin_right_button) == LOW)
   {
     m_right_button_pressed = true;
   }
-  if (digitalRead(Config::pin_left_button == LOW))
+  if (digitalRead(Config::pin_left_button) == LOW)
   {
     m_left_button_pressed = true;
   }
-  if (digitalRead(Config::pin_center_button == LOW))
+  if (digitalRead(Config::pin_center_button) == LOW)
   {
     m_center_button_pressed = true;
   }
