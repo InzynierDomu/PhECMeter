@@ -12,7 +12,6 @@
     - [Future](#future)
   - [Scheme](#scheme)
     - [Part list](#part-list)
-  - [State chart](#state-chart)
   - [IDE](#ide)
 
 ## Description
