@@ -98,9 +98,13 @@ void measurements_ph(const Buttons_action action)
 
   switch (action)
   {
-    case Buttons_action::down_pressed:
+    case Buttons_action::up_pressed:
       m_data_presentation.display_calib_mode();
       m_device_state = Device_state::calibration_ph;
+      break;
+    case Buttons_action::down_pressed:
+      m_data_presentation.display_range_mode();
+      m_device_state = Device_state::change_ph_range;
       break;
     case Buttons_action::left_pressed:
       digitalWrite(Config::ph_supply_pin_probe, LOW);
@@ -134,9 +138,13 @@ void measurements_ec(const Buttons_action action)
 
   switch (action)
   {
-    case Buttons_action::down_pressed:
+    case Buttons_action::up_pressed:
       m_data_presentation.display_calib_mode();
       m_device_state = Device_state::calibration_ec;
+      break;
+    case Buttons_action::down_pressed:
+      m_data_presentation.display_range_mode();
+      m_device_state = Device_state::change_ec_range;
       break;
     case Buttons_action::left_pressed:
       digitalWrite(Config::ec_supply_pin_probe, LOW);
@@ -333,7 +341,7 @@ void change_ph_range(const Buttons_action action)
       }
       break;
     default:
-      m_data_presentation.display_calibration_ph(sample, temperature);
+      m_data_presentation.display_change_ph_range(sample, temperature);
       break;
   }
 }

@@ -16,25 +16,38 @@
 Buttons_action Buttons::check_buttons(const bool up_button_pressed, const bool down_button_pressed, const bool left_button_pressed,
                                       bool right_button_pressed, const bool center_button_pressed)
 {
-  if (up_button_pressed)
+  static long buttons_start_press;
+  long now = millis();
+
+  if (now > (buttons_start_press + 200))
   {
-    return Buttons_action::up_pressed;
-  }
-  if (down_button_pressed)
-  {
-    return Buttons_action::down_pressed;
-  }
-  if (right_button_pressed)
-  {
-    return Buttons_action::right_pressed;
-  }
-  if (left_button_pressed)
-  {
-    return Buttons_action::left_pressed;
-  }
-  if (center_button_pressed)
-  {
-    return Buttons_action::center_pressed;
+    if (up_button_pressed)
+    {
+      Serial.println("u");
+      return Buttons_action::up_pressed;
+    }
+    if (down_button_pressed)
+    {
+      Serial.println("d");
+      return Buttons_action::down_pressed;
+    }
+    if (right_button_pressed)
+    {
+      Serial.println("r");
+      return Buttons_action::right_pressed;
+    }
+    if (left_button_pressed)
+    {
+      Serial.println("l");
+      return Buttons_action::left_pressed;
+    }
+    if (center_button_pressed)
+    {
+      Serial.println("c");
+      return Buttons_action::center_pressed;
+    }
+
+    buttons_start_press = now;
   }
 
   return Buttons_action::nothing;

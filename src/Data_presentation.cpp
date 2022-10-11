@@ -8,8 +8,8 @@
 
 #include "Config.h"
 
-#include <math.h>
 #include <Arduino.h>
+#include <math.h>
 
 /**
  * @brief Construct a new Data_presentation::Data_presentation object
@@ -35,6 +35,15 @@ void Data_presentation::init()
 void Data_presentation::display_calib_mode()
 {
   m_display.display_calib_mode();
+  delay(500);
+}
+
+/**
+ * @brief change range mode info screen
+ */
+void Data_presentation::display_range_mode()
+{
+  m_display.display_range_mode();
   delay(500);
 }
 
@@ -95,3 +104,8 @@ void Data_presentation::display_calibration_ec(const double sample, uint8_t posi
 {
   m_display.display_calibration_ec(sample, position, temperature);
 }
+
+ void Data_presentation::display_change_ph_range(const double sample, uint8_t position)
+ {
+  m_display.display_change_ph_range(sample, position);
+ }

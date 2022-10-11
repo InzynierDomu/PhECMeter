@@ -14,6 +14,7 @@ class IScreen
   ~IScreen() {}
   virtual void display_start() = 0;
   virtual void display_calib_mode() = 0;
+  virtual void display_range_mode() = 0;
   virtual void display_save_data() = 0;
   virtual void display_ph(const float temperature, const float ph) = 0;
   virtual void display_ec(const float temperature, const float ec) = 0;

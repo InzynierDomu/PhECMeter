@@ -39,6 +39,9 @@ void Screen_oled::display_calib_mode()
   ssd1306_charF12x16(0, 2, "MODE", STYLE_NORMAL);
 }
 
+void Screen_oled::display_range_mode()
+{}
+
 /**
  * @brief display save point screen
  */

@@ -16,11 +16,13 @@ class Data_presentation
   Data_presentation();
   void init();
   void display_calib_mode();
+  void display_range_mode();
   void display_save_data();
   void presentation_measurements_ph(const float temperature, const float ph);
   void presentation_measurements_ec(const float temperature, const float ec);
   void display_calibration_ph(const uint8_t sample, const float temperature);
   void display_calibration_ec(const double sample, uint8_t position, const float temperature);
+  void display_change_ph_range(const double sample, uint8_t position);
 
   private:
 #if defined LCD_SCREEN

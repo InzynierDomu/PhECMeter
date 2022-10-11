@@ -17,6 +17,7 @@ class Screen_lcd : public IScreen
   Screen_lcd();
   void display_start() override;
   void display_calib_mode() override;
+  void display_range_mode() override;
   void display_save_data() override;
   void display_ph(const float temperature, const float ph) override;
   void display_ec(const float temperature, const float ec) override;
