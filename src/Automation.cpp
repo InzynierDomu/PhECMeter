@@ -18,6 +18,7 @@
 Automation::Automation(const double min_ph, const double min_ec)
 : m_min_ph(min_ph)
 , m_min_ec(min_ec)
+, m_disable(false)
 {}
 
 /**
@@ -45,6 +46,11 @@ void Automation::set_min_ec(const double min_ec)
  */
 bool Automation::check_ph_value(const double value)
 {
+  if (m_disable)
+  {
+    return false;
+  }
+
   if (value < m_min_ph)
   {
     return true;
@@ -61,6 +67,11 @@ bool Automation::check_ph_value(const double value)
  */
 bool Automation::check_ec_value(const double value)
 {
+  if (m_disable)
+  {
+    return false;
+  }
+
   if (value < m_min_ec)
   {
     return true;
@@ -68,6 +79,11 @@ bool Automation::check_ec_value(const double value)
   }
   turn_off_fill_ec();
   return false;
+}
+
+void Automation::disable()
+{
+  m_disable = true;
 }
 
 void Automation::turn_on_fill_ph()

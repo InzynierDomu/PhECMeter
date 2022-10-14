@@ -56,6 +56,16 @@ void Data_presentation::display_save_data()
   delay(500);
 }
 
+void Data_presentation::display_fill_ph_mode()
+{
+  m_display.display_fill_ph();
+}
+
+void Data_presentation::display_fill_ec_mode()
+{
+  m_display.display_fill_ec();
+}
+
 /**
  * @brief send ph and temperature and print on screen
  * @param temperature: temperature value to send and print
@@ -105,7 +115,7 @@ void Data_presentation::display_calibration_ec(const double sample, uint8_t posi
   m_display.display_calibration_ec(sample, position, temperature);
 }
 
- void Data_presentation::display_change_ph_range(const double sample, uint8_t position)
- {
+void Data_presentation::display_change_ph_range(const double sample, uint8_t position)
+{
   m_display.display_change_ph_range(sample, position);
- }
+}

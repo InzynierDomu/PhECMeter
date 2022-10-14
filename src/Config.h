@@ -16,8 +16,8 @@ const uint8_t pin_down_button = 2; ///< down button pin
 const uint8_t pin_thermometer = 7; ///< ds18b20 thermometer pin
 const uint8_t ph_pin_probe = 15; ///< ph probe pin
 const uint8_t ec_pin_probe = 16; ///< ec probe pin
-const uint8_t ph_supply_pin_probe = 8; ///< ph probe supply pin
-const uint8_t ec_supply_pin_probe = 9; ///< ec probe supply pin
+const uint8_t ph_supply_pin_probe = 9; ///< ph probe supply pin
+const uint8_t ec_supply_pin_probe = 8; ///< ec probe supply pin
 const uint8_t sd_card_cs_pin = 10; ///< cs pin in spi communication to sd card
 
 const uint8_t screen_address = 0x3C; ///< ssd1306 oled screen i2c address

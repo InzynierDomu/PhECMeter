@@ -8,8 +8,8 @@
 #if defined LCD_SCREEN
 
 #include "Config.h"
-#include "LiquidCrystal_I2C.h"
 #include "IScreen.h"
+#include "LiquidCrystal_I2C.h"
 
 class Screen_lcd : public IScreen
 {
@@ -25,6 +25,8 @@ class Screen_lcd : public IScreen
   void display_calibration_ec(const double sample, uint8_t position, const float temperature) override;
   void display_change_ph_range(const double value, uint8_t position);
   void display_change_ec_range(const double value, uint8_t position);
+  void display_fill_ph();
+  void display_fill_ec();
 
   private:
   LiquidCrystal_I2C m_display; ///< HD44780 via PCF8574

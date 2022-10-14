@@ -173,7 +173,7 @@ void Screen_lcd::display_change_ph_range(const double value, uint8_t position)
     time = millis();
     toggle = !toggle;
   }
-  
+
   String text = String(value, 3);
   if (toggle)
   {
@@ -196,5 +196,19 @@ void Screen_lcd::display_change_ph_range(const double value, uint8_t position)
 }
 
 void Screen_lcd::display_change_ec_range(const double value, uint8_t position) {}
+
+void Screen_lcd::display_fill_ph()
+{
+  m_display.clear();
+  m_display.setCursor(0, 0);
+  m_display.print("filling pH");
+}
+
+void Screen_lcd::display_fill_ec()
+{
+  m_display.clear();
+  m_display.setCursor(0, 0);
+  m_display.print("filling ec");
+}
 
 #endif

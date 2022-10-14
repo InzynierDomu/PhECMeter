@@ -6,9 +6,10 @@
  */
 #pragma once
 
-#include <stdint.h>
 #include "Screen_lcd.h"
 #include "Screen_oled.h"
+
+#include <stdint.h>
 
 class Data_presentation
 {
@@ -18,6 +19,8 @@ class Data_presentation
   void display_calib_mode();
   void display_range_mode();
   void display_save_data();
+  void display_fill_ph_mode();
+  void display_fill_ec_mode();
   void presentation_measurements_ph(const float temperature, const float ph);
   void presentation_measurements_ec(const float temperature, const float ec);
   void display_calibration_ph(const uint8_t sample, const float temperature);

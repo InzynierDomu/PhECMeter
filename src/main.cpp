@@ -29,7 +29,9 @@ enum class Device_state
   calibration_ph,
   calibration_ec,
   change_ph_range,
-  change_ec_range
+  change_ec_range,
+  fill_ph,
+  fill_ec
 };
 
 byte m_ds_address[8]; ///< ds18b20 thermometer one wire address
@@ -69,22 +71,6 @@ void ds_thermometer_init()
 }
 
 /**
- * @brief right button press interrupt
- */
-void button_r_pressed()
-{
-  m_up_button_pressed = true;
-}
-
-/**
- * @brief left button press interrupt
- */
-void button_l_pressed()
-{
-  m_down_button_pressed = true;
-}
-
-/**
  * @brief state - ph measure
  * @param action: buttons action
  */
@@ -96,31 +82,39 @@ void measurements_ph(const Buttons_action action)
 
   m_data_presentation.presentation_measurements_ph(temperature, ph);
 
-  switch (action)
+  if (m_automation.check_ph_value(ph))
   {
-    case Buttons_action::up_pressed:
-      m_data_presentation.display_calib_mode();
-      m_device_state = Device_state::calibration_ph;
-      break;
-    case Buttons_action::down_pressed:
-      m_data_presentation.display_range_mode();
-      m_device_state = Device_state::change_ph_range;
-      break;
-    case Buttons_action::left_pressed:
-      digitalWrite(Config::ph_supply_pin_probe, LOW);
-      digitalWrite(Config::ec_supply_pin_probe, HIGH);
-      m_device_state = Device_state::display_measure_ec;
-      break;
-    case Buttons_action::right_pressed:
-      if (m_sd_card.get_card_status())
-      {
-        m_sd_card.save_ph_measurement(temperature, ph);
-        m_data_presentation.display_save_data();
-      }
-      break;
-    default:
-      m_device_state = Device_state::display_measure_ph;
-      break;
+    m_data_presentation.display_fill_ph_mode();
+    m_device_state = Device_state::fill_ph;
+  }
+  else
+  {
+    switch (action)
+    {
+      case Buttons_action::up_pressed:
+        m_data_presentation.display_calib_mode();
+        m_device_state = Device_state::calibration_ph;
+        break;
+      case Buttons_action::down_pressed:
+        m_data_presentation.display_range_mode();
+        m_device_state = Device_state::change_ph_range;
+        break;
+      case Buttons_action::left_pressed:
+        digitalWrite(Config::ph_supply_pin_probe, LOW);
+        digitalWrite(Config::ec_supply_pin_probe, HIGH);
+        m_device_state = Device_state::display_measure_ec;
+        break;
+      case Buttons_action::right_pressed:
+        if (m_sd_card.get_card_status())
+        {
+          m_sd_card.save_ph_measurement(temperature, ph);
+          m_data_presentation.display_save_data();
+        }
+        break;
+      default:
+        m_device_state = Device_state::display_measure_ph;
+        break;
+    }
   }
 }
 
@@ -313,6 +307,7 @@ void change_ph_range(const Buttons_action action)
     case Buttons_action::center_pressed:
       m_data_presentation.display_save_data();
       m_memory.save_ph_max(sample);
+      m_automation.set_min_ph(sample);
       m_device_state = Device_state::display_measure_ph;
       break;
     case Buttons_action::up_pressed:
@@ -350,7 +345,56 @@ void change_ph_range(const Buttons_action action)
  * @brief state - change ec range for automation
  * @param action buttons action
  */
-void change_ec_range(const Buttons_action action) {}
+void change_ec_range(const Buttons_action action)
+{
+  static double sample = 4.0;
+  static uint8_t position = 0;
+
+  float temperature = m_ds_sensor.getTempC();
+
+  switch (action)
+  {
+    case Buttons_action::center_pressed:
+      m_data_presentation.display_save_data();
+      m_memory.save_ec_max(sample);
+      m_automation.set_min_ec(sample);
+      m_device_state = Device_state::display_measure_ec;
+      break;
+    case Buttons_action::down_pressed:
+      // FIXME: min value
+      sample = sample - pow(10.0, position * (-1.0));
+      break;
+    case Buttons_action::up_pressed:
+      if (sample < Config::max_ec_to_calib)
+      {
+        sample = sample + pow(10.0, position * (-1.0));
+      }
+      break;
+    case Buttons_action::right_pressed:
+      // TODO: remove magic number
+      if (position < 3)
+      {
+        position++;
+      }
+      else
+      {
+        position = 0;
+      }
+    case Buttons_action::left_pressed:
+      if (position > 0)
+      {
+        position--;
+      }
+      else
+      {
+        position = 2;
+      }
+      break;
+    default:
+      m_data_presentation.display_calibration_ec(sample, position, temperature);
+      break;
+  }
+}
 
 /**
  * @brief setup on startup
@@ -386,6 +430,7 @@ void setup()
   pinMode(Config::pin_right_button, INPUT_PULLUP);
   pinMode(Config::pin_left_button, INPUT_PULLUP);
   pinMode(Config::pin_center_button, INPUT_PULLUP);
+  pinMode(Config::pin_enable_automation, INPUT_PULLUP);
   PCICR |= Config::ports_with_interrupt;
   PCMSK2 |= Config::pins_interrupt_D;
 
@@ -395,6 +440,9 @@ void setup()
   {
     Serial.println("SD card is present");
   }
+
+  m_automation.set_min_ph(m_memory.load_ph_max());
+  m_automation.set_min_ec(m_memory.load_ec_max());
 }
 
 /**
@@ -415,6 +463,10 @@ void loop()
     delay(100);
   }
 
+  if (digitalRead(Config::pin_enable_automation) == LOW)
+  {
+    m_automation.disable();
+  }
 
   switch (m_device_state)
   {
