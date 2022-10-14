@@ -77,12 +77,25 @@ void ds_thermometer_init()
 void measurements_ph(const Buttons_action action)
 {
   float temperature = m_ds_sensor.getTempC();
+
+  digitalWrite(Config::ph_supply_pin_probe, HIGH);
+  digitalWrite(Config::ec_supply_pin_probe, LOW);
   int analog_mes = analogRead(Config::ph_pin_probe);
   float ph = ph_probe_characteristic.find_y(analog_mes);
 
   m_data_presentation.presentation_measurements_ph(temperature, ph);
 
-  if (m_automation.check_ph_value(ph))
+  digitalWrite(Config::ph_supply_pin_probe, LOW);
+  digitalWrite(Config::ec_supply_pin_probe, HIGH);
+  int analog_mes = analogRead(Config::ec_pin_probe);
+  float ec = ec_probe_characteristic.find_y(analog_mes);
+
+  if (m_automation.check_ec_value(ec))
+  {
+    m_data_presentation.display_fill_ec_mode();
+    m_device_state = Device_state::fill_ec;
+  }
+  else if (m_automation.check_ph_value(ph))
   {
     m_data_presentation.display_fill_ph_mode();
     m_device_state = Device_state::fill_ph;
@@ -100,8 +113,6 @@ void measurements_ph(const Buttons_action action)
         m_device_state = Device_state::change_ph_range;
         break;
       case Buttons_action::left_pressed:
-        digitalWrite(Config::ph_supply_pin_probe, LOW);
-        digitalWrite(Config::ec_supply_pin_probe, HIGH);
         m_device_state = Device_state::display_measure_ec;
         break;
       case Buttons_action::right_pressed:
@@ -125,36 +136,55 @@ void measurements_ph(const Buttons_action action)
 void measurements_ec(const Buttons_action action)
 {
   float temperature = m_ds_sensor.getTempC();
+
+  digitalWrite(Config::ph_supply_pin_probe, LOW);
+  digitalWrite(Config::ec_supply_pin_probe, HIGH);
   int analog_mes = analogRead(Config::ec_pin_probe);
   float ec = ec_probe_characteristic.find_y(analog_mes);
 
+  digitalWrite(Config::ph_supply_pin_probe, HIGH);
+  digitalWrite(Config::ec_supply_pin_probe, LOW);
+  int analog_mes = analogRead(Config::ph_pin_probe);
+  float ph = ph_probe_characteristic.find_y(analog_mes);
+
   m_data_presentation.presentation_measurements_ec(temperature, ec);
 
-  switch (action)
+  if (m_automation.check_ec_value(ec))
   {
-    case Buttons_action::up_pressed:
-      m_data_presentation.display_calib_mode();
-      m_device_state = Device_state::calibration_ec;
-      break;
-    case Buttons_action::down_pressed:
-      m_data_presentation.display_range_mode();
-      m_device_state = Device_state::change_ec_range;
-      break;
-    case Buttons_action::left_pressed:
-      digitalWrite(Config::ec_supply_pin_probe, LOW);
-      digitalWrite(Config::ph_supply_pin_probe, HIGH);
-      m_device_state = Device_state::display_measure_ph;
-      break;
-    case Buttons_action::right_pressed:
-      if (m_sd_card.get_card_status())
-      {
-        m_sd_card.save_ec_measurement(temperature, ec);
-        m_data_presentation.display_save_data();
-      }
-      break;
-    default:
-      m_device_state = Device_state::display_measure_ec;
-      break;
+    m_data_presentation.display_fill_ec_mode();
+    m_device_state = Device_state::fill_ec;
+  }
+  else if (m_automation.check_ph_value(ph))
+  {
+    m_data_presentation.display_fill_ph_mode();
+    m_device_state = Device_state::fill_ph;
+  }
+  else
+  {
+    switch (action)
+    {
+      case Buttons_action::up_pressed:
+        m_data_presentation.display_calib_mode();
+        m_device_state = Device_state::calibration_ec;
+        break;
+      case Buttons_action::down_pressed:
+        m_data_presentation.display_range_mode();
+        m_device_state = Device_state::change_ec_range;
+        break;
+      case Buttons_action::left_pressed:
+        m_device_state = Device_state::display_measure_ph;
+        break;
+      case Buttons_action::right_pressed:
+        if (m_sd_card.get_card_status())
+        {
+          m_sd_card.save_ec_measurement(temperature, ec);
+          m_data_presentation.display_save_data();
+        }
+        break;
+      default:
+        m_device_state = Device_state::display_measure_ec;
+        break;
+    }
   }
 }
 
