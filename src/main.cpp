@@ -87,7 +87,7 @@ void measurements_ph(const Buttons_action action)
 
   digitalWrite(Config::ph_supply_pin_probe, LOW);
   digitalWrite(Config::ec_supply_pin_probe, HIGH);
-  int analog_mes = analogRead(Config::ec_pin_probe);
+  analog_mes = analogRead(Config::ec_pin_probe);
   float ec = ec_probe_characteristic.find_y(analog_mes);
 
   if (m_automation.check_ec_value(ec))
@@ -144,7 +144,7 @@ void measurements_ec(const Buttons_action action)
 
   digitalWrite(Config::ph_supply_pin_probe, HIGH);
   digitalWrite(Config::ec_supply_pin_probe, LOW);
-  int analog_mes = analogRead(Config::ph_pin_probe);
+  analog_mes = analogRead(Config::ph_pin_probe);
   float ph = ph_probe_characteristic.find_y(analog_mes);
 
   m_data_presentation.presentation_measurements_ec(temperature, ec);
@@ -332,6 +332,7 @@ void change_ph_range(const Buttons_action action)
   static uint8_t position = 0;
 
   float temperature = m_ds_sensor.getTempC();
+  
   switch (action)
   {
     case Buttons_action::center_pressed:
@@ -366,7 +367,7 @@ void change_ph_range(const Buttons_action action)
       }
       break;
     default:
-      m_data_presentation.display_change_ph_range(sample, temperature);
+      m_data_presentation.display_change_ph_range(sample, position);
       break;
   }
 }
