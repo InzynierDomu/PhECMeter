@@ -396,6 +396,37 @@ void change_ec_range(const Buttons_action action)
   }
 }
 
+void fill_ph()
+{
+  int analog_mes = analogRead(Config::ph_pin_probe);
+  float ph = ph_probe_characteristic.find_y(analog_mes);
+
+  if (m_automation.check_ph_value(ph))
+  {
+    m_data_presentation.display_fill_ph_mode();
+  }
+  else
+  {
+    m_device_state = Device_state::display_measure_ph;
+  }
+}
+
+void fill_ec()
+{
+  int analog_mes = analogRead(Config::ec_pin_probe);
+  float ec = ec_probe_characteristic.find_y(analog_mes);
+
+  if (m_automation.check_ec_value(ec))
+  {
+    m_data_presentation.display_fill_ec_mode();
+  }
+  else
+  {
+    m_device_state = Device_state::display_measure_ec;
+  }
+}
+
+
 /**
  * @brief setup on startup
  */
@@ -487,6 +518,12 @@ void loop()
       break;
     case Device_state::change_ec_range:
       change_ec_range(action);
+      break;
+    case Device_state::fill_ph:
+      fill_ph();
+      break;
+    case Device_state::fill_ec:
+      fill_ec();
       break;
     default:
       break;
