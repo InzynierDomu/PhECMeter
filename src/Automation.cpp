@@ -82,6 +82,11 @@ void Automation::disable()
   m_disable = true;
 }
 
+void Automation::enable()
+{
+  m_disable = false;
+}
+
 void Automation::turn_on_fill_ph()
 {
   digitalWrite(Config::pin_ph_relay, HIGH);

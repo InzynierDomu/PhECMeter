@@ -109,6 +109,8 @@ void measurements_ph(const Buttons_action action)
     switch (action)
     {
       case Buttons_action::up_pressed:
+        digitalWrite(Config::ph_supply_pin_probe, HIGH);
+        digitalWrite(Config::ec_supply_pin_probe, LOW);
         m_data_presentation.display_calib_mode();
         m_device_state = Device_state::calibration_ph;
         break;
@@ -172,6 +174,8 @@ void measurements_ec(const Buttons_action action)
     switch (action)
     {
       case Buttons_action::up_pressed:
+        digitalWrite(Config::ph_supply_pin_probe, LOW);
+        digitalWrite(Config::ec_supply_pin_probe, HIGH);
         m_data_presentation.display_calib_mode();
         m_device_state = Device_state::calibration_ec;
         break;
@@ -479,8 +483,25 @@ void setup()
 
   Point points[2];
   m_memory.load_ph_calibration(points);
+  Serial.println("Calibration:");
+  Serial.print("ph: p1_x:");
+  Serial.print(points[0].x);
+  Serial.print(" p1_y:");
+  Serial.print(points[0].y);
+  Serial.print(" p2_x:");
+  Serial.print(points[1].x);
+  Serial.print(" p2_y:");
+  Serial.println(points[1].y);
   ph_probe_characteristic.set_points(points);
   m_memory.load_ec_calibration(points);
+  Serial.print("ec: p1_x:");
+  Serial.print(points[0].x);
+  Serial.print(" p1_y:");
+  Serial.print(points[0].y);
+  Serial.print(" p2_x:");
+  Serial.print(points[1].x);
+  Serial.print(" p2_y:");
+  Serial.println(points[1].y);
   ec_probe_characteristic.set_points(points);
 
   m_up_button_pressed = false;
@@ -530,6 +551,9 @@ void loop()
   if (digitalRead(Config::pin_enable_automation) == LOW)
   {
     m_automation.disable();
+  }
+  else{
+    m_automation.enable();
   }
 
   switch (m_device_state)

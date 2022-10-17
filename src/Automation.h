@@ -16,6 +16,7 @@ class Automation
   bool check_ph_value(const double value);
   bool check_ec_value(const double value);
   void disable();
+  void enable();
   void turn_on_fill_ph();
   void turn_on_fill_ec();
   void turn_off_fill_ph();
