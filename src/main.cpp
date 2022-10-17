@@ -39,7 +39,7 @@ OneWire m_one_wire = OneWire(Config::pin_thermometer); ///< one wire bus
 DS18B20 m_ds_sensor = DS18B20(Config::pin_thermometer); ///< ds18b20 thermometer
 Data_presentation m_data_presentation; ///< screen and serial handling
 Calibration_data_memory m_memory; ///< memory handling
-Sd_card m_sd_card; ///< sd crad handling
+// Sd_card m_sd_card; ///< sd crad handling
 Automation m_automation;
 
 Device_state m_device_state = Device_state::startup; ///< actual device state
@@ -93,11 +93,15 @@ void measurements_ph(const Buttons_action action)
   if (m_automation.check_ec_value(ec))
   {
     m_data_presentation.display_fill_ec_mode();
+    m_automation.turn_on_fill_ec();
     m_device_state = Device_state::fill_ec;
   }
   else if (m_automation.check_ph_value(ph))
   {
+    digitalWrite(Config::ph_supply_pin_probe, HIGH);
+    digitalWrite(Config::ec_supply_pin_probe, LOW);
     m_data_presentation.display_fill_ph_mode();
+    m_automation.turn_on_fill_ph();
     m_device_state = Device_state::fill_ph;
   }
   else
@@ -116,11 +120,11 @@ void measurements_ph(const Buttons_action action)
         m_device_state = Device_state::display_measure_ec;
         break;
       case Buttons_action::right_pressed:
-        if (m_sd_card.get_card_status())
-        {
-          m_sd_card.save_ph_measurement(temperature, ph);
-          m_data_presentation.display_save_data();
-        }
+        // if (m_sd_card.get_card_status())
+        // {
+        //   m_sd_card.save_ph_measurement(temperature, ph);
+        //   m_data_presentation.display_save_data();
+        // }
         break;
       default:
         m_device_state = Device_state::display_measure_ph;
@@ -152,11 +156,15 @@ void measurements_ec(const Buttons_action action)
   if (m_automation.check_ec_value(ec))
   {
     m_data_presentation.display_fill_ec_mode();
+    m_automation.turn_on_fill_ec();
     m_device_state = Device_state::fill_ec;
   }
   else if (m_automation.check_ph_value(ph))
   {
+    digitalWrite(Config::ph_supply_pin_probe, HIGH);
+    digitalWrite(Config::ec_supply_pin_probe, LOW);
     m_data_presentation.display_fill_ph_mode();
+    m_automation.turn_on_fill_ph();
     m_device_state = Device_state::fill_ph;
   }
   else
@@ -175,11 +183,11 @@ void measurements_ec(const Buttons_action action)
         m_device_state = Device_state::display_measure_ph;
         break;
       case Buttons_action::right_pressed:
-        if (m_sd_card.get_card_status())
-        {
-          m_sd_card.save_ec_measurement(temperature, ec);
-          m_data_presentation.display_save_data();
-        }
+        // if (m_sd_card.get_card_status())
+        // {
+        //   m_sd_card.save_ec_measurement(temperature, ec);
+        //   m_data_presentation.display_save_data();
+        // }
         break;
       default:
         m_device_state = Device_state::display_measure_ec;
@@ -332,7 +340,7 @@ void change_ph_range(const Buttons_action action)
   static uint8_t position = 0;
 
   float temperature = m_ds_sensor.getTempC();
-  
+
   switch (action)
   {
     case Buttons_action::center_pressed:
@@ -432,12 +440,9 @@ void fill_ph()
   int analog_mes = analogRead(Config::ph_pin_probe);
   float ph = ph_probe_characteristic.find_y(analog_mes);
 
-  if (m_automation.check_ph_value(ph))
+  if (!m_automation.check_ph_value(ph))
   {
-    m_data_presentation.display_fill_ph_mode();
-  }
-  else
-  {
+    m_automation.turn_off_fill_ph();
     m_device_state = Device_state::display_measure_ph;
   }
 }
@@ -447,12 +452,9 @@ void fill_ec()
   int analog_mes = analogRead(Config::ec_pin_probe);
   float ec = ec_probe_characteristic.find_y(analog_mes);
 
-  if (m_automation.check_ec_value(ec))
+  if (!m_automation.check_ec_value(ec))
   {
-    m_data_presentation.display_fill_ec_mode();
-  }
-  else
-  {
+    m_automation.turn_off_fill_ec();
     m_device_state = Device_state::display_measure_ec;
   }
 }
@@ -463,6 +465,15 @@ void fill_ec()
  */
 void setup()
 {
+  pinMode(Config::pin_ph_relay, OUTPUT);
+  digitalWrite(Config::pin_ph_relay, LOW);
+  pinMode(Config::pin_ec_relay, OUTPUT);
+  digitalWrite(Config::pin_ec_relay, LOW);
+  pinMode(Config::ph_supply_pin_probe, OUTPUT);
+  digitalWrite(Config::ph_supply_pin_probe, HIGH);
+  pinMode(Config::ec_supply_pin_probe, OUTPUT);
+  digitalWrite(Config::ec_supply_pin_probe, LOW);
+
   m_data_presentation.init();
   ds_thermometer_init();
 
@@ -471,15 +482,6 @@ void setup()
   ph_probe_characteristic.set_points(points);
   m_memory.load_ec_calibration(points);
   ec_probe_characteristic.set_points(points);
-
-  pinMode(Config::ph_supply_pin_probe, OUTPUT);
-  digitalWrite(Config::ph_supply_pin_probe, HIGH);
-  pinMode(Config::ec_supply_pin_probe, OUTPUT);
-  digitalWrite(Config::ec_supply_pin_probe, LOW);
-  pinMode(Config::pin_ph_relay, OUTPUT);
-  digitalWrite(Config::pin_ph_relay, LOW);
-  pinMode(Config::pin_ec_relay, OUTPUT);
-  digitalWrite(Config::pin_ec_relay, LOW);
 
   m_up_button_pressed = false;
   m_down_button_pressed = false;
@@ -498,10 +500,10 @@ void setup()
 
   m_device_state = Device_state::display_measure_ph;
 
-  if (m_sd_card.is_card_available())
-  {
-    Serial.println("SD card is present");
-  }
+  // if (m_sd_card.is_card_available())
+  // {
+  //   Serial.println("SD card is present");
+  // }
 
   m_automation.set_min_ph(m_memory.load_ph_max());
   m_automation.set_min_ec(m_memory.load_ec_max());

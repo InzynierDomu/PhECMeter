@@ -54,9 +54,7 @@ bool Automation::check_ph_value(const double value)
   if (value < m_min_ph)
   {
     return true;
-    turn_on_fill_ph();
   }
-  turn_off_fill_ph();
   return false;
 }
 
@@ -75,9 +73,7 @@ bool Automation::check_ec_value(const double value)
   if (value < m_min_ec)
   {
     return true;
-    turn_on_fill_ec();
   }
-  turn_off_fill_ec();
   return false;
 }
 

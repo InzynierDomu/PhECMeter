@@ -16,14 +16,13 @@ class Automation
   bool check_ph_value(const double value);
   bool check_ec_value(const double value);
   void disable();
+  void turn_on_fill_ph();
+  void turn_on_fill_ec();
+  void turn_off_fill_ph();
+  void turn_off_fill_ec();
 
   private:
   double m_min_ph; ///< minimal correct ph level
   double m_min_ec; ///< minimal correct ec level
   bool m_disable;
-
-  void turn_on_fill_ph();
-  void turn_on_fill_ec();
-  void turn_off_fill_ph();
-  void turn_off_fill_ec();
 };
