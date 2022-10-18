@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include "Screen_lcd.h"
 #include "Screen_oled.h"
+#include "Linear_function.h"
 
 class Data_presentation
 {
@@ -21,6 +22,8 @@ class Data_presentation
   void presentation_measurements_ec(const float temperature, const float ec);
   void display_calibration_ph(const uint8_t sample, const float temperature);
   void display_calibration_ec(const double sample, uint8_t position, const float temperature);
+  void print_ph_calibration(Point points[2]);
+  void print_ec_calibration(Point points[2]);
 
   private:
 #if defined LCD_SCREEN

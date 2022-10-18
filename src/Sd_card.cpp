@@ -70,6 +70,32 @@ void Sd_card::save_ec_measurement(const float temperature, const float ec)
   save_measurement(measurement);
 }
 
+void Sd_card::print_ph_calibration(Point points[2])
+{
+  String calibration = "pH x1:";
+  calibration += String(points[0].x);
+  calibration += " y1:";
+  calibration += String(points[0].y);
+  calibration += " x2:";
+  calibration += String(points[1].x);
+  calibration += " y2:";
+  calibration += String(points[1].y);
+  save_measurement(calibration);
+}
+
+void Sd_card::print_ec_calibration(Point points[2])
+{
+  String calibration = "ec x1:";
+  calibration += String(points[0].x);
+  calibration += " y1:";
+  calibration += String(points[0].y);
+  calibration += " x2:";
+  calibration += String(points[1].x);
+  calibration += " y2:";
+  calibration += String(points[1].y);
+  save_measurement(calibration);
+}
+
 void Sd_card::save_measurement(String& measurement)
 {
   if (m_card_available)

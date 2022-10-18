@@ -277,11 +277,21 @@ void setup()
   m_data_presentation.init();
   ds_thermometer_init();
 
+  if (m_sd_card.is_card_available())
+  {
+    Serial.println("SD card is present");
+  }
+
   Point points[2];
   m_memory.load_ph_calibration(points);
   ph_probe_characteristic.set_points(points);
+  m_data_presentation.print_ph_calibration(points);
+  m_sd_card.print_ph_calibration(points);
+
   m_memory.load_ec_calibration(points);
   ec_probe_characteristic.set_points(points);
+  m_data_presentation.print_ec_calibration(points);
+  m_sd_card.print_ec_calibration(points);
 
   pinMode(Config::ph_supply_pin_probe, OUTPUT);
   digitalWrite(Config::ph_supply_pin_probe, HIGH);
@@ -293,11 +303,6 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(Config::pin_dwn_button), button_l_pressed, FALLING);
 
   m_device_state = Device_state::display_measure_ph;
-
-  if (m_sd_card.is_card_available())
-  {
-    Serial.println("SD card is present");
-  }
 }
 
 /**

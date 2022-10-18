@@ -8,6 +8,7 @@
 
 #include <SD.h>
 #include <SPI.h>
+#include "Linear_function.h"
 
 class Sd_card
 {
@@ -17,6 +18,8 @@ class Sd_card
   bool get_card_status();
   void save_ph_measurement(const float temperature, const float ph);
   void save_ec_measurement(const float temperature, const float ec);
+  void print_ph_calibration(Point points[2]);
+  void print_ec_calibration(Point points[2]);
 
   private:
   bool m_card_available; ///< is sd card available

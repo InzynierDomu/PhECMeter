@@ -8,8 +8,9 @@
 
 #include "Config.h"
 
-#include <math.h>
 #include <Arduino.h>
+#include <math.h>
+
 
 /**
  * @brief Construct a new Data_presentation::Data_presentation object
@@ -94,4 +95,28 @@ void Data_presentation::display_calibration_ph(const uint8_t sample, const float
 void Data_presentation::display_calibration_ec(const double sample, uint8_t position, const float temperature)
 {
   m_display.display_calibration_ec(sample, position, temperature);
+}
+
+void Data_presentation::print_ph_calibration(Point points[2])
+{
+  Serial.print("pH x1:");
+  Serial.print(points[0].x);
+  Serial.print(" y1:");
+  Serial.print(points[0].y);
+  Serial.print(" x2:");
+  Serial.print(points[1].x);
+  Serial.print(" y2:");
+  Serial.println(points[1].y);
+}
+
+void Data_presentation::print_ec_calibration(Point points[2])
+{
+  Serial.print("ec x1:");
+  Serial.print(points[0].x);
+  Serial.print(" y1:");
+  Serial.print(points[0].y);
+  Serial.print(" x2:");
+  Serial.print(points[1].x);
+  Serial.print(" y2:");
+  Serial.println(points[1].y);
 }
