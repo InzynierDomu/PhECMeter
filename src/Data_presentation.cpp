@@ -54,7 +54,8 @@ void Data_presentation::display_save_data()
  */
 void Data_presentation::presentation_measurements_ph(const float temperature, const float ph)
 {
-  Serial.print("temperature:") Serial.print(temperature);
+  Serial.print("temperature:");
+  Serial.print(temperature);
   // TODO: add unit
   Serial.print(";pH:");
   Serial.println(ph);
@@ -68,7 +69,8 @@ void Data_presentation::presentation_measurements_ph(const float temperature, co
  */
 void Data_presentation::presentation_measurements_ec(const float temperature, const float ec)
 {
-  Serial.print("temperature:") Serial.print(temperature);
+  Serial.print("temperature:");
+  Serial.print(temperature);
   // TODO: add unit
   Serial.print(";EC:");
   Serial.println(ec);
