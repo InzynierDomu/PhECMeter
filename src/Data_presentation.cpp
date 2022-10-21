@@ -11,7 +11,6 @@
 #include <Arduino.h>
 #include <math.h>
 
-
 /**
  * @brief Construct a new Data_presentation::Data_presentation object
  */
@@ -55,10 +54,10 @@ void Data_presentation::display_save_data()
  */
 void Data_presentation::presentation_measurements_ph(const float temperature, const float ph)
 {
-  Serial.print(temperature);
-  Serial.print(",");
+  Serial.print("temperature:") Serial.print(temperature);
+  // TODO: add unit
+  Serial.print(";pH:");
   Serial.println(ph);
-
   m_display.display_ph(temperature, ph);
 }
 
@@ -69,8 +68,9 @@ void Data_presentation::presentation_measurements_ph(const float temperature, co
  */
 void Data_presentation::presentation_measurements_ec(const float temperature, const float ec)
 {
-  Serial.print(temperature);
-  Serial.print(",");
+  Serial.print("temperature:") Serial.print(temperature);
+  // TODO: add unit
+  Serial.print(";EC:");
   Serial.println(ec);
 
   m_display.display_ec(temperature, ec);
