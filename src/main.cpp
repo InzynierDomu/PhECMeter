@@ -86,12 +86,12 @@ void measurements_ph(const Buttons_action action)
   int analog_mes = analogRead(Config::ph_pin_probe);
   float ph = ph_probe_characteristic.find_y(analog_mes);
 
-  m_data_presentation.presentation_measurements_ph(temperature, ph);
+  m_data_presentation.measurements_ph(temperature, ph);
 
   switch (action)
   {
     case Buttons_action::two_buttons_long:
-      m_data_presentation.display_calib_mode();
+      m_data_presentation.calibration_mode();
       m_device_state = Device_state::calibration_ph;
       break;
     case Buttons_action::up_button_long:
@@ -103,7 +103,7 @@ void measurements_ph(const Buttons_action action)
       if (m_sd_card.get_card_status())
       {
         m_sd_card.save_ph_measurement(temperature, ph);
-        m_data_presentation.display_save_data();
+        m_data_presentation.save_data();
       }
       break;
     default:
@@ -122,12 +122,12 @@ void measurements_ec(const Buttons_action action)
   int analog_mes = analogRead(Config::ec_pin_probe);
   float ec = ec_probe_characteristic.find_y(analog_mes);
 
-  m_data_presentation.presentation_measurements_ec(temperature, ec);
+  m_data_presentation.measurements_ec(temperature, ec);
 
   switch (action)
   {
     case Buttons_action::two_buttons_long:
-      m_data_presentation.display_calib_mode();
+      m_data_presentation.calibration_mode();
       m_device_state = Device_state::calibration_ec;
       break;
     case Buttons_action::up_button_long:
@@ -139,7 +139,7 @@ void measurements_ec(const Buttons_action action)
       if (m_sd_card.get_card_status())
       {
         m_sd_card.save_ec_measurement(temperature, ec);
-        m_data_presentation.display_save_data();
+        m_data_presentation.save_data();
       }
       break;
     default:
@@ -193,7 +193,7 @@ void calibration_ph(const Buttons_action action)
   switch (action)
   {
     case Buttons_action::two_buttons_long:
-      m_data_presentation.display_save_data();
+      m_data_presentation.save_data();
       if (save_sample(samples, sample))
       {
         m_memory.save_ph_calibration(samples);
@@ -214,7 +214,8 @@ void calibration_ph(const Buttons_action action)
       }
       break;
     default:
-      m_data_presentation.display_calibration_ph(sample, temperature);
+      auto read_val = analogRead(Config::ph_pin_probe);
+      m_data_presentation.calibration_ph(sample, temperature, read_val);
       break;
   }
 }
@@ -235,7 +236,7 @@ void calibration_ec(const Buttons_action action)
   switch (action)
   {
     case Buttons_action::two_buttons_long:
-      m_data_presentation.display_save_data();
+      m_data_presentation.save_data();
       if (save_sample(samples, sample))
       {
         m_memory.save_ec_calibration(samples);
@@ -264,7 +265,8 @@ void calibration_ec(const Buttons_action action)
       }
       break;
     default:
-      m_data_presentation.display_calibration_ec(sample, position, temperature);
+      auto read_val = analogRead(Config::ec_pin_probe);
+      m_data_presentation.calibration_ec(sample, position, temperature, read_val);
       break;
   }
 }

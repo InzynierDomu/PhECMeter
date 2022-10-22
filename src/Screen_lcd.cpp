@@ -30,7 +30,7 @@ void Screen_lcd::display_start()
 /**
  * @brief display calibration mode screen
  */
-void Screen_lcd::display_calib_mode()
+void Screen_lcd::calibration_mode()
 {
   m_display.clear();
   m_display.setCursor(0, 0);
@@ -40,7 +40,7 @@ void Screen_lcd::display_calib_mode()
 /**
  * @brief display save point screen
  */
-void Screen_lcd::display_save_data()
+void Screen_lcd::save_data()
 {
   m_display.clear();
   m_display.setCursor(0, 0);
@@ -50,7 +50,7 @@ void Screen_lcd::display_save_data()
 /**
  * @brief display ph measurments screen
  */
-void Screen_lcd::display_ph(const float temperature, const float ph)
+void Screen_lcd::measurements_ph(const float temperature, const float ph)
 {
   m_display.clear();
   m_display.setCursor(0, 0);
@@ -67,7 +67,7 @@ void Screen_lcd::display_ph(const float temperature, const float ph)
 /**
  * @brief display ec measurments screen
  */
-void Screen_lcd::display_ec(const float temperature, const float ec)
+void Screen_lcd::measurements_ec(const float temperature, const float ec)
 {
   m_display.clear();
   m_display.setCursor(0, 0);
@@ -82,7 +82,7 @@ void Screen_lcd::display_ec(const float temperature, const float ec)
 /**
  * @brief display caloibration ph screen
  */
-void Screen_lcd::display_calibration_ph(const uint8_t sample, const float temperature)
+void Screen_lcd::calibration_ph(const uint8_t sample, const float temperature)
 {
   long loop_time = millis();
   static long time;
@@ -112,7 +112,7 @@ void Screen_lcd::display_calibration_ph(const uint8_t sample, const float temper
 /**
  * @brief display caloibration ec screen
  */
-void Screen_lcd::display_calibration_ec(const double sample, uint8_t position, const float temperature)
+void Screen_lcd::calibration_ec(const double sample, uint8_t position, const float temperature)
 {
   long loop_time = millis();
   static long time;

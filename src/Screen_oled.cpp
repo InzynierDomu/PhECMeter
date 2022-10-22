@@ -32,7 +32,7 @@ void Screen_oled::display_start()
 /**
  * @brief display calibration mode screen
  */
-void Screen_oled::display_calib_mode()
+void Screen_oled::calibration_mode()
 {
   ssd1306_clearScreen();
   ssd1306_charF12x16(0, 0, "CALIB", STYLE_NORMAL);
@@ -42,7 +42,7 @@ void Screen_oled::display_calib_mode()
 /**
  * @brief display save point screen
  */
-void Screen_oled::display_save_data()
+void Screen_oled::save_data()
 {
   ssd1306_clearScreen();
   ssd1306_charF12x16(0, 0, "POINT", STYLE_NORMAL);
@@ -52,7 +52,7 @@ void Screen_oled::display_save_data()
 /**
  * @brief display ph measurments screen
  */
-void Screen_oled::display_ph(const float temperature, const float ph)
+void Screen_oled::measurements_ph(const float temperature, const float ph)
 {
   ssd1306_clearScreen();
   char buf[10];
@@ -67,7 +67,7 @@ void Screen_oled::display_ph(const float temperature, const float ph)
 /**
  * @brief display ec measurments screen
  */
-void Screen_oled::display_ec(const float temperature, const float ec)
+void Screen_oled::measurements_ec(const float temperature, const float ec)
 {
   ssd1306_clearScreen();
   char buf[10];
@@ -82,7 +82,7 @@ void Screen_oled::display_ec(const float temperature, const float ec)
 /**
  * @brief display caloibration ph screen
  */
-void Screen_oled::display_calibration_ph(const uint8_t sample, const float temperature)
+void Screen_oled::calibration_ph(const uint8_t sample, const float temperature)
 {
   long loop_time = millis();
   static long time;
@@ -117,7 +117,7 @@ void Screen_oled::display_calibration_ph(const uint8_t sample, const float tempe
 /**
  * @brief display caloibration ec screen
  */
-void Screen_oled::display_calibration_ec(const double sample, uint8_t position, const float temperature)
+void Screen_oled::calibration_ec(const double sample, uint8_t position, const float temperature)
 {
   long loop_time = millis();
   static long time;

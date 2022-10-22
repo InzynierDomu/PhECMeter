@@ -32,18 +32,18 @@ void Data_presentation::init()
 /**
  * @brief calibration mode info screen
  */
-void Data_presentation::display_calib_mode()
+void Data_presentation::calibration_mode()
 {
-  m_display.display_calib_mode();
+  m_display.calibration_mode();
   delay(500);
 }
 
 /**
  * @brief save point info screen
  */
-void Data_presentation::display_save_data()
+void Data_presentation::save_data()
 {
-  m_display.display_save_data();
+  m_display.save_data();
   delay(500);
 }
 
@@ -52,14 +52,14 @@ void Data_presentation::display_save_data()
  * @param temperature: temperature value to send and print
  * @param ph: ph value to send and print
  */
-void Data_presentation::presentation_measurements_ph(const float temperature, const float ph)
+void Data_presentation::measurements_ph(const float temperature, const float ph)
 {
   Serial.print("temperature:");
   Serial.print(temperature);
   // TODO: add unit
   Serial.print(";pH:");
   Serial.println(ph);
-  m_display.display_ph(temperature, ph);
+  m_display.measurements_ph(temperature, ph);
 }
 
 /**
@@ -67,7 +67,7 @@ void Data_presentation::presentation_measurements_ph(const float temperature, co
  * @param temperature: temperature value to send and print
  * @param ph: ec value to send and print
  */
-void Data_presentation::presentation_measurements_ec(const float temperature, const float ec)
+void Data_presentation::measurements_ec(const float temperature, const float ec)
 {
   Serial.print("temperature:");
   Serial.print(temperature);
@@ -75,17 +75,19 @@ void Data_presentation::presentation_measurements_ec(const float temperature, co
   Serial.print(";EC:");
   Serial.println(ec);
 
-  m_display.display_ec(temperature, ec);
+  m_display.measurements_ec(temperature, ec);
 }
 
 /**
  * @brief ph calibration screen
  * @param sample: ph value current calibrating
  * @param temperature: current temperature
+ * @param origin: //TODO:
  */
-void Data_presentation::display_calibration_ph(const uint8_t sample, const float temperature)
+void Data_presentation::calibration_ph(const uint8_t sample, const float temperature, const float origin)
 {
-  m_display.display_calibration_ph(sample, temperature);
+  m_display.calibration_ph(sample, temperature);
+  Serial.println(origin);
 }
 
 /**
@@ -93,10 +95,12 @@ void Data_presentation::display_calibration_ph(const uint8_t sample, const float
  * @param sample: ec value current calibrating
  * @param position: toggling digit position
  * @param temperature: current temperature
+ * @param origin: //TODO:
  */
-void Data_presentation::display_calibration_ec(const double sample, uint8_t position, const float temperature)
+void Data_presentation::calibration_ec(const double sample, uint8_t position, const float temperature, const float origin)
 {
-  m_display.display_calibration_ec(sample, position, temperature);
+  m_display.calibration_ec(sample, position, temperature);
+  Serial.println(origin);
 }
 
 void Data_presentation::print_ph_calibration(Point points[2])
