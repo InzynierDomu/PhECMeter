@@ -80,6 +80,7 @@ void measurements_ph(const Buttons_action action)
 
   digitalWrite(Config::ph_supply_pin_probe, HIGH);
   digitalWrite(Config::ec_supply_pin_probe, LOW);
+  delay(50);
   int analog_mes = analogRead(Config::ph_pin_probe);
   float ph = ph_probe_characteristic.find_y(analog_mes);
 
@@ -87,6 +88,7 @@ void measurements_ph(const Buttons_action action)
 
   digitalWrite(Config::ph_supply_pin_probe, LOW);
   digitalWrite(Config::ec_supply_pin_probe, HIGH);
+  delay(50);
   analog_mes = analogRead(Config::ec_pin_probe);
   float ec = ec_probe_characteristic.find_y(analog_mes);
 
@@ -145,11 +147,13 @@ void measurements_ec(const Buttons_action action)
 
   digitalWrite(Config::ph_supply_pin_probe, LOW);
   digitalWrite(Config::ec_supply_pin_probe, HIGH);
+  delay(50);
   int analog_mes = analogRead(Config::ec_pin_probe);
   float ec = ec_probe_characteristic.find_y(analog_mes);
 
   digitalWrite(Config::ph_supply_pin_probe, HIGH);
   digitalWrite(Config::ec_supply_pin_probe, LOW);
+  delay(50);
   analog_mes = analogRead(Config::ph_pin_probe);
   float ph = ph_probe_characteristic.find_y(analog_mes);
 
@@ -552,7 +556,8 @@ void loop()
   {
     m_automation.disable();
   }
-  else{
+  else
+  {
     m_automation.enable();
   }
 
