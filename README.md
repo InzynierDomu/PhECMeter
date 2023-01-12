@@ -1,6 +1,6 @@
 # PhECMeter
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/InzynierDomu/PhECMeter/CI?logo=github&style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/InzynierDomu/PhECMeter/main.yml?logo=github&style=flat-square)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/InzynierDomu/PhECMeter?style=flat-square)
 <a href="https://inzynierdomu.github.io/PhECMeter/">![GitHub docs deployments](https://img.shields.io/github/deployments/InzynierDomu/PhECMeter/github-pages?label=docs&logo=BookStack&logoColor=white&style=flat-square)</a>
 <a href="https://discord.gg/KmW6mHdg">![Discord](https://img.shields.io/discord/815929748882587688?logo=discord&logoColor=green&style=flat-square)</a>
