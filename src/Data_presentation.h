@@ -27,6 +27,7 @@ class Data_presentation
   void print_ec_calibration(Point points[2]);
 
   private:
+  void print_points(Point points[2]);
 #if defined LCD_SCREEN
   Screen_lcd m_display; ///< lcd screen
 #else

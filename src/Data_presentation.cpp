@@ -105,24 +105,24 @@ void Data_presentation::calibration_ec(const double sample, uint8_t position, co
 
 void Data_presentation::print_ph_calibration(Point points[2])
 {
-  Serial.print("pH x1:");
-  Serial.print(points[0].x);
-  Serial.print(" y1:");
-  Serial.print(points[0].y);
-  Serial.print(" x2:");
-  Serial.print(points[1].x);
-  Serial.print(" y2:");
-  Serial.println(points[1].y);
+  Serial.print("pH :");
+  print_points(points);
 }
 
 void Data_presentation::print_ec_calibration(Point points[2])
 {
-  Serial.print("ec x1:");
-  Serial.print(points[0].x);
-  Serial.print(" y1:");
-  Serial.print(points[0].y);
-  Serial.print(" x2:");
-  Serial.print(points[1].x);
-  Serial.print(" y2:");
-  Serial.println(points[1].y);
+  Serial.print("EC :");
+  print_points(points);
+}
+
+void Data_presentation::print_points(Point points[2])
+{
+  Serial.print("analog_val 1:");
+  Serial.print(points[0].analog_val);
+  Serial.print(" unit_val 1:");
+  Serial.print(points[0].unit_val);
+  Serial.print(" analog_val 2:");
+  Serial.print(points[1].analog_val);
+  Serial.print(" unit_val 2:");
+  Serial.println(points[1].unit_val);
 }

@@ -6,9 +6,10 @@
  */
 #pragma once
 
+#include "Linear_function.h"
+
 #include <SD.h>
 #include <SPI.h>
-#include "Linear_function.h"
 
 class Sd_card
 {
@@ -25,4 +26,5 @@ class Sd_card
   bool m_card_available; ///< is sd card available
 
   void save_measurement(String& measurement);
+  void print_calibration(Point points[2], String& output);
 };

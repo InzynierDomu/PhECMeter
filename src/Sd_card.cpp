@@ -72,28 +72,28 @@ void Sd_card::save_ec_measurement(const float temperature, const float ec)
 
 void Sd_card::print_ph_calibration(Point points[2])
 {
-  String calibration = "pH x1:";
-  calibration += String(points[0].x);
-  calibration += " y1:";
-  calibration += String(points[0].y);
-  calibration += " x2:";
-  calibration += String(points[1].x);
-  calibration += " y2:";
-  calibration += String(points[1].y);
+  String calibration = "pH calibration: ";
+  print_calibration(points, calibration);
   save_measurement(calibration);
 }
 
 void Sd_card::print_ec_calibration(Point points[2])
 {
-  String calibration = "ec x1:";
-  calibration += String(points[0].x);
-  calibration += " y1:";
-  calibration += String(points[0].y);
-  calibration += " x2:";
-  calibration += String(points[1].x);
-  calibration += " y2:";
-  calibration += String(points[1].y);
+  String calibration = "EC calibration: ";
+  print_calibration(points, calibration);
   save_measurement(calibration);
+}
+
+void Sd_card::print_calibration(Point points[2], String& output)
+{
+  output += " analog_val 1:";
+  output += String(points[0].analog_val);
+  output += " unit_val 1:";
+  output += String(points[0].unit_val);
+  output += " analog_val 2:";
+  output += String(points[1].analog_val);
+  output += " unit_val 2:";
+  output += String(points[1].unit_val);
 }
 
 void Sd_card::save_measurement(String& measurement)

@@ -99,7 +99,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=60104",
+                "PLATFORMIO=60107",
                 "ARDUINO_AVR_NANO",
                 "LCD_SCREEN",
                 "F_CPU=16000000L",

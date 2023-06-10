@@ -84,7 +84,7 @@ void measurements_ph(const Buttons_action action)
 {
   float temperature = m_ds_sensor.getTempC();
   int analog_mes = analogRead(Config::ph_pin_probe);
-  float ph = ph_probe_characteristic.find_y(analog_mes);
+  float ph = ph_probe_characteristic.find_unit_val(analog_mes);
 
   m_data_presentation.measurements_ph(temperature, ph);
 
@@ -120,7 +120,7 @@ void measurements_ec(const Buttons_action action)
 {
   float temperature = m_ds_sensor.getTempC();
   int analog_mes = analogRead(Config::ec_pin_probe);
-  float ec = ec_probe_characteristic.find_y(analog_mes);
+  float ec = ec_probe_characteristic.find_unit_val(analog_mes);
 
   m_data_presentation.measurements_ec(temperature, ec);
 
@@ -157,14 +157,14 @@ void measurements_ec(const Buttons_action action)
 bool save_sample(Point* samples, double sample)
 {
   static int sample_counter = 0;
-  samples[sample_counter].x = sample;
+  samples[sample_counter].unit_val = sample;
   switch (m_device_state)
   {
     case Device_state::calibration_ph:
-      samples[sample_counter].y = analogRead(Config::ph_pin_probe);
+      samples[sample_counter].analog_val = analogRead(Config::ph_pin_probe);
       break;
     case Device_state::calibration_ec:
-      samples[sample_counter].y = analogRead(Config::ec_pin_probe);
+      samples[sample_counter].analog_val = analogRead(Config::ec_pin_probe);
       break;
     default:
       break;
