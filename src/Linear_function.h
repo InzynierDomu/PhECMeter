@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 
-///< Point structure
+/// Point structure
 struct Point
 {
   /**
@@ -23,6 +23,7 @@ struct Point
   double analog_val;
 };
 
+/// @brief liner function store and calculate
 class Linear_function
 {
   public:
@@ -31,6 +32,6 @@ class Linear_function
   double find_unit_val(uint16_t analog_val);
 
   private:
-  double a; ///< slope
-  double b; ///< shift
+  double a; /// slope
+  double b; /// shift
 };
