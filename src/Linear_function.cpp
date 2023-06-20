@@ -16,9 +16,9 @@ Linear_function::Linear_function(const Point points[2])
  * @param x: input variable to function
  * @return double: return value from function
  */
-double Linear_function::find_y(uint16_t x)
+double Linear_function::find_unit_val(uint16_t analog_val)
 {
-  return (a * x + b);
+  return (a * analog_val + b);
 }
 
 /**
@@ -27,6 +27,6 @@ double Linear_function::find_y(uint16_t x)
  */
 void Linear_function::set_points(const Point points[2])
 {
-  a = (points[1].y - points[0].y) / (points[1].x - points[0].x);
-  b = points[0].y - (a * points[0].x);
+  a = (points[1].unit_val - points[0].unit_val) / (points[1].analog_val - points[0].analog_val);
+  b = points[0].unit_val - (a * points[0].analog_val);
 }
