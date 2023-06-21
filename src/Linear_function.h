@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 
-/// Point structure
+/// @brief Point structure
 struct Point
 {
   /**
