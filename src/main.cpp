@@ -245,8 +245,10 @@ void calibration_ec(const Buttons_action action)
       }
       break;
     case Buttons_action::short_dwn_button:
-      // FIXME: min value
-      sample = sample - pow(10.0, position * (-1.0));
+      if (sample > Config::min_ec_to_calib)
+      {
+        sample = sample - pow(10.0, position * (-1.0));
+      }
       break;
     case Buttons_action::short_up_button:
       if (sample < Config::max_ec_to_calib)
