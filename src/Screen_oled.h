@@ -14,7 +14,7 @@
 
 #include <SPI.h>
 
-
+/// @brief OLED screen handling
 class Screen_oled : public IScreen
 {
   public:

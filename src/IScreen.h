@@ -8,6 +8,7 @@
 
 #include <Wire.h>
 
+/// @brief Interface for screens handling
 class IScreen
 {
   public:

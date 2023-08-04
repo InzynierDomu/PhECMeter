@@ -12,6 +12,7 @@
 
 #include <stdint.h>
 
+/// @brief Presentation data on screen and serial
 class Data_presentation
 {
   public:

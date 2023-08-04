@@ -11,7 +11,7 @@
 #include "IScreen.h"
 #include "LiquidCrystal_I2C.h"
 
-
+/// @brief LCD screen handling
 class Screen_lcd : public IScreen
 {
   public:

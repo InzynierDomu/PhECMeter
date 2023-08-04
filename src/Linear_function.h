@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 
-/// Point structure
+/// @brief Point structure
 struct Point
 {
   /**
@@ -32,6 +32,6 @@ class Linear_function
   double find_unit_val(uint16_t analog_val);
 
   private:
-  double a; /// slope
-  double b; /// shift
+  double slope;
+  double shift;
 };
