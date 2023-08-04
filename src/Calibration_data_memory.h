@@ -10,6 +10,7 @@
 
 #include <EEPROM.h>
 
+/// @brief saving and reading calibration from sd card
 class Calibration_data_memory
 {
   public:

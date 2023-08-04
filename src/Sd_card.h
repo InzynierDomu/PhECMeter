@@ -11,6 +11,7 @@
 #include <SD.h>
 #include <SPI.h>
 
+/// @brief SD card handling
 class Sd_card
 {
   public:

@@ -19,6 +19,7 @@ enum class Buttons_action
   short_dwn_button
 };
 
+/// @brief buttons action handling
 class Buttons
 {
   public:
