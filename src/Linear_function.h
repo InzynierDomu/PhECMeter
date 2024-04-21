@@ -13,10 +13,10 @@ struct Point
 {
   /**
    * @brief Construct a new Point object
-   * @param _unit_val: unit_val value in SI unit
    * @param _analog_val: analog_val value directly from the converter
+   * @param _unit_val: unit_val value in SI unit
    */
-  Point(double _unit_val = 0, double _analog_val = 0)
+  Point(double _analog_val = 0, double _unit_val = 0)
   : unit_val(_unit_val)
   , analog_val(_analog_val){};
   double unit_val;

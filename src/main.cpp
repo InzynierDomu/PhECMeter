@@ -298,15 +298,15 @@ void setup()
   m_sd_card.print_ec_calibration(points);
 
   pinMode(Config::ph_supply_pin_probe, OUTPUT);
-  digitalWrite(Config::ph_supply_pin_probe, HIGH);
+  digitalWrite(Config::ph_supply_pin_probe, LOW);
   pinMode(Config::ec_supply_pin_probe, OUTPUT);
-  digitalWrite(Config::ec_supply_pin_probe, LOW);
+  digitalWrite(Config::ec_supply_pin_probe, HIGH);
   pinMode(Config::pin_up_button, INPUT_PULLUP);
   pinMode(Config::pin_dwn_button, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(Config::pin_up_button), button_r_pressed, FALLING);
   attachInterrupt(digitalPinToInterrupt(Config::pin_dwn_button), button_l_pressed, FALLING);
 
-  m_device_state = Device_state::display_measure_ph;
+  m_device_state = Device_state::display_measure_ec;
 }
 
 /**
