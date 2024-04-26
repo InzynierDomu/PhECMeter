@@ -213,7 +213,10 @@ void calibration_ph(const Buttons_action action)
         sample = samples[0].unit_val;
         m_device_state = Device_state::display_measure_ph;
       }
-      sample = load_ph_point(1);
+      else
+      {
+        sample = load_ph_point(1);
+      }
       break;
     case Buttons_action::short_dwn_button:
       if (sample > 1)
@@ -270,7 +273,10 @@ void calibration_ec(const Buttons_action action)
         sample = samples[0].unit_val;
         m_device_state = Device_state::display_measure_ec;
       }
-      sample = load_ec_point(1);
+      else
+      {
+        sample = load_ec_point(1);
+      }
       break;
     case Buttons_action::short_dwn_button:
       if (sample > Config::min_ec_to_calib)
