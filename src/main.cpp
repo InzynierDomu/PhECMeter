@@ -210,6 +210,7 @@ void calibration_ph(const Buttons_action action)
       {
         m_memory.save_ph_calibration(samples);
         ph_probe_characteristic.set_points(samples);
+        sample = samples[0].unit_val;
         m_device_state = Device_state::display_measure_ph;
       }
       sample = load_ph_point(1);
@@ -266,6 +267,7 @@ void calibration_ec(const Buttons_action action)
       {
         m_memory.save_ec_calibration(samples);
         ec_probe_characteristic.set_points(samples);
+        sample = samples[0].unit_val;
         m_device_state = Device_state::display_measure_ec;
       }
       sample = load_ec_point(1);
@@ -324,15 +326,15 @@ void setup()
   m_sd_card.print_ec_calibration(points);
 
   pinMode(Config::ph_supply_pin_probe, OUTPUT);
-  digitalWrite(Config::ph_supply_pin_probe, LOW);
+  digitalWrite(Config::ph_supply_pin_probe, HIGH);
   pinMode(Config::ec_supply_pin_probe, OUTPUT);
-  digitalWrite(Config::ec_supply_pin_probe, HIGH);
+  digitalWrite(Config::ec_supply_pin_probe, LOW);
   pinMode(Config::pin_up_button, INPUT_PULLUP);
   pinMode(Config::pin_dwn_button, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(Config::pin_up_button), button_r_pressed, FALLING);
   attachInterrupt(digitalPinToInterrupt(Config::pin_dwn_button), button_l_pressed, FALLING);
 
-  m_device_state = Device_state::display_measure_ec;
+  m_device_state = Device_state::display_measure_ph;
 }
 
 /**
