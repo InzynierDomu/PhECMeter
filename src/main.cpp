@@ -179,12 +179,24 @@ bool save_sample(Point* samples, double sample)
 }
 
 /**
+ * @brief load old ph calibration unit value
+ * @param point first or second point
+ * @return double unit value for specify point
+ */
+double load_ph_point(uint8_t point)
+{
+  Point points[2];
+  m_memory.load_ph_calibration(points);
+  return points[point].unit_val;
+}
+
+/**
  * @brief calibration ph procedure
  * @param action buttons action
  */
 void calibration_ph(const Buttons_action action)
 {
-  static uint8_t sample = 4;
+  static uint8_t sample = load_ph_point(0);
 
   static Point samples[2] = {};
 
@@ -200,6 +212,7 @@ void calibration_ph(const Buttons_action action)
         ph_probe_characteristic.set_points(samples);
         m_device_state = Device_state::display_measure_ph;
       }
+      sample = load_ph_point(1);
       break;
     case Buttons_action::short_dwn_button:
       if (sample > 1)
@@ -221,12 +234,24 @@ void calibration_ph(const Buttons_action action)
 }
 
 /**
+ * @brief load old ec calibration unit value
+ * @param point first or second point
+ * @return double unit value for specify point
+ */
+double load_ec_point(uint8_t point)
+{
+  Point points[2];
+  m_memory.load_ec_calibration(points);
+  return points[point].unit_val;
+}
+
+/**
  * @brief calibration ec procedure
  * @param action buttons action
  */
 void calibration_ec(const Buttons_action action)
 {
-  static double sample = 4.0;
+  static double sample = load_ec_point(0);
   static uint8_t position = 0;
 
   static Point samples[2] = {};
@@ -243,6 +268,7 @@ void calibration_ec(const Buttons_action action)
         ec_probe_characteristic.set_points(samples);
         m_device_state = Device_state::display_measure_ec;
       }
+      sample = load_ec_point(1);
       break;
     case Buttons_action::short_dwn_button:
       if (sample > Config::min_ec_to_calib)
