@@ -7,9 +7,60 @@
 \maketitle
 \tableofcontents
 
+\section{Installation}
+If you prefer not to use the VS Code environment or prefer simpler solutions, you can use an \href{#quick-deployment-without-using-vs-code-environment}{alternative approach}.
 
-This will be a manual for project.
-\section{Assembly}
-\section{Calibration}
-\section{Logs and troubleshooting}
+For specific screen is the prepared environment:
+\begin{itemize}
+    \item OLED SSD1306 128x32 : \texttt{nanoatmega328\_oled}
+    \item HD44780 via PCF8574 : \texttt{nanoatmega328\_lcd}
+\end{itemize}
+
+The project is prepared for the Platform IO environment. A video on how to install such an environment can be watched on this \href{https://youtu.be/Em9NuebT2Kc}{video}.
+
+\subsection{Quick deployment without using VS Code environment}
+You don't need vscode, platformio is not needed, it will be installed with the script.
+
+\subsubsection{Requirements}
+\begin{itemize}
+    \item Python 3.x must be installed on your computer. You can download the latest version of Python from \href{https://www.python.org}{Python.org}.
+\end{itemize}
+
+\subsubsection{Usage}
+\begin{itemize}
+    \item Connect the Arduino board to your computer using a USB cable.
+    \item Ensure that Python is available in the system environment.
+    \item Run the autodeploy.bat file by double-clicking on it or running it from the command prompt (cmd). This script will automatically detect the connected Arduino board and upload the project to it.
+\end{itemize}
+
+\subsubsection{Notes}
+\begin{itemize}
+    \item It's version for OLED.
+    \item Make sure that the path to Python is added to the PATH environment variable in the Windows operating system.
+    \item The atodeploy.bat script works only on Windows.
+\end{itemize}
+
+\section{Usage}
+The video with the entire project can be watched on this \href{https://youtu.be/vjk0nq04lCo}{video}.
+
+The device has 4 possible states:
+\begin{itemize}
+    \item measure pH
+    \item measure EC
+    \item calibration pH
+    \item calibration EC
+\end{itemize}
+
+The device starts in pH measure mode. To change pH/EC measure mode - press the up button for more than 1 second. To enter calibration mode, press both buttons for more than 1 second. 
+\begin{itemize}
+    \item Measure pH -> calibration pH.
+    \item Measure EC -> calibration EC.
+\end{itemize}
+Calibration mode requires 2 points to be saved.
+
+Set the value to which the sample probe is immersed. Use the up and down buttons to decrease or increase the value. In EC calibration, it is possible to change the digit position by pressing the up button for 1 second. To save points, press both buttons for 1 second. After saving two points, the device changes state to measure.
+
+When an SD card is plugged in, after a short press of the down button, measurements will be saved in a file on the SD card.
+
+
 \end{document}

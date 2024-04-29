@@ -13,6 +13,7 @@
   - [Scheme](#scheme)
     - [Part list](#part-list)
   - [IDE](#ide)
+  - [Quick deployment without using VS Code environment](#quick-deployment-without-using-vs-code-environment)
 
 ## Description
 The video with the entire project can be watched on this [video](https://youtu.be/vjk0nq04lCo)
@@ -54,6 +55,7 @@ When SD card is plugged, after short press down button measurements will be save
 * J5 SD card socket (optional)
 
 ## IDE
+If you prefer not to use the VS Code environment or prefer simpler solutions, you can use an [alternative approach](#quick-deployment-without-using-vs-code-environment)
 For specific screen is the prepared environment:</br>
 OLED SSD1306 128x32 :nanoatmega328_oled</br>
 HD44780 via PCF8574 :nanoatmega328_lcd</br>
@@ -63,3 +65,17 @@ The project is prepared for the Platform IO environment. A video on how to insta
 Formatting is done using clang-format. The description of the tool configuration is in the [video](https://youtu.be/xxuaOG0WjIE).
 <br><br>
 The code contains a comment prepared for doxygen, their use is described in the [video](https://youtu.be/1YKJtrCsPD4).
+
+## Quick deployment without using VS Code environment
+You don't need vscode, platformio is not needed, it will be installed with the script.
+
+### Requirements
+* Python 3.x must be installed on your computer. You can download the latest version of Python from Python.org.
+### Usage
+* Connect the Arduino board to your computer using a USB cable.
+* Ensure that Python is available in the system environment.
+* Run the autodeploy.bat file by double-clicking on it or running it from the command prompt (cmd). This script will automatically detect the connected Arduino board and upload the project to it.
+### Notes
+* It's version for oled.
+* Make sure that the path to Python is added to the PATH environment variable in the Windows operating system.
+* The atodeploy.bat script works only on Windows.
