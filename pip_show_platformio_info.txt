@@ -1,0 +1,10 @@
+Name: platformio
+Version: 6.1.15
+Summary: Your Gateway to Embedded Software Development Excellence. Unlock the true potential of embedded software development with PlatformIO's collaborative ecosystem, embracing declarative principles, test-driven methodologies, and modern toolchains for unrivaled success.
+Home-page: https://platformio.org
+Author: PlatformIO Labs
+Author-email: contact@piolabs.com
+License: Apache Software License
+Location: f:\msys64\mingw64\lib\python3.9\site-packages
+Requires: ajsonrpc, bottle, click, colorama, marshmallow, pyelftools, pyserial, requests, semantic-version, starlette, tabulate, uvicorn, wsproto
+Required-by: 
