@@ -30,7 +30,6 @@ echo check Platform IO
 
     :: Display the content of the file
     echo Displaying the content of the file %file_path%:
-    type %file_path%
 
     findstr /C:"WARNING: Package(s) not found" %file_path%
     if %errorlevel% equ 0 (
@@ -47,6 +46,8 @@ echo check Platform IO
     ) else (
         echo PlatformIO is already installed.
     )
+
+    type %file_path%
 )>> "%log_file%" 2>&1
 
 
@@ -74,6 +75,7 @@ if exist "%platformio_exe_path%" (
 echo Path to platformio.exe: %platformio_exe_path%
 ) else (
 echo Unable to find platformio.exe file. Check the installation path.
+exit
 )
 
 :: Path to the Arduino project
@@ -85,6 +87,8 @@ set board_type=nanoatmega328_oled
 :: Port to which Arduino is connected
 set port=arduino_port
 
+echo Configuring Arduino project and uploading
+(
 :: Calling PlatformIO CLI to upload the project
 %platformio_exe_path% run --target upload -d %project_path% -e %board_type%
 
@@ -95,6 +99,7 @@ exit /b %errorlevel%
 ) else (
 echo The project has been successfully uploaded to Arduino.
 )
+)>> "%log_file%" 2>&1
 
 echo Press Enter to exit.
 :: Wait for user to press Enter before exiting
