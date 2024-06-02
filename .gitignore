@@ -7,3 +7,5 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+pip_show_platformio_info.txt
+deploy.log
