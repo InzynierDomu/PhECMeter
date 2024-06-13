@@ -68,8 +68,23 @@ exit
 :: Path to the Arduino project
 set project_path=.\
 
-:: Arduino board type (e.g., uno, nano, etc.)
-set board_type=nanoatmega328_oled
+:: Asking the user to select the board type
+echo Please select the board type:
+echo 1. nanoatmega328_oled
+echo 2. nanoatmega328_lcd
+set /p choice="Enter the number (1 or 2): "
+
+:: Setting the board type based on the user input
+if "%choice%"=="1" (
+    set board_type=nanoatmega328_oled
+) else if "%choice%"=="2" (
+    set board_type=nanoatmega328_lcd
+) else (
+    echo Invalid choice. Exiting.
+    echo Press Enter to exit.
+    pause >nul
+    exit
+)
 
 :: Port to which Arduino is connected
 set port=arduino_port
