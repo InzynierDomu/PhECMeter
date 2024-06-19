@@ -42,29 +42,6 @@ if %errorlevel% neq 0 (
     )
 )>> "%log_file%" 2>&1
 
-:: Search the text file for the line containing "Location:"
-for /f "delims=: tokens=1,*" %%A in ('findstr /n "Location:" "%file_path%"') do (
-set "line_number=%%A"
-set "location=%%B"
-)
-
-:: Remove leading and trailing spaces from the location
-set "location=%location:~10%"
-
-:: Remove "lib\site-packages" from the location and add "Scripts\platformio.exe"
-set "platformio_exe_path=%location:lib\site-packages=Scripts\platformio.exe%"
-echo %platformio_exe_path%
-
-:: Check if the platformio.exe file exists
-if exist "%platformio_exe_path%" (
-echo Path to platformio.exe: %platformio_exe_path%
-) else (
-echo Unable to find platformio.exe file. Check the installation path.
-echo Press Enter to exit.
-pause >nul
-exit
-)
-
 :: Path to the Arduino project
 set project_path=.\
 
@@ -92,7 +69,7 @@ set port=arduino_port
 echo Configuring Arduino project and uploading
 (
 :: Calling PlatformIO CLI to upload the project
-%platformio_exe_path% run --target upload -d %project_path% -e %board_type%
+python -m platformio run --target upload -d %project_path% -e %board_type%
 )>> "%log_file%" 2>&1
 :: Check if the operation was successful
 if %errorlevel% neq 0 (
