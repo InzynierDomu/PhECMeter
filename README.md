@@ -20,12 +20,6 @@
 ## Description
 The video with the entire project can be watched on this [video](https://youtu.be/vjk0nq04lCo)
 
-<div align="center">
-<h2>Support</h2>
-
-<p>If any of my projects have helped you in your work, studies, or simply made your day better, you can buy me a coffee. <a href="https://buycoffee.to/inzynier-domu" target="_blank"><img src="https://buycoffee.to/img/share-button-primary.png" style="width: 195px; height: 51px" alt="Postaw mi kawę na buycoffee.to"></a></p>
-</div>
-
 The device has 4 possible states:
 * measure pH
 * measure EC
@@ -42,6 +36,12 @@ Calibration mode needs 2 points to save.</br>
 Set the value to which sample the probe is immersed. For that use up and dwn(down) buttons to decrease or increase the value. In EC calibration possible is to change the digit position by pressing 1s up button. To save points press 1s on both buttons. After saving two points, the device changes state to measure.</br>
 </br>
 When SD card is plugged, after short press down button measurements will be save in file on SD.
+
+<div align="center">
+<h2>Support</h2>
+
+<p>If any of my projects have helped you in your work, studies, or simply made your day better, you can buy me a coffee. <a href="https://buycoffee.to/inzynier-domu" target="_blank"><img src="https://buycoffee.to/img/share-button-primary.png" style="width: 195px; height: 51px" alt="Postaw mi kawę na buycoffee.to"></a></p>
+</div>
 
 ### Future
 * Use accumulator.
